@@ -16,6 +16,7 @@ BbwServer::Application.routes.draw do
   #   resources :products
 
   get 'articles/show' => 'articles#show'
+  get 'articles/test' => 'articles#test'
   
   # Example resource route with options:
   #   resources :products do
