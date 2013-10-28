@@ -14,9 +14,16 @@ BbwServer::Application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-
-  get 'articles/show' => 'articles#show'
-  get 'articles/test' => 'articles#test'
+  
+  resources :articles
+  get 'articles/by_barcode/:barcode' => 'articles#by_barcode'
+  
+  resources :product_entries
+  
+#
+  #TODO: Remove this:
+#  get 'articles/show' => 'articles#show'
+#  get 'articles/test' => 'articles#test'
   
   # Example resource route with options:
   #   resources :products do

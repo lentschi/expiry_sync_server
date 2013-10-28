@@ -1,0 +1,2 @@
+module ProductEntriesHelper
+end
