@@ -1,3 +1,19 @@
+GIT
+  remote: git://github.com/house9/clerk.git
+  revision: 08c367781def18c5fedf00b07b186b2d2928c162
+  specs:
+    clerk (0.2.2.rc1)
+      activerecord (>= 3)
+      railties (>= 3.1)
+      sentient_user (>= 0.3.2)
+
+GIT
+  remote: git://github.com/house9/sentient_user.git
+  revision: cfc33b158d4986f74fa9bf7d5aed1ded9a4a9954
+  specs:
+    sentient_user (0.3.3.rc1)
+      railties (>= 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -120,6 +136,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  clerk!
   coffee-rails (~> 4.0.0)
   devise
   haml
@@ -128,6 +145,7 @@ DEPENDENCIES
   rails (= 4.0.0)
   sass-rails (~> 4.0.0)
   sdoc
+  sentient_user!
   sqlite3
   turbolinks
   uglifier (>= 1.3.0)

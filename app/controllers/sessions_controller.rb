@@ -9,7 +9,7 @@ class SessionsController < Devise::SessionsController
     sign_in(resource_name, self.resource)
     respond_with self.resource, location: after_sign_in_path_for(resource) do |format|
       format.html
-      format.json { render json: self.resource }
+      format.json { render json: {user: self.resource, status: 'success'} }
     end
   end
   

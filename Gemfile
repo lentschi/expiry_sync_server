@@ -29,7 +29,10 @@ gem 'jbuilder', '~> 1.2'
 
 #auth
 gem 'devise'
+gem 'sentient_user', git: "git://github.com/house9/sentient_user.git"
+gem 'clerk', git: "git://github.com/house9/clerk.git"    
 
+#views
 gem 'haml'
 
 group :doc do

@@ -2,13 +2,17 @@ class ProductEntriesController < ApplicationController
   before_filter :authenticate_user!
   
   def create
-    product_entry_params = params[:product_entry]
     unless params[:product_entry][:article].nil?
-      article = Article.find_or_create(product_entry_params[:article])
+      Rails.logger.info "--- Current user id: "+current_user.id.to_s + ", initial params"+params[:product_entry].to_yaml.to_s
+      article = Article.smart_find_or_initialize(current_user, wrapped_article_params(params[:product_entry]))
+      article.save if article.id.nil?
         
-      product_entry_params.delete :article
-      product_entry_params[:article_id] = article.id
+      params[:product_entry].delete :article
+      params[:product_entry][:article_id] = article.id
     end
+    
+    Rails.logger.info "--- New product entry: "+product_entry_params.to_yaml.to_s
+    
     @product_entry = ProductEntry.new(product_entry_params)
     if @product_entry.save
       respond_to do |format|
@@ -21,5 +25,13 @@ class ProductEntriesController < ApplicationController
         format.json { render json: {status: 'failure'}}
       end
     end 
+  end
+  
+  def product_entry_params
+    params.require(:product_entry).permit(:article_id, :description, :expiration_date, :amount)
+  end
+  
+  def wrapped_article_params(article_params)
+    article_params.require(:article).permit(:name, :barcode)
   end
 end
