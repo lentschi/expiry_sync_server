@@ -17,7 +17,11 @@ class ProductEntriesController < ApplicationController
     if @product_entry.save
       respond_to do |format|
         format.html { redirect_to @product_entry }
-        format.json { render json: {status: 'success', product_entry: @product_entry}}
+        format.json do
+          product_entry = @product_entry.attributes
+          product_entry[:article] = @product_entry.article.attributes
+          render json: {status: 'success', product_entry: product_entry}
+       end
       end
     else
       respond_to do |format|
@@ -28,7 +32,7 @@ class ProductEntriesController < ApplicationController
   end
   
   def product_entry_params
-    params.require(:product_entry).permit(:article_id, :description, :expiration_date, :amount)
+    params.require(:product_entry).permit(:article_id, :location_id, :description, :expiration_date, :amount)
   end
   
   def wrapped_article_params(article_params)

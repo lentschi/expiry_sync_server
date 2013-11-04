@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131029141446) do
+ActiveRecord::Schema.define(version: 20131104105319) do
 
   create_table "article_sources", force: true do |t|
     t.string   "name"
@@ -29,6 +29,23 @@ ActiveRecord::Schema.define(version: 20131029141446) do
     t.integer  "modifier_id"
   end
 
+  create_table "locations", force: true do |t|
+    t.string   "uuid"
+    t.string   "name"
+    t.integer  "creator_id"
+    t.integer  "modifier_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "locations_users", id: false, force: true do |t|
+    t.integer "location_id"
+    t.integer "user_id"
+  end
+
+  add_index "locations_users", ["location_id", "user_id"], name: "index_locations_users_on_location_id_and_user_id"
+  add_index "locations_users", ["user_id"], name: "index_locations_users_on_user_id"
+
   create_table "product_entries", force: true do |t|
     t.string   "description"
     t.integer  "amount"
@@ -38,7 +55,10 @@ ActiveRecord::Schema.define(version: 20131029141446) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "modifier_id"
+    t.integer  "location_id"
   end
+
+  add_index "product_entries", ["location_id"], name: "index_product_entries_on_location_id"
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
