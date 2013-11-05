@@ -2,7 +2,8 @@ class ArticlesController < ApplicationController
   before_filter :authenticate_user!
   
   def by_barcode
-    article = Article.smart_find_or_initialize(current_user, barcode: params[:barcode])
+    article = Article.smart_find(barcode: params[:barcode])
+    article.save unless article.nil? or not article.id.nil?
       
     respond_to do |format|
       format.html

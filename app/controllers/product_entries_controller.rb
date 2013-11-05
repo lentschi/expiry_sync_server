@@ -4,7 +4,7 @@ class ProductEntriesController < ApplicationController
   def create
     unless params[:product_entry][:article].nil?
       Rails.logger.info "--- Current user id: "+current_user.id.to_s + ", initial params"+params[:product_entry].to_yaml.to_s
-      article = Article.smart_find_or_initialize(current_user, wrapped_article_params(params[:product_entry]))
+      article = Article.smart_find_or_initialize(wrapped_article_params(params[:product_entry]))
       article.save if article.id.nil?
         
       params[:product_entry].delete :article
