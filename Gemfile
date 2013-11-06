@@ -62,4 +62,6 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+gem 'remote_article_fetcher', path: "lib/gems/remote_article_fetcher"
+
 ruby "2.0.0"

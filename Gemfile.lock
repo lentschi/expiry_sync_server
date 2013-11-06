@@ -14,6 +14,12 @@ GIT
     sentient_user (0.3.3.rc1)
       railties (>= 3.1)
 
+PATH
+  remote: lib/gems/remote_article_fetcher
+  specs:
+    remote_article_fetcher (0.0.1)
+      rails (~> 4.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -153,6 +159,7 @@ DEPENDENCIES
   pg
   rails (= 4.0.0)
   rails_12factor
+  remote_article_fetcher!
   sass-rails (~> 4.0.0)
   sdoc
   sentient_user!
