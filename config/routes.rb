@@ -1,4 +1,6 @@
 BbwServer::Application.routes.draw do
+  resources :producers
+
   resources :locations
 
   devise_for :users, controllers: {sessions: "sessions", registrations: "registrations"}

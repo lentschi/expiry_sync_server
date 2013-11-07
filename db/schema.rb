@@ -11,32 +11,51 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131104105319) do
+ActiveRecord::Schema.define(version: 20131107080754) do
 
-  create_table "article_sources", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "article_sources", id: false, force: true do |t|
+    t.integer  "id",         null: false
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
+
+  add_index "article_sources", ["name"], name: "index_article_sources_on_name", unique: true
 
   create_table "articles", force: true do |t|
-    t.string   "name"
-    t.integer  "article_source_id"
-    t.integer  "creator_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "barcode"
-    t.integer  "modifier_id"
+    t.string   "name",              null: false
+    t.integer  "article_source_id", null: false
+    t.integer  "creator_id",        null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "barcode",           null: false
+    t.integer  "modifier_id",       null: false
+    t.integer  "producer_id"
   end
 
+  add_index "articles", ["article_source_id"], name: "index_articles_on_article_source_id"
+  add_index "articles", ["barcode"], name: "index_articles_on_barcode"
+  add_index "articles", ["created_at"], name: "index_articles_on_created_at"
+  add_index "articles", ["creator_id", "barcode"], name: "index_articles_on_creator_id_and_barcode", unique: true
+  add_index "articles", ["creator_id"], name: "index_articles_on_creator_id"
+  add_index "articles", ["modifier_id"], name: "index_articles_on_modifier_id"
+  add_index "articles", ["producer_id"], name: "index_articles_on_producer_id"
+  add_index "articles", ["updated_at"], name: "index_articles_on_updated_at"
+
   create_table "locations", force: true do |t|
-    t.string   "uuid"
-    t.string   "name"
-    t.integer  "creator_id"
-    t.integer  "modifier_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "uuid",        null: false
+    t.string   "name",        null: false
+    t.integer  "creator_id",  null: false
+    t.integer  "modifier_id", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
+
+  add_index "locations", ["created_at"], name: "index_locations_on_created_at"
+  add_index "locations", ["creator_id"], name: "index_locations_on_creator_id"
+  add_index "locations", ["modifier_id"], name: "index_locations_on_modifier_id"
+  add_index "locations", ["updated_at"], name: "index_locations_on_updated_at"
+  add_index "locations", ["uuid"], name: "index_locations_on_uuid"
 
   create_table "locations_users", id: false, force: true do |t|
     t.integer "location_id"
@@ -46,19 +65,37 @@ ActiveRecord::Schema.define(version: 20131104105319) do
   add_index "locations_users", ["location_id", "user_id"], name: "index_locations_users_on_location_id_and_user_id"
   add_index "locations_users", ["user_id"], name: "index_locations_users_on_user_id"
 
-  create_table "product_entries", force: true do |t|
-    t.string   "description"
-    t.integer  "amount"
-    t.date     "expiration_date"
-    t.integer  "article_id"
+  create_table "producers", force: true do |t|
+    t.string   "name"
     t.integer  "creator_id"
+    t.integer  "modifier_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "modifier_id"
-    t.integer  "location_id"
   end
 
+  add_index "producers", ["creator_id"], name: "index_producers_on_creator_id"
+  add_index "producers", ["modifier_id"], name: "index_producers_on_modifier_id"
+  add_index "producers", ["name"], name: "index_producers_on_name", unique: true
+
+  create_table "product_entries", force: true do |t|
+    t.string   "description"
+    t.integer  "amount",          null: false
+    t.date     "expiration_date"
+    t.integer  "article_id",      null: false
+    t.integer  "creator_id",      null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "modifier_id",     null: false
+    t.integer  "location_id",     null: false
+  end
+
+  add_index "product_entries", ["article_id"], name: "index_product_entries_on_article_id"
+  add_index "product_entries", ["created_at"], name: "index_product_entries_on_created_at"
+  add_index "product_entries", ["creator_id"], name: "index_product_entries_on_creator_id"
+  add_index "product_entries", ["expiration_date"], name: "index_product_entries_on_expiration_date"
   add_index "product_entries", ["location_id"], name: "index_product_entries_on_location_id"
+  add_index "product_entries", ["modifier_id"], name: "index_product_entries_on_modifier_id"
+  add_index "product_entries", ["updated_at"], name: "index_product_entries_on_updated_at"
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

@@ -3,6 +3,10 @@ class Article < ActiveRecord::Base
   acts_as_remote_article_fetcher
   
   belongs_to :source, class_name: "ArticleSource", foreign_key: "article_source_id"
+  belongs_to :producer
+  
+  validates :barcode, :source, :name, presence: true
+  validates :barcode, uniqueness: {scope: :creator_id}
   
   def self.smart_find(data)
     article = self.find_by(barcode: data[:barcode], creator_id: User.current.id) unless User.current.nil?
