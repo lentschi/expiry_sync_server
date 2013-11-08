@@ -20,16 +20,16 @@ module RemoteArticleFetcher
         elem = doc.at_css('div#baseDataHolder h1[itemprop="name"]')
         return nil if elem.nil?
         data[:name] = elem.text
-#        data[:producer] = doc.at_css('div#baseDataHolder [itemprop="manufacturer"]').text unless doc.at_css('div#baseDataHolder [itemprop="manufacturer"]').nil?
-#        data[:images] = Array.new
-#        
-#        imageNode = doc.at_css('div#baseDataHolder img[itemprop="image"]')
-#       unless imageNode.nil? or imageNode.attribute("src").nil?
-#         url = imageNode.attribute("src").value
-#         extname = File.extname(url)
-#         url = url.sub("high"+extname,"low"+extname)
-#         data[:images] << url
-#       end
+        producerNode = doc.at_css('div#baseDataHolder span[itemprop="manufacturer"]')
+        data[:producer_attributes] = {name: producerNode.text} unless producerNode.nil?
+        data[:images_attributes] = Array.new
+        imageNode = doc.at_css('div#baseDataHolder img[itemprop="image"]')
+        unless imageNode.nil? or imageNode.attribute("src").nil?
+          url = imageNode.attribute("src").value
+          extname = File.extname(url)
+          url = url.sub("high"+extname,"low"+extname)
+          data[:images_attributes] << {source_url: url}
+        end
         
         
         Rails.logger.info "Done fetching "+data.to_yaml.to_s

@@ -1,4 +1,6 @@
 BbwServer::Application.routes.draw do
+  resources :article_images
+
   resources :producers
 
   resources :locations
@@ -24,6 +26,10 @@ BbwServer::Application.routes.draw do
   
   resources :product_entries
   resources :locations
+  
+  resources :article_images do
+    get "serve", :on => :member
+  end
 #
   #TODO: Remove this:
 #  get 'articles/show' => 'articles#show'

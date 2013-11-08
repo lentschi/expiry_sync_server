@@ -57,10 +57,13 @@ end
 
 group :development do
   gem 'sqlite3'
+  gem 'debugger'
 end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+gem 'mime-types'
 
 gem 'remote_article_fetcher', path: "lib/gems/remote_article_fetcher"
 

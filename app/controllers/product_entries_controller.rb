@@ -4,11 +4,16 @@ class ProductEntriesController < ApplicationController
   def create
     unless params[:product_entry][:article].nil?
       Rails.logger.info "--- Current user id: "+current_user.id.to_s + ", initial params"+params[:product_entry].to_yaml.to_s
-      article = Article.smart_find_or_initialize(wrapped_article_params(params[:product_entry]))
-      article.save if article.id.nil?
+      image_params = params[:product_entry][:article][:images].clone
+      params[:product_entry][:article].delete :images
+      @article = Article.smart_find_or_initialize(wrapped_article_params(params[:product_entry]))
+      @article.decode_images(image_params)
+      @article.source = ArticleSource.get_user_source
+      Rails.logger.info "Save: "+@article.save().to_s if @article.id.nil?
+      Rails.logger.info "Errors: "+@article.errors.to_yaml.to_s
         
       params[:product_entry].delete :article
-      params[:product_entry][:article_id] = article.id
+      params[:product_entry][:article_id] = @article.id
     end
     
     Rails.logger.info "--- New product entry: "+product_entry_params.to_yaml.to_s

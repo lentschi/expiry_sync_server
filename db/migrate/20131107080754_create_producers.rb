@@ -13,7 +13,7 @@ class CreateProducers < ActiveRecord::Migration
     
     change_table :articles do |t|
       t.references :producer
-      t.index :producer_id # I don't get why this isn't done by 't.references'...
+      t.index :producer_id
     end
   end
 end

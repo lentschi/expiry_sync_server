@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  source_url: MyString
+  image_data: 
+  article_id: 
+  article_source_id: 1
+  creator_id: 1
+
+two:
+  source_url: MyString
+  image_data: 
+  article_id: 
+  article_source_id: 1
+  creator_id: 1

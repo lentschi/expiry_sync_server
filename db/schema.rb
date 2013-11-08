@@ -11,10 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131107080754) do
+ActiveRecord::Schema.define(version: 20131107115518) do
 
-  create_table "article_sources", id: false, force: true do |t|
-    t.integer  "id",         null: false
+  create_table "article_images", force: true do |t|
+    t.string   "source_url"
+    t.string   "original_basename"
+    t.string   "original_extname"
+    t.string   "mime_type"
+    t.binary   "image_data"
+    t.integer  "article_id",        null: false
+    t.integer  "article_source_id", null: false
+    t.integer  "creator_id",        null: false
+    t.integer  "modifier_id",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "article_images", ["article_id"], name: "index_article_images_on_article_id"
+  add_index "article_images", ["article_source_id"], name: "index_article_images_on_article_source_id"
+  add_index "article_images", ["creator_id"], name: "index_article_images_on_creator_id"
+  add_index "article_images", ["modifier_id"], name: "index_article_images_on_modifier_id"
+
+  create_table "article_sources", force: true do |t|
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
