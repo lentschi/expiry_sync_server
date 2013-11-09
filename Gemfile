@@ -60,6 +60,15 @@ group :development do
   gem 'debugger'
 end
 
+group :test do
+  gem 'rspec-rails'
+  gem "cucumber", :require => false
+  gem 'cucumber-rails', :require => false
+  #gem 'cucumber-api-steps', :require => false
+  gem 'database_cleaner'
+  gem 'factory_girl_rails'
+end
+
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
