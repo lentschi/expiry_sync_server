@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131107115518) do
+ActiveRecord::Schema.define(version: 20131120115232) do
 
   create_table "article_images", force: true do |t|
     t.string   "source_url"
@@ -61,19 +61,18 @@ ActiveRecord::Schema.define(version: 20131107115518) do
   add_index "articles", ["updated_at"], name: "index_articles_on_updated_at"
 
   create_table "locations", force: true do |t|
-    t.string   "uuid",        null: false
     t.string   "name",        null: false
     t.integer  "creator_id",  null: false
     t.integer  "modifier_id", null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.datetime "deleted_at"
   end
 
   add_index "locations", ["created_at"], name: "index_locations_on_created_at"
   add_index "locations", ["creator_id"], name: "index_locations_on_creator_id"
   add_index "locations", ["modifier_id"], name: "index_locations_on_modifier_id"
   add_index "locations", ["updated_at"], name: "index_locations_on_updated_at"
-  add_index "locations", ["uuid"], name: "index_locations_on_uuid"
 
   create_table "locations_users", id: false, force: true do |t|
     t.integer "location_id"

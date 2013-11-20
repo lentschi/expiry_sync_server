@@ -26,15 +26,19 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
-#auth
+# auth
 gem 'devise'
 gem 'sentient_user', git: "git://github.com/house9/sentient_user.git"
 gem 'clerk', git: "git://github.com/house9/clerk.git"    
 
-#views
+# views:
 gem 'haml'
 
+# html parsing:
 gem 'nokogiri'
+
+# deleted flags:
+gem 'paranoia', '~> 2.0'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

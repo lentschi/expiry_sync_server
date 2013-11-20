@@ -3,7 +3,7 @@ Feature: Location sharing
 	
 Background:
 	Given a valid user exists
-	Given I am logged in with that user
+		And I am logged in with that user
 	
 Scenario: Share a location
     Given my user has an email address set

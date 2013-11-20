@@ -19,6 +19,10 @@ Given /^a valid user exists$/ do
   @existing_user ||= FactoryGirl.create :user
 end
 
+Given /^I am logged in with that user$/ do
+  step "I perform a login with that user's data"
+end
+
 When /^I perform a login with (that user's|invalid login) data$/ do |login_data_str|
   user = (login_data_str == "that user's") ? existing_user : invalid_user
   user.should_not be_nil, "You need to specify what you mean by 'that user' (no preceding 'Given a valid user exists' registered)!"

@@ -4,7 +4,7 @@ Feature: Location handling
     
 Background:
     Given a valid user exists
-    Given I am logged in with that user
+    	And I am logged in with that user
 
 # ADDING        
 Scenario: Add a location with valid data

@@ -3,25 +3,46 @@ Feature: Location retrieval
     
 Background:
     Given a valid user exists
-    Given I am logged in with that user
+    	And I am logged in with that user
 
 
-Scenario: Retrieve locations assigned to the current user
+# 'all locations' are only requested, if there has never been a retrieval  
+Scenario: Retrieve all locations assigned to the current user
     When I request a list of my locations
     Then the call should be successful
         And I should have received a valid location list
         
-Scenario: Retrieve list of locations assigned to the current user, which is still empty (directly after registration)
+Scenario: Retrieve list of all locations assigned to the current user, which is still empty (directly after registration)
     Given I successfully register a new user
         And I am logged in with that user
     When I request a list of my locations
     Then the call should be successful
         And I should have received a valid location list
         And that list should be empty
-        
-Scenario: Retrieve list of locations assigned to the current user, which contains some locations
+
+#Login on a new device / different user who's been newly assigned to the location:        
+Scenario: Retrieve list of all locations assigned to the current user, which contains some locations
     Given several locations are assigned to me
     When I request a list of my locations
     Then the call should be successful
         And I should have received a valid location list
         And that list should contain the same locations as assigned before
+
+Scenario: Retrieve list of locations assigned to the current user, that was changed
+	Given the client had performed a location retrieval earlier
+		And several locations were assigned to me before that retrieval
+		And a changed set of locations was assigned to me after that retrieval
+	When I request a list of my locations specifying the time of that retrieval
+    Then the call should be successful
+    	And I should have received a valid location list
+        And that list should contain the same locations as assigned after the retrieval
+
+Scenario: Retrieve list of locations assigned to the current user, that was changed, containing deleted locations
+	Given the client had performed a location retrieval earlier
+		And several locations were assigned to me before that retrieval
+		And a changed set of locations (where some have even been deleted) was assigned to me after that retrieval
+	When I request a list of my locations specifying the time of that retrieval
+    Then the call should be successful
+    	And I should have received a valid location list
+        And that list should contain the same locations as assigned after the retrieval
+        And that list should contain the locations that were deleted after the retrieval with respective deleted timestamps
