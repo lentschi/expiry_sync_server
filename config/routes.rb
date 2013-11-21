@@ -3,8 +3,6 @@ BbwServer::Application.routes.draw do
 
   resources :producers
 
-  resources :locations
-
   devise_for :users, controllers: {sessions: "sessions", registrations: "registrations"}
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -25,7 +23,9 @@ BbwServer::Application.routes.draw do
   get 'articles/by_barcode/:barcode' => 'articles#by_barcode'
   
   resources :product_entries
-  resources :locations
+  resources :locations do
+    get "index_mine_changed", on: :collection
+  end
   
   resources :article_images do
     get "serve", :on => :member

@@ -1,11 +1,22 @@
 require 'debugger'
 
+SIGN_IN_PATH = "/users/sign_in"
+
 def existing_user
   @existing_user
 end
 
+def other_user
+  @other_user ||= FactoryGirl.create(:user, email: 'other@alia.com', password: 'correct')
+end
+
 def invalid_user
-  @invalid_user ||= User.new(email: 'invalid@wrong.com', password: 'wrong')
+  @invalid_user ||= FactoryGirl.build(:user, email: 'invalid@wrong.com', password: 'wrong')
+end
+
+def logged_in_user
+  @logged_in_user.should_not be_nil, "No 'current user'"
+  @logged_in_user
 end
 
 #Given /^the following users exist:$/ do |user_rows|
@@ -20,27 +31,33 @@ Given /^a valid user exists$/ do
 end
 
 Given /^I am logged in with that user$/ do
+  # TODO: Make this non-step calls:
   step "I perform a login with that user's data"
+  step "the call should be successful"
+  step "I should have received a valid access token"
 end
 
 When /^I perform a login with (that user's|invalid login) data$/ do |login_data_str|
   user = (login_data_str == "that user's") ? existing_user : invalid_user
   user.should_not be_nil, "You need to specify what you mean by 'that user' (no preceding 'Given a valid user exists' registered)!"
    
-  params = {
+  @sign_in_params = {
     user: {
       email: user.email,
       password: user.password
     }
   }
   
-  json_post "/users/sign_in", params
+  json_post SIGN_IN_PATH, @sign_in_params
 end
 
 Then /^I should have received a valid access token$/ do
   set_cookie_header = last_response.header["Set-Cookie"]
   set_cookie_header.should match(/bbw_server_session=.+;/)
   #TODO: Check if this cannout be done more accurately
+  
+  
+  @logged_in_user = User.find_by_email(@sign_in_params[:user][:email])
 end
 
 When /^I try to register (.+)$/ do |in_which_way_str|

@@ -29,7 +29,8 @@ gem 'jbuilder', '~> 1.2'
 # auth
 gem 'devise'
 gem 'sentient_user', git: "git://github.com/house9/sentient_user.git"
-gem 'clerk', git: "git://github.com/house9/clerk.git"    
+gem 'clerk', git: "git://github.com/house9/clerk.git"
+gem 'cancan'    
 
 # views:
 gem 'haml'
@@ -71,6 +72,7 @@ group :test do
   #gem 'cucumber-api-steps', :require => false
   gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'addressable'
 end
 
 # Use debugger

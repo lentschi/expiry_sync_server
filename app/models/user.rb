@@ -6,4 +6,6 @@ class User < ActiveRecord::Base
   
   # required by the 'clerk'-gem (track creator and modifier user):
   include SentientUser
+  
+  has_and_belongs_to_many :locations
 end

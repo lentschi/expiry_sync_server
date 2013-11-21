@@ -10,5 +10,20 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session, :if => Proc.new { |c| c.request.format == 'application/json' }
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
   
+  # CanCan:
+  rescue_from CanCan::AccessDenied do |exception|
+    raise ActionController::RoutingError.new('Forbidden')
+  end
   
+  # workaround to make CanCan and rails 4 work together on create actions
+  # s. https://github.com/ryanb/cancan/issues/835#issuecomment-20229737 and
+  # http://stackoverflow.com/questions/19273182/activemodelforbiddenattributeserror-cancan-rails-4-model-with-scoped-con/19504322#19504322
+  # don't quite get it myself - TODO: Check if this could be a security hazard
+  def prepare_params_for_can_can
+    resource = controller_path.singularize.gsub('/', '_').to_sym
+    method = "#{resource}_params"
+    params[resource] &&= send(method) if respond_to?(method, true)
+  end
+  
+  before_filter :prepare_params_for_can_can, only: [:create]
 end

@@ -1,11 +1,33 @@
 class LocationsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_location, only: [:show, :edit, :update, :destroy]
+    
+  load_and_authorize_resource
 
   # GET /locations
   # GET /locations.json
   def index
     @locations = Location.all
+  end
+  
+  def index_mine_changed
+    @locations = current_user.locations
+    @deleted_locations = current_user.locations.with_deleted.where.not('deleted_at IS NULL')
+    
+    unless location_index_params[:last_change].nil?
+      @locations = @locations.where('deleted_at >= :last_change', {last_change: location_index_params[:last_change]})
+      @deleted_locations = @deleted_locations.where('deleted_at >= :last_change', {last_change: location_index_params[:last_change]})
+    end
+    
+    respond_to do |format|
+      format.json do
+        render json: {
+          status: 'success',
+          locations: @locations,
+          deleted_locations: @deleted_locations
+        }
+      end
+    end
   end
 
   # GET /locations/1
@@ -56,10 +78,11 @@ class LocationsController < ApplicationController
   # DELETE /locations/1
   # DELETE /locations/1.json
   def destroy
-    @location.destroy
+    success = @location.destroy
+    
     respond_to do |format|
       format.html { redirect_to locations_url }
-      format.json { head :no_content }
+      format.json { render json: {status: success ? :success : :failure} }
     end
   end
 
@@ -71,6 +94,10 @@ class LocationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def location_params
-      params.require(:location).permit(:uuid, :name)
+      params.require(:location).permit(:name)
+    end
+    
+    def location_index_params
+      params.permit(:last_change)
     end
 end
