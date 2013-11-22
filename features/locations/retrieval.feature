@@ -20,13 +20,14 @@ Scenario: Retrieve list of all locations assigned to the current user, which is 
         And I should have received a valid location list
         And that list should be empty
 
-#Login on a new device / different user who's been newly assigned to the location:        
-Scenario: Retrieve list of all locations assigned to the current user, which contains some locations
+# Login on a new device / different user who's been newly assigned to the location:        
+Scenario: Retrieve list of all locations assigned to the current user, 
+    which contains some locations
     Given several locations are assigned to me
     When I request a list of my locations
     Then the call should be successful
         And I should have received a valid location list
-        And that list should contain the same locations as assigned before
+        And the same locations as assigned before should be in the list
 
 Scenario: Retrieve list of locations assigned to the current user, that was changed
 	Given the client had performed a location retrieval earlier

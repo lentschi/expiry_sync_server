@@ -11,6 +11,13 @@ Scenario: Add a location with valid data
     When I try to add a location with valid data
     Then the call should be successful
         And I should have received a valid location
+
+Scenario: Add two locations with the same name
+    When I try to add a location with valid data
+    Then the call should be successful
+        And I should have received a valid location
+    When I try to add a location with valid data using the same location name as before
+    Then the call should fail
         
 # DELETING
 Scenario: Delete an existing location assigned created by the current user
@@ -27,7 +34,8 @@ Scenario: Delete an existing location, that is not assigned to the current user
     When I try to delete that location
     Then the call should fail
         
-Scenario: Delete an existing location, that is assigned to the current user but was created by someone else than the current user
+Scenario: Delete an existing location, that is assigned to the current user 
+    but was created by someone else than the current user
     Given a location created by someone else is assigned to me
     When I try to delete that location
     Then the call should fail
