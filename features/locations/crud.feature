@@ -27,7 +27,7 @@ Scenario: Delete an existing location assigned created by the current user
     When I request a list of my locations
     Then the call should be successful
         And I should have received a valid location list
-        And the previously deleted location should be in the list marked as deleted
+        And the previously deleted location should be in the location list marked as deleted
 
 Scenario: Delete an existing location, that is not assigned to the current user
     Given a location is not assigned to me
@@ -42,11 +42,11 @@ Scenario: Delete an existing location, that is assigned to the current user
 
 # UPDATING
 Scenario: Update the data of an existing location assigned to the current user
-    Given a location is assigned to me
-    When I try to update that location 
+    Given a location created by me is assigned to me
+    When I try to update that location with different valid data 
     Then the call should be successful
     When I request a list of my locations
     Then the call should be successful
         And I should have received a valid location list
-        And the previously updated location should appear with the new data
-        And the previously updated location should no longer appear with its old data
+        And the location with its new data should be in the location list
+        And the location with its old data should no longer be in the location list 

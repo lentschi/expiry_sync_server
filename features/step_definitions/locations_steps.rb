@@ -2,6 +2,7 @@ require 'debugger'
 
 ADD_PATH = '/locations'
 DELETE_PATH = '/locations'
+UPDATE_PATH = '/locations'
 INDEX_MINE_CHANGED_PATH = '/locations/index_mine_changed'
 
 VALID_LOCATION_DATA = [
@@ -10,34 +11,13 @@ VALID_LOCATION_DATA = [
   {name: "Test2"},
 ]
 
+INVALID_LOCATION_DATA = {name: ''}
+
 SEVERAL_AMOUNT = 3 # how much are 'several locations'
 
-def get_valid_location_data
-  @valid_location_data_counter ||= 0
-  location_data = VALID_LOCATION_DATA[@valid_location_data_counter]
-  @valid_location_data_counter += 1
-  @valid_location_data_counter = 0 if @valid_location_data_counter >= VALID_LOCATION_DATA.length
-  
-  location_data
-end
-
-def location(reference='that location')
-  locations(reference).should have(1).items, reference_error_str(reference)
-  locations(reference)[0]
-end
-
-def locations(reference)
-  @locations.should_not be_nil, reference_error_str(reference)
-  @locations
-end
-
-def locations_list(reference='the list')
-  @locations_list.should_not be_nil, reference_error_str(reference)
-  @locations_list
-end
 
 When /^I try to add a location with valid data(?: using (.+))?$/ do |using_data_str|
-  @locations_posted ||= Array.new
+  @locations_submitted ||= Array.new
   
   same_name_as_before = false
   case using_data_str
@@ -45,7 +25,7 @@ When /^I try to add a location with valid data(?: using (.+))?$/ do |using_data_
     nil # pass
   when 'the same location name as before'
     same_name_as_before = true
-    @locations_posted.should have_at_least(1).items
+    @locations_submitted.should have_at_least(1).items
   else
     raise Cucumber::Undefined.new("No such data to use: '#{using_data_str}'")
   end
@@ -53,13 +33,38 @@ When /^I try to add a location with valid data(?: using (.+))?$/ do |using_data_
   location_data = get_valid_location_data()
   params = {
     location: {
-      name: same_name_as_before ? @locations_posted.last[:location][:name] : location_data[:name]
+      name: same_name_as_before ? @locations_submitted.last[:location][:name] : location_data[:name]
     }
   }
     
   json_post ADD_PATH, params
   
-  @locations_posted << params
+  @locations_submitted << params
+end
+
+When /^I try to update that location with( different)? (valid|invalid) data$/ do |different_data_str, valid_str|
+  @locations_submitted ||= Array.new
+  
+  @valid_location_data_counter ||= 0
+  unless different_data_str.nil?
+    @valid_location_data_counter+= 1
+  end
+  
+  valid = (valid_str=='valid')
+  raise Cucumber::Undefined.new("Not implemented: Different AND invalid") unless different_data_str.nil? or valid
+    
+  location_data = valid ? VALID_LOCATION_DATA[@valid_location_data_counter] : INVALID_LOCATION_DATA
+    
+  params = {
+    location: {
+      id: location('that location').id,
+      name: location_data[:name]
+    }
+  }
+  
+  json_put UPDATE_PATH+'/'+location('that location').id.to_s, params
+  
+  @locations_submitted << params
 end
 
 Then /^I should have received a valid location$/ do
@@ -115,7 +120,7 @@ Given /^(a location|several locations) (?:created by (.+) )?(?:is|are|was|were) 
 end
 
 When /^I try to delete that location$/ do
-  json_delete DELETE_PATH + "/#{location.id}"
+  json_delete DELETE_PATH + "/"+location('that location').id.to_s
 end
 
 When /^I request a list of my locations$/ do
@@ -144,32 +149,79 @@ Then /^I should have received a valid location list/ do
   @locations_list = {locations: result['locations'], deleted_locations: result['deleted_locations']}
 end
 
-Then /^(.+) should be in the list(?: marked as (deleted|existing))?$/ do |location_str, marked_as|  
+Then /^(.+) should( not| no longer)? be in the location list(?: marked as (deleted|existing))?$/ do |location_str, negation_str, marked_as_str|  
   the_locations_arr = case location_str
   when 'the previously deleted location'
     [ location('previously deleted location') ]
   when 'the same locations as assigned before'
     locations('same locations as assigned before')
+  when 'the location with its new data'
+    @locations_submitted.should_not be_nil
+    @locations_submitted.should have_at_least(1).items
+    @locations_submitted.map { |params| FactoryGirl.build(:location,params[:location]) }
+  when 'the location with its old data'
+    old_location = location('the location with its old data')
+    old_location.id = nil # we don't count the id as 'data'
+    [ old_location ]
   else
     raise Cucumber::Undefined.new("No such location(s): '#{location_str}'")
   end
   
+  ensure_in_list('the list', the_locations_arr, !negation_str.nil?, marked_as_str)  
+end
+
+def get_valid_location_data
+  @valid_location_data_counter ||= 0
+  location_data = VALID_LOCATION_DATA[@valid_location_data_counter]
+  @valid_location_data_counter += 1
+  @valid_location_data_counter = 0 if @valid_location_data_counter >= VALID_LOCATION_DATA.length
+  
+  location_data
+end
+
+def location(reference)
+  locations(reference).should have(1).items, reference_error_str(reference)
+  locations(reference)[0]
+end
+
+def locations(reference)
+  @locations.should_not be_nil, reference_error_str(reference)
+  @locations
+end
+
+def locations_list(reference)
+  @locations_list.should_not be_nil, reference_error_str(reference)
+  @locations_list
+end
+
+
+def ensure_in_list(reference, the_locations_arr, negated, marked_as_str)
+  if negated and !marked_as_str.nil?
+    raise Cucumber::Undefined.new("Cannot ensure that a location that is not supposed to be there should be marked as '#{marked_as_str}'")
+  end 
+  
   the_locations_arr.each do |the_location|
-    found = nil
-    (locations_list[:locations] + locations_list[:deleted_locations]).each do |location_hash|
-      if Integer(location_hash['id']) == the_location.id and location_hash['name'] == the_location.name
-        found = location_hash
+      found = nil
+      (locations_list(reference)[:locations] + locations_list(reference)[:deleted_locations]).each do |location_hash|
+        # only compare the id if we have one (when comparing 'data' we won't have one):
+        if (the_location.id.nil? || Integer(location_hash['id']) == the_location.id) \
+          and location_hash['name'] == the_location.name
+          found = location_hash 
+          break
+        end
+      end
+      
+      unless negated
+        found.should_not be_nil
+        
+        case marked_as_str
+        when 'deleted'
+          found['deleted_at'].should_not be_nil
+        when 'existing'
+          found['deleted_at'].should be_nil
+        end
+      else
+        found.should be_nil
       end
     end
-    
-    found.should_not be_nil
-    case marked_as
-    when 'deleted'
-      found['deleted_at'].should_not be_nil
-    when 'existing'
-      found['deleted_at'].should be_nil
-    end
-  end
-  
-  
 end

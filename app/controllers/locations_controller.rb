@@ -67,10 +67,10 @@ class LocationsController < ApplicationController
     respond_to do |format|
       if @location.update(location_params)
         format.html { redirect_to @location, notice: 'Location was successfully updated.' }
-        format.json { head :no_content }
+        format.json { render json: {status: :success} }
       else
         format.html { render action: 'edit' }
-        format.json { render json: { status: :unprocessable_entity } }
+        format.json { render json: {status: :failure} }
       end
     end
   end

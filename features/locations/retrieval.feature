@@ -27,7 +27,7 @@ Scenario: Retrieve list of all locations assigned to the current user,
     When I request a list of my locations
     Then the call should be successful
         And I should have received a valid location list
-        And the same locations as assigned before should be in the list
+        And the same locations as assigned before should be in the location list
 
 Scenario: Retrieve list of locations assigned to the current user, that was changed
 	Given the client had performed a location retrieval earlier

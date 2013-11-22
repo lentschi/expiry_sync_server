@@ -41,6 +41,15 @@ def json_post(path, params)
   json_request path, request_opts
 end
 
+def json_put(path, params)
+  request_opts = {
+    method: 'PUT',
+    input: params.to_json
+  }
+  
+  json_request path, request_opts
+end
+
 def json_delete(path)
   request_opts = {
     method: 'DELETE'
