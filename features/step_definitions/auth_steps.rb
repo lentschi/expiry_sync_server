@@ -2,21 +2,8 @@ require 'debugger'
 
 SIGN_IN_PATH = "/users/sign_in"
 
-def existing_user
-  @existing_user
-end
-
-def other_user
-  @other_user ||= FactoryGirl.create(:user, email: 'other@alia.com', password: 'correct')
-end
-
-def invalid_user
-  @invalid_user ||= FactoryGirl.build(:user, email: 'invalid@wrong.com', password: 'wrong')
-end
-
-def logged_in_user
-  @logged_in_user.should_not be_nil, "No 'current user'"
-  @logged_in_user
+Before do |scenario|
+  @authHelper = CucumberAuthHelpers::AuthHelper.new
 end
 
 #Given /^the following users exist:$/ do |user_rows|
@@ -27,7 +14,7 @@ end
 #end
 
 Given /^a valid user exists$/ do
-  @existing_user ||= FactoryGirl.create :user
+  @authHelper.existing_user ||= FactoryGirl.create :user
 end
 
 Given /^I am logged in with that user$/ do
@@ -38,17 +25,16 @@ Given /^I am logged in with that user$/ do
 end
 
 When /^I perform a login with (that user's|invalid login) data$/ do |login_data_str|
-  user = (login_data_str == "that user's") ? existing_user : invalid_user
-  user.should_not be_nil, "You need to specify what you mean by 'that user' (no preceding 'Given a valid user exists' registered)!"
+  user = (login_data_str == "that user's") ? @authHelper.remember_existing_user('that user') : @authHelper.invalid_user
    
-  @sign_in_params = {
+  @authHelper.sign_in_params = {
     user: {
       email: user.email,
       password: user.password
     }
   }
   
-  json_post SIGN_IN_PATH, @sign_in_params
+  json_post SIGN_IN_PATH, @authHelper.sign_in_params
 end
 
 Then /^I should have received a valid access token$/ do
@@ -57,7 +43,7 @@ Then /^I should have received a valid access token$/ do
   #TODO: Check if this cannout be done more accurately
   
   
-  @logged_in_user = User.find_by_email(@sign_in_params[:user][:email])
+  @authHelper.logged_in_user = User.find_by_email(@authHelper.sign_in_params[:user][:email])
 end
 
 When /^I try to register (.+)$/ do |in_which_way_str|
