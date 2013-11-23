@@ -13,6 +13,10 @@ module CucumberAuthHelpers
       @other_user ||= FactoryGirl.create(:user, username: 'alia', email: 'other@alia.com', password: 'correct')
     end
     
+    def new_user
+      @new_user ||= FactoryGirl.build(:user, username: 'new', email: 'new@test.com', password: 'correct')
+    end
+    
     def invalid_user
       @invalid_user ||= FactoryGirl.build(:user, username: 'invalid', email: 'invalid@wrong.com', password: 'wrong')
     end

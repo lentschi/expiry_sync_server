@@ -26,7 +26,7 @@ class RegistrationsController < Devise::RegistrationsController
         clean_up_passwords resource
         respond_with resource do |format|
           format.html
-          format.json { render json: {status: 'error', code: 1}}
+          format.json { render json: {status: 'error', errors: resource.errors.to_hash}}
         end
       end
     end

@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_filter :prepare_params_for_can_can, only: [:create]
+  before_filter :configure_permitted_devise_parameters, if: :devise_controller?
   
   # required by the 'clerk'-gem (track creator and modifier user):
   include SentientController
@@ -25,5 +26,10 @@ class ApplicationController < ActionController::Base
     resource = controller_path.singularize.gsub('/', '_').to_sym
     method = "#{resource}_params"
     params[resource] &&= send(method) if respond_to?(method, true)
+  end
+  
+  def configure_permitted_devise_parameters
+    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me) }
+    devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:username, :email, :password, :remember_me) }
   end
 end

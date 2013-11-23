@@ -9,8 +9,9 @@ Scenario: Register a new user with valid data
 Scenario Outline: Register a new user with invalid data
 	When I try to register <in_which_way?>
 	Then the call should fail
+	   And I should have received errors on the <error_field> field 
 Examples:
-	| in_which_way? |
-	| omitting the username |
-	| with an invalid email address |
-	| with a typo in the repeat password field |
+	| in_which_way? | error_field |
+	| omitting the username | username |
+	| with an invalid username | username |
+	| with an invalid email address | email |

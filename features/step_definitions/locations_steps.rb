@@ -40,7 +40,7 @@ When /^I try to add a location with valid data(?: using (.+))?$/ do |using_data_
     }
   }
     
-  json_post ADD_PATH, params
+  @jsonHelper.json_post ADD_PATH, params
   
   @locationHelper.locations_submitted << params
 end
@@ -65,13 +65,13 @@ When /^I try to update that location with( different)? (valid|invalid) data$/ do
     }
   }
   
-  json_put UPDATE_PATH+'/'+@locationHelper.remember_location('that location').id.to_s, params
+  @jsonHelper.json_put UPDATE_PATH+'/'+@locationHelper.remember_location('that location').id.to_s, params
   
   @locationHelper.locations_submitted << params
 end
 
 Then /^I should have received a valid location$/ do
-  result = JSON.parse(last_response.body)
+  result = JSON.parse(@jsonHelper.last_response.body)
   
   TestHelper.verify_contained_obj_integrity result, "location"
   result["location"].should have_key("name")
@@ -123,15 +123,15 @@ Given /^(a location|several locations) (?:created by (.+) )?(?:is|are|was|were) 
 end
 
 When /^I try to delete that location$/ do
-  json_delete DELETE_PATH + "/"+@locationHelper.remember_location('that location').id.to_s
+  @jsonHelper.json_delete DELETE_PATH + "/"+@locationHelper.remember_location('that location').id.to_s
 end
 
 When /^I request a list of my locations$/ do
-  json_get INDEX_MINE_CHANGED_PATH#, last_change: nil
+  @jsonHelper.json_get INDEX_MINE_CHANGED_PATH#, last_change: nil
 end
 
 Then /^I should have received a valid location list/ do
-  result = JSON.parse(last_response.body)
+  result = JSON.parse(@jsonHelper.last_response.body)
   
   result.should have_key('locations')
   result['locations'].should be_a_kind_of(Array)  
