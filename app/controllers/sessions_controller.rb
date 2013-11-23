@@ -1,4 +1,4 @@
-class SessionsController < Devise::SessionsController 
+class SessionsController < Devise::SessionsController   
   def new
     super
   end
@@ -27,5 +27,4 @@ class SessionsController < Devise::SessionsController
       format.any(*navigational_formats) { redirect_to redirect_path }
     end
   end
-
 end

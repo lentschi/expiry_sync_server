@@ -10,11 +10,11 @@ module CucumberAuthHelpers
     end
     
     def other_user
-      @other_user ||= FactoryGirl.create(:user, email: 'other@alia.com', password: 'correct')
+      @other_user ||= FactoryGirl.create(:user, username: 'alia', email: 'other@alia.com', password: 'correct')
     end
     
     def invalid_user
-      @invalid_user ||= FactoryGirl.build(:user, email: 'invalid@wrong.com', password: 'wrong')
+      @invalid_user ||= FactoryGirl.build(:user, username: 'invalid', email: 'invalid@wrong.com', password: 'wrong')
     end
     
     def remember_logged_in_user(error_msg="No 'current user'")

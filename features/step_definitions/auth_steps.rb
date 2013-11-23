@@ -29,7 +29,7 @@ When /^I perform a login with (that user's|invalid login) data$/ do |login_data_
    
   @authHelper.sign_in_params = {
     user: {
-      email: user.email,
+      username: user.username,
       password: user.password
     }
   }
@@ -43,7 +43,7 @@ Then /^I should have received a valid access token$/ do
   #TODO: Check if this cannout be done more accurately
   
   
-  @authHelper.logged_in_user = User.find_by_email(@authHelper.sign_in_params[:user][:email])
+  @authHelper.logged_in_user = User.find_by_username(@authHelper.sign_in_params[:user][:username])
 end
 
 When /^I try to register (.+)$/ do |in_which_way_str|
