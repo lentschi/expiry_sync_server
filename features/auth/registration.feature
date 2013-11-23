@@ -11,6 +11,6 @@ Scenario Outline: Register a new user with invalid data
 	Then the call should fail
 Examples:
 	| in_which_way? |
-	| omitting my first name |
-	| omitting my last name |
+	| omitting the username |
+	| with an invalid email address |
 	| with a typo in the repeat password field |

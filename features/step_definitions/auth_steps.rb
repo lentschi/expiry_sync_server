@@ -48,7 +48,13 @@ end
 
 When /^I try to register (.+)$/ do |in_which_way_str|
   case in_which_way_str
-  when 'omitting my first name'
+  when 'with valid data'
+    raise Cucumber::Undefined.new("TODO too'")
+  when 'omitting the username'
+    raise Cucumber::Undefined.new("TODO too'")
+  when 'with an invalid email address'
+    raise Cucumber::Undefined.new("TODO too'")
+  when 'with a typo in the repeat password field'
     raise Cucumber::Undefined.new("TODO too'")
   else
     raise Cucumber::Undefined.new("No such way to register in: '#{in_which_way_str}'")
