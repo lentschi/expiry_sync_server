@@ -16,11 +16,11 @@ class User < ActiveRecord::Base
   
   validates :username, :uniqueness => { :case_sensitive => false }, length: { in: 2..20 }
     
-  cattr_accessor :email_required
-  @@email_required = false # will only be required upon update
+  cattr_accessor :email_is_required
+  @@email_is_required = false # will only be required upon update
     
   def email_required?
-    @@email_required
+    @@email_is_required
   end
   
   def self.find_first_by_auth_conditions(warden_conditions)

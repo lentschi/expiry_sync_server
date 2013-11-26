@@ -8,8 +8,11 @@ Scenario: Update password and set an email address
     When I try to update that user with an email address and a new password
     Then the call should be successful
     When I logout
-        And I try to login with that user specifying the new password
+        And I perform a login with that user's data specifying the new password
     Then the call should be successful
+    When I logout
+        And I perform a login with that user's data specifying the old password
+    Then the call should fail
     
 Scenario Outline: Update password without setting an email address
     Given a valid user without an email address exists

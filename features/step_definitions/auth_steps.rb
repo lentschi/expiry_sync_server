@@ -1,7 +1,9 @@
 require 'debugger'
 
 SIGN_IN_PATH = "/users/sign_in"
+SIGN_OUT_PATH = "/users/sign_out"
 REGISTER_PATH = "/users"
+UPDATE_USER_PATH = "/users"
 
 Before do |scenario|
   @authHelper = CucumberAuthHelpers::AuthHelper.new
@@ -20,12 +22,12 @@ Given /^I am logged in with that user$/ do
   step "I should have received a valid access token"
 end
 
-When /^I perform a login with (that user's|invalid login) data(?: using their (.+) as login key)?$/ do |login_data_str, login_key_str|
+When /^I perform a login with (that user's|invalid login) data(?: using their (.+) as login key)?(?: specifying the (new|old) password)?$/ do |login_data_str, login_key_str, specify_new_pwd_str|
   user = (login_data_str == "that user's") ? @authHelper.remember_existing_user('that user') : @authHelper.invalid_user
    
   @authHelper.sign_in_params = {
     user: {
-      password: user.password
+      password: specify_new_pwd_str.nil? ? user.password : ((specify_new_pwd_str == 'old') ? @authHelper.old_password : @authHelper.sign_in_params[:user][:password])
     }
   }
   
@@ -77,4 +79,41 @@ When /^I try to register (.+)$/ do |in_which_way_str|
   @jsonHelper.json_post REGISTER_PATH, params
   
   @authHelper.sign_in_params = params # newly registered users are automatically signed in
+end
+
+
+When /^I try to update that user (.+)$/ do |with_what_data_str|
+  the_user = @authHelper.remember_logged_in_user("Don't know what you mean by 'that user'")
+  
+  params = {
+    user: {
+      username: the_user.username,
+      id: the_user.id 
+    }
+  }
+  
+  case with_what_data_str
+  when 'with an email address and a new password'
+    params[:user][:email] = the_user.email
+    @authHelper.old_password = params[:user][:current_password] = '123123' # TODO: define this as a constant
+    params[:user][:password] = 'somenewvalidpwd'
+  when 'with a new username'
+    params[:user][:username] = 'somenewvalidusername'
+  when 'without an email address'
+    @authHelper.old_password = params[:user][:current_password] = '123123' # TODO: define this as a constant
+    params[:user][:password] = 'somenewvalidpwd'
+  end
+  
+  @jsonHelper.json_put UPDATE_USER_PATH, params
+  
+  @authHelper.sign_in_params = {
+    user: {
+      username: params[:user][:username].nil? ? the_user.username : params[:user][:username],
+      password: 'somenewvalidpwd'
+    }
+  }  
+end
+
+When /^I logout$/ do 
+  @jsonHelper.json_delete SIGN_OUT_PATH
 end
