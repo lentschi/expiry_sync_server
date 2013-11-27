@@ -94,7 +94,7 @@ When /^I try to update that user (.+)$/ do |with_what_data_str|
   
   case with_what_data_str
   when 'with an email address and a new password'
-    params[:user][:email] = the_user.email
+    params[:user][:email] = 'somevalidaddress@bla.com'
     @authHelper.old_password = params[:user][:current_password] = '123123' # TODO: define this as a constant
     params[:user][:password] = 'somenewvalidpwd'
   when 'with a new username'
@@ -103,9 +103,8 @@ When /^I try to update that user (.+)$/ do |with_what_data_str|
     @authHelper.old_password = params[:user][:current_password] = '123123' # TODO: define this as a constant
     params[:user][:password] = 'somenewvalidpwd'
   end
-  
   @jsonHelper.json_put UPDATE_USER_PATH, params
-  
+
   @authHelper.sign_in_params = {
     user: {
       username: params[:user][:username].nil? ? the_user.username : params[:user][:username],

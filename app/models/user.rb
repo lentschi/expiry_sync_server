@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   attr_accessor :login
   
   validates :username, :uniqueness => { :case_sensitive => false }, length: { in: 2..20 }
+  validate :username_not_changed_on_update
     
   cattr_accessor :email_is_required
   @@email_is_required = false # will only be required upon update
@@ -23,12 +24,29 @@ class User < ActiveRecord::Base
     @@email_is_required
   end
   
+  # username OR email as login:
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
       where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
     else
       where(conditions).first
+    end
+  end
+  
+  # do not require the current password even when setting a new one: 
+  def update_with_password(params={}) 
+    if params[:password].blank? 
+      params.delete(:password) 
+      params.delete(:password_confirmation) if params[:password_confirmation].blank? 
+    end 
+    update_attributes(params) 
+  end
+  
+  protected
+  def username_not_changed_on_update
+    if username_changed? && self.persisted?
+      errors.add(:username, "may not be changed")
     end
   end
 end
