@@ -57,6 +57,8 @@ When /^I try to register (.+)$/ do |in_which_way_str|
   case in_which_way_str
   when 'with valid data', 'with invalid data'
     nil # pass
+  when 'with valid data but without an email address'
+    new_user.email = nil
   when 'omitting the username'
     new_user.username = nil
   when 'with an invalid username'
@@ -79,6 +81,12 @@ When /^I try to register (.+)$/ do |in_which_way_str|
   @jsonHelper.json_post REGISTER_PATH, params
   
   @authHelper.sign_in_params = params # newly registered users are automatically signed in
+end
+
+Given /^I just registered a new user$/ do
+  step "I try to register with valid data"
+  step "the call should be successful"
+  step "I should have received a valid access token"
 end
 
 

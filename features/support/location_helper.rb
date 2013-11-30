@@ -6,11 +6,14 @@ module CucumberLocationHelpers
     
     cattr_accessor :valid_location_data_arr
     
-    attr_accessor :valid_location_data_counter, :locations, :locations_list, :locations_submitted
+    attr_accessor :valid_location_data_counter, 
+       :locations, :modified_locations, :locations_list, :locations_submitted,
+       :last_fetch
     
     def initialize()
       @valid_location_data_counter = 0
       @locations = Array.new
+      @modified_locations = Array.new
       @locations_list = Array.new
     end
     
@@ -34,11 +37,20 @@ module CucumberLocationHelpers
       @locations
     end
     
+    def remember_modified_locations(reference)
+      @modified_locations.should_not be_nil, TestHelper.reference_error_str(reference)
+      @modified_locations
+    end
+  
     def remember_locations_list(reference)
       @locations_list.should_not be_nil, TestHelper.reference_error_str(reference)
       @locations_list
     end
     
+    def remember_last_fetch(reference)
+      @last_fetch.should_not be_nil, TestHelper.reference_error_str(reference)
+      @last_fetch
+    end
     
     def ensure_in_list(reference, the_locations_arr, negated, marked_as_str)
       if negated and !marked_as_str.nil?
@@ -59,7 +71,7 @@ module CucumberLocationHelpers
           end
           
           unless negated
-            found.should_not be_nil
+            found.should_not be_nil, "Required location (Name: '#{the_location['name']}') not found in list"
             
             case marked_as_str
             when 'deleted'

@@ -1,3 +1,5 @@
+require 'debugger'
+
 class LocationsController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_location, only: [:show, :edit, :update, :destroy]
@@ -13,10 +15,10 @@ class LocationsController < ApplicationController
   def index_mine_changed
     @locations = current_user.locations
     @deleted_locations = current_user.locations.with_deleted.where.not('deleted_at IS NULL')
-    
-    unless location_index_params[:last_change].nil?
-      @locations = @locations.where('deleted_at >= :last_change', {last_change: location_index_params[:last_change]})
-      @deleted_locations = @deleted_locations.where('deleted_at >= :last_change', {last_change: location_index_params[:last_change]})
+
+    unless location_index_params[:from_timestamp].nil?
+      @locations = @locations.where('updated_at >= :from_timestamp', {from_timestamp: location_index_params[:from_timestamp]})
+      @deleted_locations = @deleted_locations.where('deleted_at >= :from_timestamp', {from_timestamp: location_index_params[:from_timestamp]})
     end
     
     respond_to do |format|
@@ -98,6 +100,6 @@ class LocationsController < ApplicationController
     end
     
     def location_index_params
-      params.permit(:last_change)
+      params.permit(:from_timestamp)
     end
 end

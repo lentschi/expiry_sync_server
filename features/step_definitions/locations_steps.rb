@@ -13,6 +13,8 @@ VALID_LOCATION_DATA = [
 
 INVALID_LOCATION_DATA = {name: ''}
 
+SEVERAL_LOCATION_AMOUNT = 5
+
 CucumberLocationHelpers::LocationHelper.valid_location_data_arr = VALID_LOCATION_DATA
 
 Before do |scenario|
@@ -126,8 +128,52 @@ When /^I try to delete that location$/ do
   @jsonHelper.json_delete DELETE_PATH + "/"+@locationHelper.remember_location('that location').id.to_s
 end
 
-When /^I request a list of my locations$/ do
-  @jsonHelper.json_get INDEX_MINE_CHANGED_PATH#, last_change: nil
+When /^I request a list of my locations( specifying the time of that retrieval)?$/ do |specify_time_str|
+  params = Hash.new
+  params[:from_timestamp] = @locationHelper.remember_last_fetch('that retrieval').to_s unless specify_time_str.nil?
+  @jsonHelper.json_get INDEX_MINE_CHANGED_PATH, params
+end
+
+Given /^the client had performed a location retrieval earlier$/ do
+  @locationHelper.last_fetch = Time.now
+end
+
+Given /^several locations were assigned to me before that retrieval$/ do
+  fake_time = @locationHelper.remember_last_fetch('that retrieval') - rand(1..10).days
+  params = {
+    created_at: fake_time,
+    updated_at: fake_time
+  }
+  
+  SEVERAL_LOCATION_AMOUNT.times do
+    new_location = FactoryGirl.build :location, params
+    new_location.users << @authHelper.remember_logged_in_user
+    new_location.save
+  end
+end
+
+Given /^a changed set of locations was assigned to me after that retrieval$/ do
+  fake_time = @locationHelper.remember_last_fetch('that retrieval') + rand(1..10).days
+  
+  # update one of the existing ones if there is one:
+  old_location = Location.last
+  unless old_location.nil?
+    old_location.update_attributes(name: 'Test', updated_at: fake_time)
+    old_location.should_not be_nil
+    @locationHelper.modified_locations << old_location
+  end
+    
+  # add some more
+  params = {
+    created_at: fake_time,
+    updated_at: fake_time
+  }
+  SEVERAL_LOCATION_AMOUNT.times do
+    new_location = FactoryGirl.build :location, params
+    new_location.users << @authHelper.remember_logged_in_user
+    new_location.save
+    @locationHelper.modified_locations << new_location
+  end
 end
 
 Then /^I should have received a valid location list/ do
@@ -158,6 +204,8 @@ Then /^(.+) should( not| no longer)? be in the location list(?: marked as (delet
     [ @locationHelper.remember_location('previously deleted location') ]
   when 'the same locations as assigned before'
     @locationHelper.remember_locations('same locations as assigned before')
+  when 'the same locations as assigned after the retrieval'
+    @locationHelper.remember_modified_locations('the same locations as assigned after the retrieval')
   when 'the location with its new data'
     @locationHelper.locations_submitted.should_not be_nil
     @locationHelper.locations_submitted.should have_at_least(1).items
@@ -170,6 +218,10 @@ Then /^(.+) should( not| no longer)? be in the location list(?: marked as (delet
     raise Cucumber::Undefined.new("No such location(s): '#{location_str}'")
   end
   
-  @locationHelper.ensure_in_list('the list', the_locations_arr, !negation_str.nil?, marked_as_str)  
+  @locationHelper.ensure_in_list('the location list', the_locations_arr, !negation_str.nil?, marked_as_str)  
 end
 
+Then /^the location list should be empty$/ do
+  locations_list = @locationHelper.remember_locations_list('the location list')
+  locations_list[:locations].should be_empty
+end

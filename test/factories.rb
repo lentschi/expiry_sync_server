@@ -6,7 +6,11 @@ FactoryGirl.define do
     password_confirmation { |u| u.password }  
   end
   
+  sequence :location_name 
+  
   factory :location do
-    name "Default"
+    sequence(:name) do |n|
+      "Default-#{n}"
+    end
   end
 end
