@@ -58,6 +58,7 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'pg'
+  gem 'debugger2'
 end
 
 group :development do
