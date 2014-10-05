@@ -62,7 +62,7 @@ end
 
 group :development do
   gem 'sqlite3'
-  gem 'debugger'
+  gem 'debugger2'
 end
 
 group :test do
@@ -82,4 +82,4 @@ gem 'mime-types'
 
 gem 'remote_article_fetcher', path: "lib/gems/remote_article_fetcher"
 
-ruby "2.0.0"
+ruby "2.1.3"
