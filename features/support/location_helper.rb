@@ -1,5 +1,3 @@
-require 'debugger'
-
 module CucumberLocationHelpers
   class LocationHelper
     include RSpec::Matchers

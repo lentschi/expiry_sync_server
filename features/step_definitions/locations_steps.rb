@@ -1,5 +1,3 @@
-require 'debugger'
-
 ADD_PATH = '/locations'
 DELETE_PATH = '/locations'
 UPDATE_PATH = '/locations'

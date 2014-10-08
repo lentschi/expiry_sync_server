@@ -1,5 +1,3 @@
-require 'debugger'
-
 SIGN_IN_PATH = "/users/sign_in"
 SIGN_OUT_PATH = "/users/sign_out"
 REGISTER_PATH = "/users"

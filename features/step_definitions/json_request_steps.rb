@@ -1,4 +1,3 @@
-require 'debugger'
 require "addressable/uri"
 
 Before do |scenario|

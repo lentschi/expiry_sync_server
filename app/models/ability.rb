@@ -1,4 +1,3 @@
-require 'debugger'
 class Ability
   include CanCan::Ability
   
@@ -11,11 +10,9 @@ class Ability
     
     can :read, Location do |location|
       location.users.each do |associated_user|
-        debugger
         return true if associated_user == user
       end
       
-      debugger
       false
     end
     

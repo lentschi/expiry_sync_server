@@ -58,12 +58,11 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'pg'
-  gem 'debugger2'
 end
 
 group :development do
   gem 'sqlite3'
-  gem 'debugger2'
+  gem 'byebug'
 end
 
 group :test do
