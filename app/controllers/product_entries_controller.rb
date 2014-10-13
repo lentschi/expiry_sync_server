@@ -2,11 +2,15 @@ class ProductEntriesController < ApplicationController
   before_filter :authenticate_user!
   
   def create
-    unless params[:product_entry][:article].nil?
+    unless product_entry_params[:article].nil?
       Rails.logger.info "--- Current user id: "+current_user.id.to_s + ", initial params"+params[:product_entry].to_yaml.to_s
-      image_params = params[:product_entry][:article][:images].clone
+      
+      image_params = Array.new
+      image_params = product_entry_params[:article][:images].clone unless product_entry_params[:article][:images].nil?
+      image_params = [] if image_params.nil? # s. https://github.com/rails/rails/issues/13766
       params[:product_entry][:article].delete :images
-      @article = Article.smart_find_or_initialize(wrapped_article_params(params[:product_entry]))
+      
+      @article = Article.smart_find_or_initialize(product_entry_params[:article])
       @article.decode_images(image_params)
       @article.source = ArticleSource.get_user_source
       Rails.logger.info "Save: "+@article.save().to_s if @article.id.nil?
@@ -16,6 +20,7 @@ class ProductEntriesController < ApplicationController
       params[:product_entry][:article_id] = @article.id
     end
     
+    product_entry_params.delete :article
     Rails.logger.info "--- New product entry: "+product_entry_params.to_yaml.to_s
     
     @product_entry = ProductEntry.new(product_entry_params)
@@ -36,11 +41,21 @@ class ProductEntriesController < ApplicationController
     end 
   end
   
-  def product_entry_params
-    params.require(:product_entry).permit(:article_id, :location_id, :description, :expiration_date, :amount)
-  end
-  
-  def wrapped_article_params(article_params)
-    article_params.require(:article).permit(:name, :barcode)
-  end
+ 	def product_entry_params
+ 		# s. https://github.com/rails/rails/issues/13766 :
+ 		unless params[:product_entry].nil? or params[:product_entry][:article].nil? or params[:product_entry][:article][:images].nil?
+ 			allowed_images = {images: [:image_data, :mime_type, :original_extname]}
+ 		else
+ 			allowed_images = :images
+ 		end
+ 		
+		params.require(:product_entry).permit(
+			{article: [:name, :barcode, allowed_images]}, 
+			:article_id, # <- added manually, will simply be overwritten, if passed by client
+			:location_id, 
+			:description, 
+			:expiration_date, 
+			:amount
+		)
+	end
 end

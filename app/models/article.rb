@@ -54,7 +54,7 @@ class Article < ActiveRecord::Base
     data[:article_source_id] = ArticleSource.find_or_create_by(name: data[:article_source].to_s).id
     data.delete :article_source
     
-    producer = Producer.find_by(name: data[:producer_attributes][:name])
+    producer = Producer.find_by(name: data[:producer_attributes][:name]) unless data[:producer_attributes].nil?
     unless producer.nil?
       data[:producer_id] = producer.id
       data.delete :producer_attributes

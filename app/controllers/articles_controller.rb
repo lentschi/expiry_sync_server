@@ -9,7 +9,8 @@ class ArticlesController < ApplicationController
       format.html
       format.json do
         unless article.nil?
-          render json: {status: 'success', article: article}
+        	json_data = {status: 'success', article: JSON.parse(article.to_json(include: :images))}
+          render json: json_data
         else
           render json: {status: 'failure'}
         end
