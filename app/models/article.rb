@@ -12,22 +12,30 @@ class Article < ActiveRecord::Base
   validates :barcode, :source, :name, presence: true
   validates :barcode, uniqueness: {scope: :creator_id}
   
-  def self.smart_find(data)   
+  def self.smart_find(data)    	
     article = self.find_by(barcode: data[:barcode], creator_id: User.current.id) unless User.current.nil?
-    return article unless article.nil?
+    return article unless article.nil? # own article with the specified barcode will be returned even if the names don't match 
            
-    article = self.find_by(barcode: data[:barcode])
-    return article unless article.nil?
+    if data[:name].nil? or data[:name].empty? # not querying for a specific name...
     
+	    article = self.find_by(barcode: data[:barcode]) # -> check if another user already has fetched an article with that barcode
+	    return article unless article.nil?
 
-    if data[:name].nil? or data[:name].empty?
+			# if no article with this barcode could be found so far, search the remotes:
       data = self.remote_article_fetch(data)
       unless data.nil? or data[:name].nil? or data[:name].empty?
         data = self.build_nested_references(data)
+        
+        # if the remotes have found something, initialize a new article for the local db:
         return self.new(data) 
       end
+    else # querying for a specific name...
+    	# -> try if anyone has got such an article:
+    	article = self.find_by(barcode: data[:barcode], name: data[:name])
+	    return article unless article.nil?
     end
     
+    # found nothing :-(
     nil
   end
   

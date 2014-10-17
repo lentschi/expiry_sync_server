@@ -11,9 +11,11 @@ class ProductEntriesController < ApplicationController
       params[:product_entry][:article].delete :images
       
       @article = Article.smart_find_or_initialize(product_entry_params[:article])
+      article_change_required = (@article.id.nil? or (@article.name != product_entry_params[:article][:name]))
+      @article.name = product_entry_params[:article][:name]
       @article.decode_images(image_params)
       @article.source = ArticleSource.get_user_source
-      Rails.logger.info "Save: "+@article.save().to_s if @article.id.nil?
+      Rails.logger.info "Save: "+@article.save().to_s if article_change_required
       Rails.logger.info "Errors: "+@article.errors.to_yaml.to_s
         
       params[:product_entry].delete :article
@@ -39,6 +41,28 @@ class ProductEntriesController < ApplicationController
         format.json { render json: {status: 'failure'}}
       end
     end 
+  end
+  
+  def update
+  	# TODO
+  end
+  
+  def destroy
+  	if ProductEntry.find(product_entry_params[:product_entry][:id]).destroy
+	  	respond_to do |format|
+	        format.html { redirect_to @product_entry }
+	        format.json do
+	          product_entry = @product_entry.attributes
+	          product_entry[:article] = @product_entry.article.attributes
+	          render json: {status: 'success', product_entry: product_entry}
+	        end
+	    end
+  	else
+  		respond_to do |format|
+        format.html { render "delete"}
+        format.json { render json: {status: 'failure'}}
+      end
+  	end
   end
   
  	def product_entry_params

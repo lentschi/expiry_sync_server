@@ -23,10 +23,17 @@ FactoryGirl.define do
   
   factory :article_source do
   	name "user_generated"
+  	
+  	# Don't create many sources, just because many articles might be created:
+  	initialize_with do
+  		ArticleSource.find_or_create_by(name: name)
+  	end
   end
   
   factory :producer do
-  	name "Rama"
+  	sequence(:name) do |n|
+      "Unilever-#{n}"
+    end
   end
   
   factory :article do  	
@@ -36,5 +43,14 @@ FactoryGirl.define do
   	# assocs:
   	producer
   	association :source, factory: :article_source
+  end
+  
+  factory :product_entry do
+  	description "mmmh"
+  	amount 1
+  	
+  	# assocs:
+  	article
+  	location
   end
 end
