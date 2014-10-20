@@ -20,7 +20,7 @@ module CucumberLocationHelpers
       @valid_location_data_counter += 1
       @valid_location_data_counter = 0 if @valid_location_data_counter >= @@valid_location_data_arr.length
       
-      location_data
+      location_data.deep_dup
     end
     
     def remember_location(reference)    

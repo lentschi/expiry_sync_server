@@ -1,5 +1,8 @@
+require 'byebug'
+
 class ProductEntriesController < ApplicationController
   before_filter :authenticate_user!
+  load_and_authorize_resource  only: [:destroy]
   
   def create
     unless product_entry_params[:article].nil?
@@ -22,7 +25,6 @@ class ProductEntriesController < ApplicationController
       params[:product_entry][:article_id] = @article.id
     end
     
-    product_entry_params.delete :article
     Rails.logger.info "--- New product entry: "+product_entry_params.to_yaml.to_s
     
     @product_entry = ProductEntry.new(product_entry_params)
@@ -44,25 +46,47 @@ class ProductEntriesController < ApplicationController
   end
   
   def update
-  	# TODO
+  	@product_entry = ProductEntry.find_by(id: params[:id])
+  	raise ActiveRecord::RecordNotFound if @product_entry.nil? # TODO: Find out if this is really necessary
+  
+  	unless product_entry_params[:article].nil?
+  		if @product_entry.article.barcode != product_entry_params[:article][:barcode]
+  			@article = Article.smart_find_or_initialize(product_entry_params[:article])
+  		else
+  			@article = @product_entry.article
+  		end
+  		article_change_required = (@article.id.nil? or (@article.name != product_entry_params[:article][:name]))
+  		@article.name = product_entry_params[:article][:name]
+  		@article.source = ArticleSource.get_user_source if @article.source.nil?
+  		Rails.logger.info "Save: "+@article.save().to_s if article_change_required
+      Rails.logger.info "Errors: "+@article.errors.to_yaml.to_s
+  		
+  		params[:product_entry].delete :article
+      params[:product_entry][:article_id] = @article.id
+  	end
+  	
+  	respond_to do |format|
+      if @product_entry.update(product_entry_params)
+        format.html { redirect_to @product_entry, notice: 'Product entry was successfully updated.' }
+        format.json do
+          product_entry = @product_entry.attributes
+          product_entry[:article] = @product_entry.article.attributes
+          render json: {status: 'success', product_entry: product_entry}
+        end
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: {status: :failure} }
+      end
+    end
   end
   
   def destroy
-  	if ProductEntry.find(product_entry_params[:product_entry][:id]).destroy
-	  	respond_to do |format|
-	        format.html { redirect_to @product_entry }
-	        format.json do
-	          product_entry = @product_entry.attributes
-	          product_entry[:article] = @product_entry.article.attributes
-	          render json: {status: 'success', product_entry: product_entry}
-	        end
-	    end
-  	else
-  		respond_to do |format|
-        format.html { render "delete"}
-        format.json { render json: {status: 'failure'}}
-      end
-  	end
+ 		success = @product_entry.destroy
+    
+    respond_to do |format|
+      format.html { redirect_to product_entries_url }
+      format.json { render json: {status: success ? :success : :failure} }
+    end
   end
   
  	def product_entry_params

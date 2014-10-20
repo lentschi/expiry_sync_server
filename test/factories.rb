@@ -37,8 +37,13 @@ FactoryGirl.define do
   end
   
   factory :article do  	
-  	name "Butter"
-  	barcode "123"
+  	sequence(:name) do |n|
+      "Butter-#{n}"
+    end
+    
+    sequence(:barcode) do |n|
+      "123#{n}"
+    end
   	
   	# assocs:
   	producer

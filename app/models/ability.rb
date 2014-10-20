@@ -9,15 +9,16 @@ class Ability
     can :index_mine_changed, Location
     
     can :read, Location do |location|
-      location.users.each do |associated_user|
-        return true if associated_user == user
-      end
-      
-      false
+      location.user_related?(user)
     end
     
     can [:update, :destroy], Location do |location|
       location.try(:creator) == user
+    end
+    
+    # product entries:
+    can [:update, :destroy], ProductEntry do |entry|
+      entry.location.user_related?(user)
     end
   end
 end

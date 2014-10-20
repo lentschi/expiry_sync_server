@@ -1,6 +1,8 @@
 class LocationsController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_location, only: [:show, :edit, :update, :destroy]
+  
+  # This may have become obsolete due to load_and_authorize_resource:
+  #before_action :set_location, only: [:show, :edit, :update, :destroy]
     
   load_and_authorize_resource
 
@@ -87,10 +89,11 @@ class LocationsController < ApplicationController
   end
 
   private
+  	# This may have become obsolete due to load_and_authorize_resource:
     # Use callbacks to share common setup or constraints between actions.
-    def set_location
-      @location = Location.find(params[:id])
-    end
+    #def set_location
+    #  @location = Location.find(params[:id])
+    #end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def location_params

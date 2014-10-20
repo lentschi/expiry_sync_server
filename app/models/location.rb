@@ -5,4 +5,8 @@ class Location < ActiveRecord::Base
   has_and_belongs_to_many :users
   
   validates :name, presence: true
+  
+  def user_related?(user)
+  	self.users.where(id: user.id).length == 1
+  end
 end

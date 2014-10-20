@@ -18,7 +18,7 @@ module CucumberProductEntryHelpers
       @valid_entry_data_counter += 1
       @valid_entry_data_counter = 0 if @valid_entry_data_counter >= @@valid_entry_data_arr.length
       
-      entry_data
+      entry_data.deep_dup
     end
     
     def get_valid_article_data()
@@ -26,7 +26,7 @@ module CucumberProductEntryHelpers
       @valid_article_data_counter += 1
       @valid_article_data_counter = 0 if @valid_article_data_counter >= @@valid_article_data_arr.length
       
-      article_data
+      article_data.deep_dup
     end
     
     def remember_entry(reference)

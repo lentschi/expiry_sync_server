@@ -1,7 +1,7 @@
-ADD_PATH = '/locations'
-DELETE_PATH = '/locations'
-UPDATE_PATH = '/locations'
-INDEX_MINE_CHANGED_PATH = '/locations/index_mine_changed'
+ADD_LOCATION_PATH = '/locations'
+DELETE_LOCATION_PATH = '/locations'
+UPDATE_LOCATION_PATH = '/locations'
+INDEX_MY_CHANGED_LOCATIONS_PATH = '/locations/index_mine_changed'
 
 VALID_LOCATION_DATA = [
   {name: "Default"},
@@ -40,7 +40,7 @@ When /^I try to add a location with valid data(?: using (.+))?$/ do |using_data_
     }
   }
     
-  @jsonHelper.json_post ADD_PATH, params
+  @jsonHelper.json_post ADD_LOCATION_PATH, params
   
   @locationHelper.locations_submitted << params
 end
@@ -65,7 +65,7 @@ When /^I try to update that location with( different)? (valid|invalid) data$/ do
     }
   }
   
-  @jsonHelper.json_put UPDATE_PATH+'/'+@locationHelper.remember_location('that location').id.to_s, params
+  @jsonHelper.json_put UPDATE_LOCATION_PATH+'/'+@locationHelper.remember_location('that location').id.to_s, params
   
   @locationHelper.locations_submitted << params
 end
@@ -123,13 +123,13 @@ Given /^(a location|several locations) (?:created by (.+) )?(?:is|are|was|were) 
 end
 
 When /^I try to delete that location$/ do
-  @jsonHelper.json_delete DELETE_PATH + "/"+@locationHelper.remember_location('that location').id.to_s
+  @jsonHelper.json_delete DELETE_LOCATION_PATH + "/"+@locationHelper.remember_location('that location').id.to_s
 end
 
 When /^I request a list of my locations( specifying the time of that retrieval)?$/ do |specify_time_str|
   params = Hash.new
   params[:from_timestamp] = @locationHelper.remember_last_fetch('that retrieval').to_s unless specify_time_str.nil?
-  @jsonHelper.json_get INDEX_MINE_CHANGED_PATH, params
+  @jsonHelper.json_get INDEX_MY_CHANGED_LOCATIONS_PATH, params
 end
 
 Given /^the client had performed a location retrieval earlier$/ do
