@@ -19,9 +19,9 @@ module RemoteArticleFetcher
         return nil if doc.nil?
         elem = doc.at_css('div#baseDataHolder h1[itemprop="name"]')
         return nil if elem.nil?
-        data[:name] = elem.text
+        data[:name] = elem.text.chop
         producerNode = doc.at_css('div#baseDataHolder span[itemprop="manufacturer"]')
-        data[:producer_attributes] = {name: producerNode.text} unless producerNode.nil?
+        data[:producer_attributes] = {name: producerNode.text.chop} unless producerNode.nil?
         data[:images_attributes] = Array.new
         imageNode = doc.at_css('div#baseDataHolder img[itemprop="image"]')
         unless imageNode.nil? or imageNode.attribute("src").nil?
