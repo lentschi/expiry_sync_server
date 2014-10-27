@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131123165220) do
+ActiveRecord::Schema.define(version: 20141027143142) do
 
   create_table "article_images", force: true do |t|
     t.string   "source_url"
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20131123165220) do
   add_index "product_entries", ["updated_at"], name: "index_product_entries_on_updated_at"
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: ""
+    t.string   "email"
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
