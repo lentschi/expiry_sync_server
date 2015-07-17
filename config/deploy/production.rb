@@ -1,4 +1,5 @@
 role :web, 'bbw_server@florian-lentsch.at'
+set :rvm_ruby_version, '2.1.3'
 
 # server-based syntax
 # ======================
