@@ -59,6 +59,7 @@ end
 
 group :development do
 	gem 'capistrano-rails'
+	gem 'capistrano-rvm'
   gem 'sqlite3'
   gem 'byebug'
 end
