@@ -55,11 +55,13 @@ end
 
 group :production do
   gem 'mysql2'
+  gem 'unicorn'
 end
 
 group :development do
 	gem 'capistrano-rails'
 	gem 'capistrano-rvm'
+	gem 'capistrano3-unicorn'
   gem 'sqlite3'
   gem 'byebug'
 end
