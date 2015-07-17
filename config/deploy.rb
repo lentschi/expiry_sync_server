@@ -34,6 +34,8 @@ set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+  
+set :unicorn_config_path, File.join(current_path, 'config', 'unicorn.rb')
 
 namespace :deploy do
 
