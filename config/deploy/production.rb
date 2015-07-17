@@ -1,4 +1,4 @@
-role :web, 'bbw_server@florian-lentsch.at'
+server 'florian-lentsch.at', user: 'bbw_server', roles: %w{web app db}
 set :rvm_ruby_version, '2.1.3'
 
 # server-based syntax
