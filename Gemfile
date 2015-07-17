@@ -52,16 +52,13 @@ end
 # Use unicorn as the app server
 # gem 'unicorn'
 
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
 
 group :production do
-  gem 'rails_12factor'
-  gem 'pg'
-  gem 'byebug' #required by heroku
+  gem 'mysql2'
 end
 
 group :development do
+	gem 'capistrano-rails'
   gem 'sqlite3'
   gem 'byebug'
 end
