@@ -62,6 +62,7 @@ group :development do
 	gem 'capistrano-rails'
 	gem 'capistrano-rvm'
 	gem 'capistrano3-unicorn'
+	gem 'capistrano-rails-console'
   gem 'sqlite3'
   gem 'byebug'
 end
