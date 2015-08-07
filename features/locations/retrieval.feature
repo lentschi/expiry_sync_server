@@ -31,7 +31,7 @@ Scenario: Retrieve list of all locations assigned to the current user,
         And the same locations as assigned before should be in the location list
 
 Scenario: Retrieve list of locations assigned to the current user, 
-	that was changed
+	that were changed
 	Given the client had performed a location retrieval earlier
 		And several locations were assigned to me before that retrieval
 		And a changed set of locations was assigned to me after that retrieval
@@ -41,7 +41,7 @@ Scenario: Retrieve list of locations assigned to the current user,
         And the same locations as assigned after the retrieval should be in the location list
 
 Scenario: Retrieve list of locations assigned to the current user, 
-	that was changed, containing deleted locations
+	that were changed, containing deleted locations
 	Given the client had performed a location retrieval earlier
 		And several locations were assigned to me before that retrieval
 		And a changed set of locations (where some have even been deleted) was assigned to me after that retrieval

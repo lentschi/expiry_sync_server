@@ -45,3 +45,13 @@ Scenario: Updating a product with new entry data, changing the article for a dif
 		And that article should be the same as the one existing without an entry in the beginning
     	And that article should have set its data as requested
     	
+Scenario: Updating a product entry, which hasn't been created by the current user, with new entry data
+	Given a location created by someone else is assigned to me
+		And there is a product entry assigned to someone else at that location
+	When I try to update that product entry with valid data, not changing the article
+	Then the call should be successful
+		And I should have received a valid product entry
+		And I should have received a valid article wrapped in its product entry
+		And that article should be the same as the one attached to the initial product entry
+    	And that article should have set its data as requested
+    	

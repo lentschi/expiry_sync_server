@@ -2,7 +2,10 @@ module CucumberProductEntryHelpers
   class ProductEntryHelper
     include RSpec::Matchers
     
-    attr_accessor :entries, :entries_submitted, :articles, :valid_entry_data_counter, :valid_article_data_counter
+    attr_accessor :entries, :entries_submitted, :articles, 
+      :valid_entry_data_counter, :valid_article_data_counter,
+      :product_entries_list
+      
     cattr_accessor :valid_entry_data_arr, :valid_article_data_arr
     
     def initialize()
@@ -40,6 +43,11 @@ module CucumberProductEntryHelpers
 			@entries.should_not be_nil, TestHelper.reference_error_str(reference)
       @entries
     end
+    
+    def remember_entries_list(reference)
+       @product_entries_list.should_not be_nil, TestHelper.reference_error_str(reference)
+       @product_entries_list
+     end
     
     def remember_article(reference)
     	articles = remember_articles(reference)

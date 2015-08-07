@@ -79,6 +79,8 @@ class ProductEntriesController < ApplicationController
   end
   
   def destroy
+    require 'byebug'
+    byebug
  		success = @product_entry.destroy
     
     respond_to do |format|
@@ -87,21 +89,25 @@ class ProductEntriesController < ApplicationController
     end
   end
   
- 	def product_entry_params
- 		# s. https://github.com/rails/rails/issues/13766 :
- 		unless params[:product_entry].nil? or params[:product_entry][:article].nil? or params[:product_entry][:article][:images].nil?
- 			allowed_images = {images: [:image_data, :mime_type, :original_extname]}
- 		else
- 			allowed_images = :images
- 		end
- 		
-		params.require(:product_entry).permit(
-			{article: [:name, :barcode, allowed_images]}, 
-			:article_id, # <- added manually, will simply be overwritten, if passed by client
-			:location_id, 
-			:description, 
-			:expiration_date, 
-			:amount
-		)
-	end
+  def index_changed
+  end 
+  
+  private
+   	def product_entry_params
+   		# s. https://github.com/rails/rails/issues/13766 :
+   		unless params[:product_entry].nil? or params[:product_entry][:article].nil? or params[:product_entry][:article][:images].nil?
+   			allowed_images = {images: [:image_data, :mime_type, :original_extname]}
+   		else
+   			allowed_images = :images
+   		end
+   		
+  		params.require(:product_entry).permit(
+  			{article: [:name, :barcode, allowed_images]}, 
+  			:article_id, # <- added manually, will simply be overwritten, if passed by client
+  			:location_id, 
+  			:description, 
+  			:expiration_date, 
+  			:amount
+  		)
+  	end
 end

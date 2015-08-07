@@ -22,9 +22,13 @@ BbwServer::Application.routes.draw do
   resources :articles
   get 'articles/by_barcode/:barcode' => 'articles#by_barcode'
   
-  resources :product_entries
+  resources :product_entries, only: [:create, :update, :destroy]
+  
   resources :locations do
     get "index_mine_changed", on: :collection
+    resources :product_entries do
+      get "index_changed", on: :collection
+    end
   end
   
   resources :article_images do

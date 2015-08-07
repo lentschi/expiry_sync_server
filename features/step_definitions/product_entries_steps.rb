@@ -1,6 +1,7 @@
 ADD_PRODUCT_ENTRY_PATH = '/product_entries'
 DELETE_PRODUCT_ENTRY_PATH = '/product_entries'
 UPDATE_PRODUCT_ENTRY_PATH = '/product_entries'
+INDEX_CHANGED_PRODUCT_ENTRIES_PATH = '/locations/:id/product_entries/index_changed' 
 
 VALID_ENTRY_DATA = [
 	{ 
@@ -53,10 +54,32 @@ end
 
 
 
-Given /^there is a product entry assigned to me at that location$/ do
+Given /^there (is a product entry|are several product entries) assigned to (.+) at that location$/ do |entry_amount_str, assigned_to_str|
+  single_entry = case entry_amount_str
+  when 'is a product entry'
+    true
+  when 'are several product entries'
+    false
+  end
+  
+  assigned_to_me = case assigned_to_str
+  when 'me'
+    true
+  when 'someone else'
+    false
+  else
+    raise Cucumber::Undefined.new("No such user to be assigned to: '#{assigned_to_str}'")
+  end
+  
 	that_location = @locationHelper.remember_location('that location')
-	entry = FactoryGirl.create(:product_entry, location: that_location)
-	@productEntryHelper.entries << entry
+	
+  @authHelper.other_user.make_current unless assigned_to_me
+  VALID_PRODUCT_ENTRY_DATA.each do |entry_data|
+  	entry = FactoryGirl.create(:product_entry, location: that_location)
+  	@productEntryHelper.entries << entry
+  	
+    break if single_entry
+  end
 end
 
 
@@ -207,4 +230,55 @@ Then /^that article should have set its data as requested$/ do
 
 	requested_article[:barcode].should be == that_article.barcode
 	requested_article[:name].should be == that_article.name
+end
+
+When /^I request a list of product entries for that location( specifying the time of that retrieval)?$/ do |specify_time_str|
+  params = Hash.new
+  params[:from_timestamp] = @productEntryHelper.remember_last_fetch('that retrieval').to_s unless specify_time_str.nil?
+  location = @locationHelper.remember_location('that location')
+  @jsonHelper.json_get INDEX_CHANGED_PRODUCT_ENTRIES_PATH.sub(/\:id/, location.id.to_s), params
+end
+
+Then /^I should have received a valid list of product entries/ do
+  result = JSON.parse(@jsonHelper.last_response.body)
+  
+  result.should have_key('product_entries')
+  result['product_entries'].should be_a_kind_of(Array)
+end
+
+Then(/^the product entry list should be empty$/) do
+  locations_list = @productEntryHelper.remember_entries_list('the product entry list')
+  locations_list[:product_entries].should be_empty
+end
+
+Then(/^the same product entries as assigned before should be in the product entry list$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Given(/^the client had performed a product entry retrieval for that location earlier$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Given(/^several product entries were assigned to that location before that retrieval$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Given(/^a changed set of product entries was assigned to me after that retrieval$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I should have received a valid product entry list$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^the same product entries as assigned after the retrieval should be in the product entry list$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Given(/^a changed set of product entries \(where some have even been deleted\) was assigned to me after that retrieval$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^that list should contain the product entries that were deleted after the retrieval with respective deleted timestamps$/) do
+  pending # express the regexp above with the code you wish you had
 end

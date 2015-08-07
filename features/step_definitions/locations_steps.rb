@@ -122,6 +122,10 @@ Given /^(a location|several locations) (?:created by (.+) )?(?:is|are|was|were) 
   @authHelper.logged_in_user.make_current unless created_by_me
 end
 
+Given /I just created a new location$/ do
+  step 'a location is assigned to me'
+end
+
 When /^I try to delete that location$/ do
   @jsonHelper.json_delete DELETE_LOCATION_PATH + "/"+@locationHelper.remember_location('that location').id.to_s
 end
