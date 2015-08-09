@@ -16,8 +16,8 @@ class Ability
       location.try(:creator) == user
     end
     
-    # product entries:
-    can [:update, :destroy], ProductEntry do |entry|
+    # product entries:    
+    can [:update, :destroy, :index_changed], ProductEntry do |entry|
       entry.location.user_related?(user)
     end
   end

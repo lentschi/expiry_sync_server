@@ -1,6 +1,9 @@
 class ProductEntriesController < ApplicationController
   before_filter :authenticate_user!
-  load_and_authorize_resource  only: [:destroy]
+#  load_and_authorize_resource
+  load_and_authorize_resource :location, only: [:index_changed]
+  load_and_authorize_resource :product_entry, through: :location, only: [:index_changed]
+  load_and_authorize_resource only: [:destroy]
   
   def create
     unless product_entry_params[:article].nil?
@@ -79,8 +82,6 @@ class ProductEntriesController < ApplicationController
   end
   
   def destroy
-    require 'byebug'
-    byebug
  		success = @product_entry.destroy
     
     respond_to do |format|
@@ -90,6 +91,24 @@ class ProductEntriesController < ApplicationController
   end
   
   def index_changed
+    location = Location.find_by_id(params[:location_id])
+    @product_entries = location.product_entries
+    @deleted_product_entries = location.product_entries.with_deleted.where.not('deleted_at IS NULL')
+
+    unless product_entry_index_params[:from_timestamp].nil?
+      @product_entries = @product_entries.where('updated_at >= :from_timestamp', {from_timestamp: product_entry_index_params[:from_timestamp]})
+      @deleted_product_entries = @deleted_product_entries.where('deleted_at >= :from_timestamp', {from_timestamp: product_entry_index_params[:from_timestamp]})
+    end
+    
+    respond_to do |format|
+      format.json do
+        render json: {
+          status: 'success',
+          product_entries: JSON.parse(@product_entries.to_json(include: :article)),
+          deleted_product_entries: @deleted_product_entries
+        }
+      end
+    end
   end 
   
   private
@@ -110,4 +129,8 @@ class ProductEntriesController < ApplicationController
   			:amount
   		)
   	end
+  	
+  	def product_entry_index_params
+      params.permit(:from_timestamp)
+    end
 end

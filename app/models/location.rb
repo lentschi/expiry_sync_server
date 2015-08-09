@@ -3,6 +3,7 @@ class Location < ActiveRecord::Base
   acts_as_paranoid
   
   has_and_belongs_to_many :users
+  has_many :product_entries
   
   validates :name, presence: true
   

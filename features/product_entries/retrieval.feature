@@ -13,6 +13,11 @@ Scenario: Retrieve all product entries assigned to a location
 	Then the call should be successful
 		And I should have received a valid list of product entries
 		
+Scenario: Retrieve all product entries assigned to a location
+	Given a location is not assigned to me
+	When I request a list of product entries for that location
+	Then the call should fail
+		
 Scenario: Retrieve list of all product entries for a location, 
 	which is still empty (directly after creating the location)
     Given I just created a new location
@@ -38,7 +43,7 @@ Scenario: Retrieve list of product entries for a location,
 		And a changed set of product entries was assigned to me after that retrieval
 	When I request a list of product entries for that location specifying the time of that retrieval
     Then the call should be successful
-    	And I should have received a valid product entry list
+    	And I should have received a valid list of product entries
         And the same product entries as assigned after the retrieval should be in the product entry list
 
 Scenario: Retrieve list of product entries for a location, 
@@ -49,6 +54,6 @@ Scenario: Retrieve list of product entries for a location,
 		And a changed set of product entries (where some have even been deleted) was assigned to me after that retrieval
 	When I request a list of product entries for that location specifying the time of that retrieval
     Then the call should be successful
-    	And I should have received a valid product entry list
+    	And I should have received a valid list of product entries
         And the same product entries as assigned after the retrieval should be in the product entry list
         And that list should contain the product entries that were deleted after the retrieval with respective deleted timestamps

@@ -12,6 +12,7 @@ module CucumberProductEntryHelpers
     	@valid_entry_data_counter = 0
     	@valid_article_data_counter = 0
       @entries = Array.new
+      @modified_entries = Array.new
       @entries_submitted = Array.new
       @articles = Array.new
       @last_fetch = Hash.new
@@ -81,20 +82,20 @@ module CucumberProductEntryHelpers
       
       the_entries_arr.each do |the_entry|
           found = nil
-          (entries_list[:entries] + entries_list[:deleted_entries]).each do |entry_hash|
+          (entries_list[:product_entries] + entries_list[:deleted_product_entries]).each do |entry_hash|
             # only compare the id if we have one (when comparing 'data' we won't have one):
             if (the_entry.id.nil? || Integer(entry_hash['id']) == the_entry.id) \
               and entry_hash['amount'] == the_entry.amount \
               and entry_hash['description'] == the_entry.description \
               and entry_hash['expiration_date'] == the_entry.expiration_date \
               and entry_hash['article']['barcode'] == the_entry.article.barcode
-              found = entry_hash 
+              found = entry_hash
               break
             end
           end
           
           unless negated
-            found.should_not be_nil, "Required product entry (Barcode: '#{the_entry['article']['barcode']}, Amount: '#{the_entry['amount']}, Description: '#{the_entry['description']}, Expiration date: '#{the_entry['expiration_date']}) not found in list"
+            found.should_not be_nil, "Required product entry (Barcode: '#{the_entry.article.barcode}', Amount: '#{the_entry['amount']}, Description: '#{the_entry['description']}, Expiration date: '#{the_entry['expiration_date']}) not found in list"
             
             case marked_as_str
             when 'deleted'

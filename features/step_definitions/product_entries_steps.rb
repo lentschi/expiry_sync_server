@@ -76,7 +76,7 @@ Given /^there (is a product entry|are several product entries) assigned to (.+) 
 	that_location = @locationHelper.remember_location('that location')
 	
   @authHelper.other_user.make_current unless assigned_to_me
-  VALID_PRODUCT_ENTRY_DATA.each do |entry_data|
+  VALID_ENTRY_DATA.each do |entry_data|
   	entry = FactoryGirl.create(:product_entry, location: that_location)
   	@productEntryHelper.entries << entry
   	
@@ -167,9 +167,9 @@ Then /^I should have received a valid product entry$/ do
 	result = JSON.parse(@jsonHelper.last_response.body)
   
   TestHelper.verify_contained_obj_integrity result, "product_entry"
-  result["product_entry"].should have_key "id"
-  result["product_entry"].should have_key "description"
-  result["product_entry"].should have_key "creator_id"
+  result["product_entry"].should have_key("id")
+  result["product_entry"].should have_key("description")
+  result["product_entry"].should have_key("creator_id")
   
   received_entry = FactoryGirl.build(:product_entry, result["product_entry"])
   @productEntryHelper.entries = [ received_entry ]
@@ -182,9 +182,9 @@ Then /^I should have received a valid article wrapped in its product entry$/ do
   
   TestHelper.verify_contained_obj_integrity result, "product_entry"
   TestHelper.verify_contained_obj_integrity result["product_entry"], "article"
-  result["product_entry"]["article"].should have_key "id"
-  result["product_entry"]["article"].should have_key "barcode"
-  result["product_entry"]["article"].should have_key "name"
+  result["product_entry"]["article"].should have_key("id")
+  result["product_entry"]["article"].should have_key("barcode")
+  result["product_entry"]["article"].should have_key("name")
 
 	received_article = FactoryGirl.build(:article, result["product_entry"]["article"])
   @productEntryHelper.articles << received_article
@@ -272,6 +272,7 @@ end
 
 
 Given(/^the client had performed a product entry retrieval for that location earlier$/) do
+  that_location = @locationHelper.remember_location('that location')
   @productEntryHelper.last_fetch[that_location.id] = Time.now
 end
 
@@ -306,14 +307,14 @@ Given(/^a changed set of product entries was assigned to me after that retrieval
     created_at: fake_time,
     updated_at: fake_time
   }
-  SEVERAL_PRODUCT_ENTRY_AMOUNT.times do
+  SEVERAL_PRODUCT_ENTRIES_AMOUNT.times do
     new_entry = FactoryGirl.build :product_entry, params
     new_entry.save
     @productEntryHelper.modified_entries << new_entry
   end
 end
 
-Then(/^I should have received a valid product entry list$/) do
+Then(/^I should have received a valid list of product entries$/) do
   result = JSON.parse(@jsonHelper.last_response.body)
     
   result.should have_key('product_entries')
@@ -324,6 +325,9 @@ Then(/^I should have received a valid product entry list$/) do
     entry_hash['deleted_at'].should be_nil
       
     TestHelper.verify_contained_obj_integrity(entry_hash, 'article')
+    article_hash = entry_hash['article']
+    article_hash.should have_key('barcode')
+    article_hash.should have_key('name')
   end
   
   result.should have_key('deleted_product_entries')
@@ -332,6 +336,8 @@ Then(/^I should have received a valid product entry list$/) do
     TestHelper.verify_obj_integrity(entry_hash, 'product_entry')
     entry_hash.should have_key('deleted_at')
     entry_hash['deleted_at'].should_not be_nil
-  end  
+  end
+  
+  @productEntryHelper.product_entries_list = {product_entries: result['product_entries'], deleted_product_entries: result['deleted_product_entries']}  
 end
 
