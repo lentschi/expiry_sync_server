@@ -12,7 +12,7 @@ Given /^a valid article exists in the barcoo db$/ do
 	# Note: we cannot influence that in any way
 	@articleHelper.existing_article = Article.new
 	@articleHelper.existing_article.barcode = 9009700300206 
-	@articleHelper.existing_article.name = 'Vöslauer Mineralwasser ohne '
+	@articleHelper.existing_article.name = 'Vöslauer ohne'
 end
 
 When /^I try to fetch that article$/ do

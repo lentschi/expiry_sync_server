@@ -281,7 +281,8 @@ Given(/^several product entries were assigned to that location before that retri
   fake_time = @productEntryHelper.remember_last_fetch(that_location, 'that retrieval') - rand(1..10).days
   params = {
     created_at: fake_time,
-    updated_at: fake_time
+    updated_at: fake_time,
+    location_id: that_location.id
   }
   
   SEVERAL_PRODUCT_ENTRIES_AMOUNT.times do
@@ -292,7 +293,7 @@ end
 
 Given(/^a changed set of product entries was assigned to me after that retrieval$/) do
   that_location = @locationHelper.remember_location('that location')
-  fake_time = @productEntryHelper.remember_last_fetch(that_location, 'that retrieval') - rand(1..10).days
+  fake_time = @productEntryHelper.remember_last_fetch(that_location, 'that retrieval') + rand(1..10).days
     
   # update one of the existing ones if there is one:
   old_entry = ProductEntry.last
@@ -305,7 +306,8 @@ Given(/^a changed set of product entries was assigned to me after that retrieval
   # add some more
   params = {
     created_at: fake_time,
-    updated_at: fake_time
+    updated_at: fake_time,
+    location_id: that_location.id
   }
   SEVERAL_PRODUCT_ENTRIES_AMOUNT.times do
     new_entry = FactoryGirl.build :product_entry, params
