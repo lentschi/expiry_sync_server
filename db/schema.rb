@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150809162520) do
+ActiveRecord::Schema.define(version: 20151030142237) do
 
   create_table "article_images", force: true do |t|
     t.string   "source_url"
@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(version: 20150809162520) do
     t.binary   "image_data"
     t.integer  "article_id",        null: false
     t.integer  "article_source_id", null: false
-    t.integer  "creator_id",        null: false
-    t.integer  "modifier_id",       null: false
+    t.integer  "creator_id"
+    t.integer  "modifier_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -43,11 +43,11 @@ ActiveRecord::Schema.define(version: 20150809162520) do
   create_table "articles", force: true do |t|
     t.string   "name",              null: false
     t.integer  "article_source_id", null: false
-    t.integer  "creator_id",        null: false
+    t.integer  "creator_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.string   "barcode",           null: false
-    t.integer  "modifier_id",       null: false
+    t.integer  "modifier_id"
     t.integer  "producer_id"
   end
 

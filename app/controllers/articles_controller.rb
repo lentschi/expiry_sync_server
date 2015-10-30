@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: [:by_barcode]
   
   def by_barcode
     article = Article.smart_find(barcode: params[:barcode])
