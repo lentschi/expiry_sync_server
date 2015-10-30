@@ -237,7 +237,7 @@ end
 When /^I request a list of product entries for that location( specifying the time of that retrieval)?$/ do |specify_time_str|
   params = Hash.new
   that_location = @locationHelper.remember_location('that location')
-  params[:from_timestamp] = @productEntryHelper.remember_last_fetch(that_location, 'that retrieval').to_s unless specify_time_str.nil?
+  params[:from_timestamp] = @productEntryHelper.remember_last_fetch(that_location, 'that retrieval').strftime('%a, %d %b %Y %H:%M:%S %z') unless specify_time_str.nil?
   @jsonHelper.json_get INDEX_CHANGED_PRODUCT_ENTRIES_PATH.sub(/\:id/, that_location.id.to_s), params
 end
 
