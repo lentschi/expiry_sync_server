@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151030142237) do
+ActiveRecord::Schema.define(version: 20151104145539) do
 
   create_table "article_images", force: true do |t|
     t.string   "source_url"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20151030142237) do
     t.integer  "creator_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
-    t.string   "barcode",           null: false
+    t.string   "barcode"
     t.integer  "modifier_id"
     t.integer  "producer_id"
   end

@@ -9,20 +9,19 @@ class Article < ActiveRecord::Base
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :producer
   
-  validates :barcode, :source, :name, presence: true
+  validates :source, :name, presence: true
   validates :barcode, uniqueness: {scope: :creator_id}
   
-  def self.smart_find(data)    	
-    article = self.find_by(barcode: data[:barcode], creator_id: User.current.id) unless User.current.nil?
+  def self.smart_find(data)
+    article = self.find_by(barcode: data[:barcode], creator_id: User.current.id) unless User.current.nil? or data[:barcode].nil?
     return article unless article.nil? # own article with the specified barcode will be returned even if the names don't match 
            
     if data[:name].nil? or data[:name].empty? # not querying for a specific name...
-    
-	    article = self.find_by(barcode: data[:barcode]) # -> check if another user already has fetched an article with that barcode
+	    article = self.find_by(barcode: data[:barcode]) unless data[:barcode].nil? # -> check if another user already has fetched an article with that barcode
 	    return article unless article.nil?
 
 			# if no article with this barcode could be found so far, search the remotes:
-      data = self.remote_article_fetch(data)
+      data = self.remote_article_fetch(data) unless data[:barcode].nil?
       unless data.nil? or data[:name].nil? or data[:name].empty?
         data = self.build_nested_references(data)
         
@@ -40,6 +39,7 @@ class Article < ActiveRecord::Base
   end
   
   def self.smart_find_or_initialize(data)
+    data[:barcode] = nil if data[:barcode].nil? or data[:barcode].empty?
     article = smart_find(data)
     return article unless article.nil?
     
