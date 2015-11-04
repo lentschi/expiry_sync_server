@@ -36,7 +36,7 @@ class ProductEntriesController < ApplicationController
           product_entry = @product_entry.attributes
           product_entry[:article] = @product_entry.article.attributes
           render json: {status: 'success', product_entry: product_entry}
-       end
+        end
       end
     else
       respond_to do |format|
@@ -105,7 +105,9 @@ class ProductEntriesController < ApplicationController
       format.json do
         render json: {
           status: 'success',
-          product_entries: JSON.parse(@product_entries.to_json(include: :article)),
+          product_entries: JSON.parse(@product_entries.to_json(include: {
+            article: {include: {images: {exclude: :image_data}}},
+          })),
           deleted_product_entries: JSON.parse(@deleted_product_entries.to_json(include: :article)),
         }
       end
