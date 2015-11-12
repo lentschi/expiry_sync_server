@@ -43,6 +43,7 @@ class Article < ActiveRecord::Base
     article = smart_find(data)
     return article unless article.nil?
     
+    data.delete(:images) if data[:images].nil?
     self.new(data)
   end
   
