@@ -122,6 +122,8 @@ When /^I try to add a product entry (.+) containing (.+)$/ do |with_data_str, co
 		params[:product_entry].delete(:amount)
 	when 'without an article barcode'
 		params[:product_entry][:article].delete(:barcode)
+  when 'without an article name'
+      params[:product_entry][:article].delete(:name)
 	else 
 		raise Cucumber::Undefined.new("Don't know what that means: '#{with_data_str}'") unless with_data_str == 'with valid data'
 	end
