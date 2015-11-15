@@ -27,7 +27,8 @@ module RemoteArticleFetcher
     end
 
     module LocalClassMethods
-      def remote_article_fetch(data)
+      def remote_article_fetch(data, mode = :first)
+        ret_arr = Array.new if mode == :all
         RemoteArticleFetcher::ActsAsRemoteArticleFetcher.fetchers_arr.each do |fetcherClass|
           fetcherName = "remote_article_fetcher_#{fetcherClass.to_s.demodulize.underscore}".to_sym
           result = fetcherClass.fetch(data)
@@ -36,11 +37,25 @@ module RemoteArticleFetcher
             result[:images_attributes].each do |attrib|
               attrib[:article_source] = fetcherName
             end
-            return result
+            return result if mode == :first
+            ret_arr << result
           end
         end
 
-        nil
+        return nil if mode == :first
+        ret_arr
+      end
+      
+      def remote_fetch_available_barcodes(limit = nil)
+        ret_arr = Array.new
+        RemoteArticleFetcher::ActsAsRemoteArticleFetcher.fetchers_arr.each do |fetcherClass|
+          fetcherName = "remote_article_fetcher_#{fetcherClass.to_s.demodulize.underscore}".to_sym
+          barcodes_arr = fetcherClass.fetch_barcodes(limit)
+          result = {article_source: fetcherName, barcodes: barcodes_arr}
+          ret_arr << result
+        end
+        
+        ret_arr
       end
     end
   end
