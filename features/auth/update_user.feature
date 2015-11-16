@@ -31,3 +31,6 @@ Scenario: Deactivate account
     Then the call should be successful
     When I perform a login with that user's data
     Then the call should fail
+    When the deactivated user's record is manually reactivated in the db
+    	And I perform a login with that user's data
+   	Then the call should be successful

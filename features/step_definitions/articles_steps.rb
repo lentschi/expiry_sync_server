@@ -30,9 +30,9 @@ Then /^I should have received a valid article$/ do
 	@articleHelper.received_article = result['article']
 end
 
-Then /^the received article should be the same as the one in the barcoo db$/ do
-	barcooArticle = @articleHelper.remember_existing_article
+Then /^the received article should be the same as the one in the( barcoo)? db$/ do |ingored|
+	existingArticle = @articleHelper.remember_existing_article
 	receivedArticle = @articleHelper.remember_received_article
 	
-	barcooArticle.name.should == receivedArticle['name']
+  existingArticle.name.should == receivedArticle['name']
 end

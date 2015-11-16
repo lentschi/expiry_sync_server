@@ -33,33 +33,6 @@ class RegistrationsController < Devise::RegistrationsController
       end
     end
   end
-    
-  # PUT /resource
-  # We need to use a copy of the resource because we don't want to change
-  # the current user in place.  
-#  def update
-#    self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
-#    prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
-#
-#    if update_resource(resource, account_update_params)
-#      if is_navigational_format?
-#        flash_key = update_needs_confirmation?(resource, prev_unconfirmed_email) ?
-#          :update_needs_confirmation : :updated
-#        set_flash_message :notice, flash_key
-#      end
-#      sign_in resource_name, resource, :bypass => true
-#      respond_with resource, :location => after_update_path_for(resource) do |format|
-#        format.html
-#        format.json { render json: {status: 'success'} }
-#      end
-#    else
-#      clean_up_passwords resource
-#      respond_with resource do |format|
-#        format.html
-#        format.json { render json: {status: 'error', errors: resource.errors.to_hash}}
-#      end
-#    end
-#  end
   
   def update
     @user = User.find(current_user.id)
@@ -86,6 +59,15 @@ class RegistrationsController < Devise::RegistrationsController
         format.html { render 'edit' }
         format.json { render json: {status: 'error', errors: resource.errors.to_hash}}
       end
+    end
+  end
+  
+  def destroy
+    resource.destroy
+    Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
+    respond_with @user do |format|
+      format.html { redirect_to after_sign_out_path_for(resource_name) }
+      format.json { render json: {status: 'success', user: self.resource} }
     end
   end
   

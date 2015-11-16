@@ -2,6 +2,7 @@ SIGN_IN_PATH = "/users/sign_in"
 SIGN_OUT_PATH = "/users/sign_out"
 REGISTER_PATH = "/users"
 UPDATE_USER_PATH = "/users"
+DELETE_USER_PATH = "/users"
 
 Before do |scenario|
   @authHelper = CucumberAuthHelpers::AuthHelper.new
@@ -122,3 +123,17 @@ end
 When /^I logout$/ do 
   @jsonHelper.json_delete SIGN_OUT_PATH
 end
+
+When(/^I try to deactivate my account$/) do
+  the_user = @authHelper.remember_logged_in_user("Don't know what you mean by 'my account'")
+  @jsonHelper.json_delete "#{DELETE_USER_PATH}"
+  
+  @authHelper.deactivated_user = the_user
+end
+
+When(/^the deactivated user's record is manually reactivated in the db$/) do
+  the_user = @authHelper.remember_deactivated_user("Don't know what you mean by 'the deactivated user'")
+  the_user.restore!
+end
+
+

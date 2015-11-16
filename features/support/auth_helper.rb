@@ -2,11 +2,16 @@ module CucumberAuthHelpers
   class AuthHelper
     include RSpec::Matchers
     
-    attr_accessor :existing_user, :other_user, :invalid_user, :logged_in_user, :sign_in_params, :old_password
+    attr_accessor :existing_user, :other_user, :invalid_user, :logged_in_user, :deactivated_user, :sign_in_params, :old_password
         
     def remember_existing_user(reference)
       @existing_user.should_not be_nil, TestHelper.reference_error_str(reference)
       @existing_user
+    end
+    
+    def remember_deactivated_user(reference)
+      @deactivated_user.should_not be_nil, TestHelper.reference_error_str(reference)
+      @deactivated_user
     end
     
     def other_user

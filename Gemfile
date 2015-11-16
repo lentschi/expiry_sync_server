@@ -39,7 +39,7 @@ gem 'haml'
 gem 'nokogiri'
 
 # deleted flags:
-gem 'paranoia', '~> 2.0'
+gem 'paranoia'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

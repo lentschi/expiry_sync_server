@@ -8,8 +8,10 @@ Background:
 
 Scenario: Fetch an existing article from db
 	Given a valid article exists in the db
-	When I try to fetch the article details using the barcode
-	Then I should receive the details of that article
+	When I try to fetch that article
+	Then the call should be successful
+		And I should have received a valid article
+		And the received article should be the same as the one in the db
 	
 Scenario: Fetch an article from barcoo
 	Given a valid article exists in the barcoo db
