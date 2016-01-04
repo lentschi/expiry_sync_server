@@ -47,7 +47,7 @@ class ProductEntriesController < ApplicationController
   end
   
   def update
-  	@product_entry = ProductEntry.find_by(id: params[:id])
+  	@product_entry = ProductEntry.with_deleted.find_by(id: params[:id])
   	raise ActiveRecord::RecordNotFound if @product_entry.nil? # TODO: Find out if this is really necessary
   
   	unless product_entry_params[:article].nil?
@@ -66,8 +66,14 @@ class ProductEntriesController < ApplicationController
       params[:product_entry][:article_id] = @article.id
   	end
   	
+    # update always means undeleting if the entry has been soft deleted:
+#    unless @product_entry.deleted_at.nil?
+#      Rails.logger.info "--- Recovering"
+#      @product_entry.restore(recursive: true)
+#    end
+      
   	respond_to do |format|
-      if @product_entry.update(product_entry_params)
+      if @product_entry.update(product_entry_params.merge({deleted_at: nil}))
         format.html { redirect_to @product_entry, notice: 'Product entry was successfully updated.' }
         format.json do
           product_entry = @product_entry.attributes
@@ -100,6 +106,14 @@ class ProductEntriesController < ApplicationController
       @product_entries = @product_entries.where('updated_at >= :from_timestamp', {from_timestamp: from_timestamp})
       @deleted_product_entries = @deleted_product_entries.where('deleted_at >= :from_timestamp', {from_timestamp: from_timestamp})
     end
+    
+    Rails.logger.info "Answering: " +{
+      status: 'success',
+      product_entries: JSON.parse(@product_entries.to_json(include: {
+        article: {include: {images: {exclude: :image_data}}},
+      })),
+      deleted_product_entries: JSON.parse(@deleted_product_entries.to_json(include: :article)),
+    }.to_yaml.to_s
     
     respond_to do |format|
       format.json do
