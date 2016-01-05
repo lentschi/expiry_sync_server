@@ -8,11 +8,11 @@ Given /^a valid article exists in the db$/ do
 	@articleHelper.existing_article = FactoryGirl.create(:article)
 end
 
-Given /^a valid article exists in the barcoo db$/ do
+Given /^a valid article exists in the remote testing db$/ do
 	# Note: we cannot influence that in any way
 	@articleHelper.existing_article = Article.new
-	@articleHelper.existing_article.barcode = 9009700300206 
-	@articleHelper.existing_article.name = 'Vöslauer ohne'
+	@articleHelper.existing_article.barcode = '0704679311333' 
+	@articleHelper.existing_article.name = 'Hard as Iron Muesli'
 end
 
 When /^I try to fetch that article$/ do
@@ -30,7 +30,7 @@ Then /^I should have received a valid article$/ do
 	@articleHelper.received_article = result['article']
 end
 
-Then /^the received article should be the same as the one in the( barcoo)? db$/ do |ingored|
+Then /^the received article should be the same as the one in the(?: remote testing)? db$/ do
 	existingArticle = @articleHelper.remember_existing_article
 	receivedArticle = @articleHelper.remember_received_article
 	

@@ -6,5 +6,6 @@ module RemoteArticleFetcher
   
   def self.setup
     yield self
+    RemoteArticleFetcher::ActsAsRemoteArticleFetcher.load_config
   end
 end

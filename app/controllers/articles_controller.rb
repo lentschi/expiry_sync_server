@@ -1,10 +1,10 @@
 class ArticlesController < ApplicationController
   before_filter :authenticate_user!, except: [:by_barcode]
-  
+      
   def by_barcode
     article = Article.smart_find(barcode: params[:barcode])
     article.save unless article.nil? or not article.id.nil?
-      
+    
     respond_to do |format|
       format.html
       format.json do

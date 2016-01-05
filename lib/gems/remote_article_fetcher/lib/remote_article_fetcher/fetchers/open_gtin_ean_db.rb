@@ -35,12 +35,6 @@ module RemoteArticleFetcher
           
         data
       end
-      
-      def self.fetch_barcodes(limit = nil)
-        ret_arr = Array.new
-        # TODO: not yet implemented
-        ret_arr
-      end
     end
   end
 end

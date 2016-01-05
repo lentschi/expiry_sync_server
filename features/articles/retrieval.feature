@@ -13,9 +13,9 @@ Scenario: Fetch an existing article from db
 		And I should have received a valid article
 		And the received article should be the same as the one in the db
 	
-Scenario: Fetch an article from barcoo
-	Given a valid article exists in the barcoo db
+Scenario: Fetch an article from the testing remote
+	Given a valid article exists in the remote testing db
 	When I try to fetch that article
 	Then the call should be successful
 		And I should have received a valid article
-		And the received article should be the same as the one in the barcoo db
+		And the received article should be the same as the one in the remote testing db

@@ -10,19 +10,21 @@ module RemoteArticleFetcher
 
     included do
     end
+    
+    def self.load_config
+      RemoteArticleFetcher::ActsAsRemoteArticleFetcher.fetchers_arr = Array.new
+      raise ImproperlyConfiguredError("Fetchers sequence missing") if RemoteArticleFetcher.fetcher_sequence.nil?
+      RemoteArticleFetcher.fetcher_sequence.each do |fetcher_str|
+        require "remote_article_fetcher/fetchers/#{fetcher_str}.rb"
+        fetcherClass = "RemoteArticleFetcher::Fetchers::#{fetcher_str.to_s.classify}".constantize
+        raise "Invalid fetcher found: "+fetcher_str if fetcherClass.kind_of? RemoteArticleFetcher::Fetcher
+        RemoteArticleFetcher::ActsAsRemoteArticleFetcher.fetchers_arr << fetcherClass
+      end
+    end
 
     module ClassMethods
       def acts_as_remote_article_fetcher(options = {})
         extend RemoteArticleFetcher::ActsAsRemoteArticleFetcher::LocalClassMethods
-
-        RemoteArticleFetcher::ActsAsRemoteArticleFetcher.fetchers_arr = Array.new
-        raise ImproperlyConfiguredError("Fetchers sequence missing") if RemoteArticleFetcher.fetcher_sequence.nil?
-        RemoteArticleFetcher.fetcher_sequence.each do |fetcher_str|
-          require "remote_article_fetcher/fetchers/#{fetcher_str}.rb"
-          fetcherClass = "RemoteArticleFetcher::Fetchers::#{fetcher_str.to_s.classify}".constantize
-          raise "Invalid fetcher found: "+fetcher_str if fetcherClass.kind_of? RemoteArticleFetcher::Fetcher
-          RemoteArticleFetcher::ActsAsRemoteArticleFetcher.fetchers_arr << fetcherClass
-        end
       end
     end
 
