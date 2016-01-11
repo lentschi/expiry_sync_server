@@ -11,7 +11,7 @@ end
 Given /^a valid article exists in the remote testing db$/ do
 	# Note: we cannot influence that in any way
 	@articleHelper.existing_article = Article.new
-	@articleHelper.existing_article.barcode = '0704679311333' 
+	@articleHelper.existing_article.barcode = '7610848570554' 
 	@articleHelper.existing_article.name = 'Hard as Iron Muesli'
 end
 
