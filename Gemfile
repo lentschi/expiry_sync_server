@@ -53,9 +53,17 @@ end
 # gem 'unicorn'
 
 
+group :heroku_production_db do
+  gem 'pg'
+end
+
+group :heroku_production_server do
+	gem 'puma'
+end
+
 group :production do
-  gem 'mysql2'
-  gem 'unicorn'
+	gem 'mysql2'
+	gem 'unicorn'
 end
 
 group :development do
@@ -81,6 +89,8 @@ end
 # gem 'debugger', group: [:development, :test]
 
 gem 'mime-types'
+
+gem 'rails_12factor'
 
 gem 'remote_article_fetcher', path: "lib/gems/remote_article_fetcher"
 

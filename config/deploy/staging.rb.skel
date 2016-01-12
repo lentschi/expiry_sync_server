@@ -1,3 +1,5 @@
+set :bundle_without, %w{heroku_production_db heroku_production_server development test}.join(' ')
+
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
