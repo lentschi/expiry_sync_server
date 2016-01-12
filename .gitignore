@@ -1,0 +1,21 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+/.ruby-version
+/.ruby-gemset
+
+# ignore Eclipse files:
+/.project
+
+#deployment specific files
+/Capfile
+/config/deploy.rb
+/config/deploy/production.rb
+/config/deploy/staging.rb

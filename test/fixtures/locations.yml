@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  uuid: MyString
+  name: MyString
+  creator_id: 1
+  modifier_id: 1
+
+two:
+  uuid: MyString
+  name: MyString
+  creator_id: 1
+  modifier_id: 1
