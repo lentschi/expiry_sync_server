@@ -16,11 +16,12 @@ Just run `bundle exec rails s`
 
 ### Using capistrano
 
-There are Some `.skel` files you need to copy and configure:
+There are Some `.skel` files you need to copy and configure (The examples are configured to use unicorn and include the rails console):
 
-- `Capfile.skel` - The example is configured to use unicorn and include the rails console.
-- `config/deploy/production.skel` - add your production server
-- `config/deploy/staging.skel` - add your staging server
+- `Capfile.skel`
+- `config/deploy.rb`: change `repo_url` to your fork
+- `config/deploy/production.skel`: add your production server
+- `config/deploy/staging.skel`: add your staging server
 
 To deploy on your production server you may run: `cap production deploy`
 
