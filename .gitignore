@@ -13,3 +13,8 @@
 
 # ignore Eclipse files:
 /.project
+
+#deployment specific files
+/Capfile
+/config/deploy/production.rb
+/config/deploy/staging.rb
