@@ -4,9 +4,9 @@ ExpirySync - Ruby on Rails API server
 ## Installation
 
 - [Install ruby](https://www.ruby-lang.org/en/documentation/installation/) (v2.1 +)
-- Install required dependencies using __bundler__: `gem install bundler && bundle install`
+- Install required dependencies using __bundler__: `gem install bundler && bundle install` (If you want to install for local development only, you could use `bundle install --without production --without heroku_production_server --without heroku_production_db`)
 - Configure database access by copying `config/database.yml.skel` to `config/database.yml` and adepting it to your needs.
-- Create the empty database by running `bundle exec rake db:create` and `bundle rake db:schema:load`
+- Create the empty database by running `bundle exec rake db:create && bundle exec rake db:schema:load`
 
 ## Running the server
 
