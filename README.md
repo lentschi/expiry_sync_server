@@ -6,6 +6,7 @@ ExpirySync - Ruby on Rails API server
 - [Install ruby](https://www.ruby-lang.org/en/documentation/installation/) (v2.1 +)
 - Install required dependencies using __bundler__: `gem install bundler && bundle install`
 - Configure database access by copying `config/database.yml.skel` to `config/database.yml` and adepting it to your needs.
+- Configure cookie singing by copying `config/initializers/secret_token.rb.skel` to `config/initializers/secret_token.rb` and inserting the output of `bundle exec rake secret`.
 - Create the empty database by running `bundle exec rake db:create` and `bundle rake db:schema:load`
 
 ## Running the server
