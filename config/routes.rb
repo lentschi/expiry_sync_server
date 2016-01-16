@@ -1,4 +1,4 @@
-BbwServer::Application.routes.draw do
+ExpirySyncServer::Application.routes.draw do
   resources :article_images
 
   resources :producers

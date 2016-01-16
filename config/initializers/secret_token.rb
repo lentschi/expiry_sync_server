@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-BbwServer::Application.config.secret_key_base = 'a962015fd9bd25681af69626fdf8966a111d97eb879cde527ee9407a4ea102473bb4226f58bcf7709c1e26bd930290540b5bc5d80439380a799991f7cc13f084'
+ExpirySyncServer::Application.config.secret_key_base = 'a962015fd9bd25681af69626fdf8966a111d97eb879cde527ee9407a4ea102473bb4226f58bcf7709c1e26bd930290540b5bc5d80439380a799991f7cc13f084'

@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-BbwServer::Application.load_tasks
+ExpirySyncServer::Application.load_tasks
