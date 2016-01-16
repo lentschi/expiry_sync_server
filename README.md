@@ -13,6 +13,14 @@ ExpirySync - Ruby on Rails API server
 
 Just run `bundle exec rails s`
 
+## Testing
+
+Only cucumber tests for now -> run:
+
+```bash
+bundle exec cucumber
+```
+
 ## Deployment
 
 ### Using capistrano
