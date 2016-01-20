@@ -79,5 +79,6 @@ ExpirySyncServer::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
   
   # required by heroku (else configured in config/initializers/secret_token.rb, which is not in git):
+  # to make it work run heroku config:set SECRET_KEY_BASE=<your-rake-secret-output>:
   config.secret_key_base = ENV["SECRET_KEY_BASE"]
 end

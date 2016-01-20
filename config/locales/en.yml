@@ -8,7 +8,7 @@ en:
   welcome_to_expiry_sync_title: "Welcome to Expiry Sync"
   welcome_to_expiry_sync_text: >
     This is the default server for the ExpirySync app - Download the app at the %{app_link}.<br /><br />
-    App and server are both open source, you can add your own server here: %{alternate_servers_link}.<br /><br />
+    App and server are both open source projects, you can add your own server here: %{alternate_servers_link}.<br /><br />
     You can find the source code and the API docs at %{github_link}.
   google_play: "Google Playstore"
   github: "GitHub"
