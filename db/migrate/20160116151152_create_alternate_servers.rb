@@ -11,7 +11,7 @@ class CreateAlternateServers < ActiveRecord::Migration
     
     AlternateServer.create_translation_table!({
       name: {type: :string, null: false, default: ''},
-      description: {type: :text, null: false, default: ''} 
+      description: {type: :text, null: true} 
     })
   end
   
