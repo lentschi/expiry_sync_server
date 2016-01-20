@@ -4,13 +4,22 @@ ExpirySync - Ruby on Rails API server
 ## Installation
 
 - [Install ruby](https://www.ruby-lang.org/en/documentation/installation/) (v2.1 +)
-- Install required dependencies using __bundler__: `gem install bundler && bundle install` (If you want to install for local development only, you could use `bundle install --without production --without heroku_production_server --without heroku_production_db`)
+- Install required dependencies using __bundler__: `gem install bundler && bundle install` (or instead `bundle install --without heroku_production_server heroku_production_db production`, if you're on a development server)
 - Configure database access by copying `config/database.yml.skel` to `config/database.yml` and adepting it to your needs.
-- Create the empty database by running `bundle exec rake db:create && bundle exec rake db:schema:load`
+- Configure cookie singing by copying `config/initializers/secret_token.rb.skel` to `config/initializers/secret_token.rb` and inserting the output of `bundle exec rake secret`.
+- Create the empty database by running `bundle exec rake db:create` and `bundle rake db:schema:load`
 
 ## Running the server
 
 Just run `bundle exec rails s`
+
+## Testing
+
+Only cucumber tests for now -> run:
+
+```bash
+bundle exec cucumber
+```
 
 ## Deployment
 

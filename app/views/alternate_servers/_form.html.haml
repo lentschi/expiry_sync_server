@@ -1,0 +1,23 @@
+= form_for(@alternate_server) do |f|
+  - if @alternate_server.errors.any?
+    #error_explanation
+      %h2
+        = t(:error_prohibited_saving, count: @alternate_server.errors.count)
+        \:
+      %ul
+        - @alternate_server.errors.full_messages.each do |msg|
+          %li= msg
+  .field
+    = f.label :url
+    = f.text_field :url
+  - I18n.available_locales.each do |lang|
+    .field{"data-lang" => lang}
+      = f.label(t(:name) + " (#{lang})", for: "alternate_server_name_#{lang}")
+      %br/
+      = f.text_field "name_#{lang}"
+    .field{"data-lang" => lang}
+      = f.label(t(:description) + " (#{lang})", for: "alternate_server_description_#{lang}")
+      %br/
+      = f.text_area "description_#{lang}"
+  .actions
+    = f.submit

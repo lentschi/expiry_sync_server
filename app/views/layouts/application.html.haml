@@ -1,0 +1,22 @@
+!!!
+%html
+  %head
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    = favicon_link_tag 'favicon.ico'
+    %title ExpirySync Server
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+  %body
+    #user_info
+      - if current_user.nil?
+        = link_to(t(:login), new_user_session_path) unless current_page?(new_user_session_path)
+        = link_to(t(:sign_up), new_user_registration_path) unless  current_page?(new_user_registration_path)
+      - else
+        = t(:logged_in_as, name: current_user.to_s)
+        = link_to(t(:logout),  destroy_user_session_path, method: :delete)
+      = link_to(t(:home), root_path)
+    - flash.each do |name, msg|
+      - if msg.is_a?(String)
+        .flash(class=name)= msg
+    #content= yield

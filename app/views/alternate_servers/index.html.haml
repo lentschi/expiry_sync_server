@@ -1,0 +1,26 @@
+%h1= AlternateServer.model_name.human(count: 3)
+%table
+  %thead
+    %tr
+      %th= AlternateServer.human_attribute_name(:name)
+      %th= AlternateServer.human_attribute_name(:url)
+      %th= AlternateServer.human_attribute_name(:description)
+      %th= t(:added_by)
+      %th= AlternateServer.human_attribute_name(:updated_at)
+      %th 
+      %th.actions
+  %tbody
+    - @alternate_servers.each do |alternate_server|
+      %tr
+        %td= alternate_server.name
+        %td= alternate_server.url
+        %td= alternate_server.description
+        %td.user= alternate_server.creator
+        %td.datetime= l(alternate_server.updated_at, format: :short)
+        %td.actions
+          - if can? :update, alternate_server
+            = link_to t(:edit), edit_alternate_server_path(alternate_server)
+          - if can? :destroy, alternate_server
+            = link_to t(:delete), alternate_server, method: :delete, data: { confirm: 'Are you sure?' }
+%br/
+= link_to(t(:new_alternate_server), new_alternate_server_path, class: 'block_link')

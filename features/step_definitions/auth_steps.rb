@@ -44,7 +44,7 @@ end
 
 Then /^I should have received a valid access token$/ do
   set_cookie_header = @jsonHelper.last_response.header["Set-Cookie"]
-  set_cookie_header.should match(/bbw_server_session=.+;/)
+  set_cookie_header.should match(/expiry_sync_server_session=.+;/)
   #TODO: Check if this cannout be done more accurately
   
   @authHelper.logged_in_user = User.find_first_by_auth_conditions(login: @authHelper.sign_in_params[:user][:login])
@@ -135,5 +135,3 @@ When(/^the deactivated user's record is manually reactivated in the db$/) do
   the_user = @authHelper.remember_deactivated_user("Don't know what you mean by 'the deactivated user'")
   the_user.restore!
 end
-
-

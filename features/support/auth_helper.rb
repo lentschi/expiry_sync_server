@@ -14,6 +14,11 @@ module CucumberAuthHelpers
       @deactivated_user
     end
     
+    def remember_new_user(reference)
+      @new_user.should_not be_nil, TestHelper.reference_error_str(reference)
+      @new_user
+    end
+    
     def other_user
       @other_user ||= FactoryGirl.create(:user, username: 'alia', email: 'other@alia.com', password: 'correct')
     end

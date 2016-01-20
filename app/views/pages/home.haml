@@ -1,0 +1,6 @@
+%h1= t(:welcome_to_expiry_sync_title)
+%p
+  = raw t(:welcome_to_expiry_sync_text, |
+      alternate_servers_link: link_to(t(:alternate_servers), alternate_servers_path), |
+      app_link: link_to(t(:google_play), "https://play.google.com/store/apps/details?id=at.florian_lentsch.expirysync", target: '_blank'), |
+      github_link: link_to(t(:github), "https://github.com/lentschi/expiry_sync_server", target: "_blank"))

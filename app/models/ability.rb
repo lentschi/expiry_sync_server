@@ -16,6 +16,11 @@ class Ability
       location.try(:creator) == user
     end
     
+    # alternate servers:
+    can [:update, :destroy], AlternateServer do |alternate_server|
+      alternate_server.try(:creator) == user
+    end
+    
     # product entries:    
     can [:update, :destroy, :index_changed], ProductEntry do |entry|
       entry.location.user_related?(user)

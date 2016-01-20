@@ -28,6 +28,7 @@ gem 'jbuilder', '~> 1.2'
 
 # auth
 gem 'devise'
+gem 'devise-i18n'
 gem 'sentient_user', git: "git://github.com/house9/sentient_user.git"
 gem 'clerk', git: "git://github.com/house9/clerk.git"
 gem 'cancan'    
@@ -46,24 +47,18 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-
 group :heroku_production_db do
   gem 'pg'
 end
 
 group :heroku_production_server do
-	gem 'puma'
+  gem 'puma'
 end
 
+
 group :production do
-	gem 'mysql2'
-	gem 'unicorn'
+  gem 'mysql2'
+  gem 'unicorn'
 end
 
 group :development do
@@ -73,24 +68,27 @@ group :development do
 	gem 'capistrano-rails-console'
   gem 'sqlite3'
   gem 'byebug'
+  gem 'selenium-webdriver'
 end
 
 group :test do
   gem 'rspec-rails'
   gem "cucumber", :require => false
   gem 'cucumber-rails', :require => false
-  #gem 'cucumber-api-steps', :require => false
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'addressable'
 end
 
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-
-gem 'mime-types'
 
 gem 'rails_12factor'
+
+gem 'mime-types'
+gem 'rails-i18n'
+gem 'globalize', '~> 4.0.3'
+gem 'globalize-accessors'
+gem 'http_accept_language'
+gem 'haml-rails'
 
 gem 'remote_article_fetcher', path: "lib/gems/remote_article_fetcher"
 

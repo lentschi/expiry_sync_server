@@ -44,6 +44,11 @@ class User < ActiveRecord::Base
     update_attributes(params) 
   end
   
+  def to_s
+    return self.email unless self.email.nil?
+    self.username
+  end
+  
   protected
   def username_not_changed_on_update
     if username_changed? && self.persisted?

@@ -1,4 +1,6 @@
-BbwServer::Application.routes.draw do
+ExpirySyncServer::Application.routes.draw do
+  resources :alternate_servers
+
   resources :article_images
 
   resources :producers
@@ -20,4 +22,8 @@ BbwServer::Application.routes.draw do
   resources :article_images do
     get "serve", :on => :member
   end
+  
+  get "/pages/:page" => "pages#show"
+  
+  root to: 'pages#show', page: 'home'
 end

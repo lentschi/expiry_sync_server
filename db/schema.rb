@@ -11,7 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151115184737) do
+ActiveRecord::Schema.define(version: 20160116151152) do
+
+  create_table "alternate_server_translations", force: true do |t|
+    t.integer  "alternate_server_id",              null: false
+    t.string   "locale",                           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name",                default: "", null: false
+    t.text     "description",         default: "", null: false
+  end
+
+  add_index "alternate_server_translations", ["alternate_server_id"], name: "index_alternate_server_translations_on_alternate_server_id"
+  add_index "alternate_server_translations", ["locale"], name: "index_alternate_server_translations_on_locale"
+
+  create_table "alternate_servers", force: true do |t|
+    t.string   "url"
+    t.integer  "creator_id",  null: false
+    t.integer  "modifier_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "article_images", force: true do |t|
     t.string   "source_url"

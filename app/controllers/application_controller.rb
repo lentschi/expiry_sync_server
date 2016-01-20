@@ -17,6 +17,9 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Forbidden')
   end
   
+  # set locale according to HTTP_ACCEPT_LANGUAGE:
+  include HttpAcceptLanguage::AutoLocale
+  
   protected
   # workaround to make CanCan and rails 4 work together on create actions
   # s. https://github.com/ryanb/cancan/issues/835#issuecomment-20229737 and

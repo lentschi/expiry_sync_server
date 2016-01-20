@@ -1,10 +1,10 @@
 # paths
-app_path = "/var/www/bbw_server"
+app_path = "/var/www/expiry_sync_server"
 working_directory "#{app_path}/current"
 pid               "#{app_path}/current/tmp/pids/unicorn.pid"
 
 # listen
-listen "/tmp/bbw_server.socket", :backlog => 64
+listen "/tmp/expiry_sync_server.socket", :backlog => 64
 listen "127.0.0.1:8090", :tcp_nopush => true
 
 # logging

@@ -56,4 +56,18 @@ FactoryGirl.define do
   	article
   	location
   end
+  
+  factory :alternate_server do    
+    sequence(:name) do |n|
+      "My alternate server-#{n}"
+    end
+    
+    sequence(:url) do |n|
+      "https://my-fancy-alternate-server-#{n}.com"
+    end
+    
+    sequence(:description) do |n|
+      "connects you to a huge barcode database-#{n}"
+    end
+  end
 end

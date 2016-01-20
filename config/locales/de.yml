@@ -1,0 +1,23 @@
+de:
+  login: "einloggen"
+  sign_up: "registrieren"
+  logged_in_as: "eingeloggt als %{name}"
+  
+  alternate_servers: "alternative Server"
+  new_alternate_server: "neuer alternativer Server"
+  successfully_created_alternate_server: "alternativen Server erfolgreich angelegt"
+  
+  activerecord:
+    models:
+      alternate_server: 
+        one: "alternativer Server"
+        other: "alternative Server"
+    attributes:
+      alternate_server:
+        name: "Name"
+        url: "URL"
+        description: "Beschreibung"
+  helpers:
+    submit:
+      alternate_server:
+        create: "alternativen Server hinzufügen"

@@ -1,23 +1,42 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  home: "home"
+  login: "login"
+  sign_up: "sign up"
+  logged_in_as: "logged in as %{name}"
+  logout: "logout"
+  
+  welcome_to_expiry_sync_title: "Welcome to Expiry Sync"
+  welcome_to_expiry_sync_text: >
+    This is the default server for the ExpirySync app - Download the app at the %{app_link}.<br /><br />
+    App and server are both open source, you can add your own server here: %{alternate_servers_link}.<br /><br />
+    You can find the source code and the API docs at %{github_link}.
+  google_play: "Google Playstore"
+  github: "GitHub"
+  
+  alternate_servers: "alternate servers"
+  new_alternate_server: "new alternate server"
+  editing_alternate_server: "editing alternate server"
+  successfully_created_alternate_server: "successfully created an alternate server"
+  
+  added_by: 'added by'
+  edit: 'edit'
+  delete: 'delete'
+  
+  error_prohibited_saving:
+    one: 'An error prohibited this form from being saved'
+    other: '%{count} errors prohibited this form from being saved'
+  
+  activerecord:
+    models:
+      alternate_server: 
+        one: "alternate server"
+        other: "alternate servers"
+    attributes:
+      alternate_server:
+        name: "name"
+        url: "URL"
+        description: "description"
+  helpers:
+    submit:
+      alternate_server:
+        create: "add alternate server"

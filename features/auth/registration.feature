@@ -19,3 +19,8 @@ Examples:
 	| omitting the username | username |
 	| with an invalid username | username |
 	| with an invalid email address | email |
+	
+Scenario: Register a new user using the website
+	When I submit the registration form on the website with valid data
+	Then I should see that registration succeeded
+		And I should see that I am logged in with that user

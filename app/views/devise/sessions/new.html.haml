@@ -1,0 +1,14 @@
+%h1= t(:login)
+= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
+  %div.field
+    = f.label :login
+    = f.text_field :login, :autofocus => true
+  %div.field
+    = f.label :password
+    = f.password_field :password
+  - if devise_mapping.rememberable?
+    %div.field
+      = f.label :remember_me
+      = f.check_box :remember_me
+  %div= f.submit t(:login)
+= render "devise/shared/links"

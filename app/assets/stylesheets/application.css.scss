@@ -1,0 +1,208 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* General */
+body {
+	font-family: "Verdana";
+}
+
+a:link, a:visited, a:hover {
+	display: inline-block;
+}
+
+a::first-letter {
+  text-transform: uppercase;
+}
+
+a:link, a:visited {
+	color: #3362b0;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+p {
+	a:link, a:visited, a:hover {
+	 display: inline;
+  }
+}
+
+#user_info {
+	background-color: #25254e;
+	padding: 10px;
+	margin-bottom: 10px;
+	color: #ffffff;
+	text-align: right;
+}
+
+#user_info a {
+	color: #cccccc;
+	font-weight: bold;
+	margin: 0px 10px 0px 10px;
+}
+
+
+.flash {
+	text-align:center;
+	font-weight: bold;
+}
+
+.flash.notice {
+	color: #119436;
+}
+
+.flash.alert {
+	color: #983711;
+}
+
+#content {
+	margin-top: 20px;
+	padding: 10px;
+}
+
+h1 {
+	font-weight:bold;
+	font-size: 25px;
+	margin-bottom: 20px;
+}
+
+h1::first-letter {
+	text-transform: uppercase;
+}
+
+table {
+	
+}
+
+td, th {
+	padding: 10px;
+}
+
+th {
+	text-align:left;
+	font-weight: bold;
+}
+
+th::first-letter {
+	text-transform: uppercase;
+}
+
+tbody tr:nth-child(even) {
+	background-color: #cccccc;
+}
+
+tbody tr:hover {
+	background-color: #dce7a0;
+}
+
+td.user, td.datetime, td.actions {
+	white-space: nowrap;
+}
+
+
+form {
+	display:table;
+	margin-bottom:20px;
+	
+	.field {
+		display:table-row;
+	}
+	
+	label, input, select, textarea {
+		display: table-cell;
+	}
+	
+	.language_container {
+	  display: table-row;
+	}
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    margin-bottom: 0px;
+    background-color: #c00;
+    color: #fff;
+  }
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
+}
