@@ -7,7 +7,7 @@ de:
   
   welcome_to_expiry_sync_title: "Willkommen bei Expiry Sync"
   welcome_to_expiry_sync_text: >
-    Dies ist der Standard-Server der ExpirySync-App - Laden Sie die App im %{app_link} herunter.<br /><br />
+    Dies ist HomerIncognito's Server für die ExpirySync-App - Laden Sie die App im %{app_link} herunter.<br /><br />
     Sowohl App als auch Server sind OpenSource Projekte, Sie können hier Ihren eigenen Server hinzufügen: %{alternate_servers_link}.<br /><br />
     Hier können Sie den Source-Code und die API-Doku finden: %{github_link}.
   google_play: "Google Playstore"
