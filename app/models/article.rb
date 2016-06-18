@@ -50,7 +50,9 @@ class Article < ActiveRecord::Base
   def decode_images(params)
     params.each do |imageParams|
       img = ArticleImage.new
-      img.image_data = Base64.decode64(imageParams[:image_data])
+      img_str = imageParams[:image_data]
+      img_str = Base64.decode64(img_str)
+      img.image_data = img_str.gsub(/\0/,'')
       img.mime_type = imageParams[:mime_type]
       img.original_extname = imageParams[:original_extname]
       img.source = ArticleSource.get_user_source
