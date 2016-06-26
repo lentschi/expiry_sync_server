@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem 'rails', '~> 4.0.0'
 
 # Use sqlite3 as the database for Active Record
 
@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 1.2'
 # auth
 gem 'devise'
 gem 'devise-i18n'
-gem 'sentient_user', git: "git://github.com/house9/sentient_user.git"
+gem 'sentient_user', git: "git://github.com/bokmann/sentient_user.git"
 gem 'clerk', git: "git://github.com/house9/clerk.git"
 gem 'cancan'    
 
@@ -62,17 +62,18 @@ group :production do
 end
 
 group :development do
-	gem 'capistrano-rails'
-	gem 'capistrano-rvm'
-	gem 'capistrano3-unicorn'
-	gem 'capistrano-rails-console'
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
+  gem 'capistrano3-unicorn'
+  gem 'capistrano-rails-console'
   gem 'sqlite3'
   gem 'byebug'
   gem 'selenium-webdriver'
 end
 
 group :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '2.14.0'
+  gem 'rspec-core', '2.14.7'
   gem "cucumber", :require => false
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
