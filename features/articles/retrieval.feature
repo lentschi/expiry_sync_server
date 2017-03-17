@@ -1,6 +1,6 @@
 Feature: Article retrieval
 	Any user should be able to retrieve details about an article, if
-	it exists in the server db or can be retrieved through a remote connection like Barcoo
+	it exists in the server db or can be retrieved through a remote connection
 
 Background:
     Given a valid user exists

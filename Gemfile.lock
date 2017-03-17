@@ -179,6 +179,7 @@ GEM
     pkg-config (1.1.7)
     puma (3.4.0)
     rack (1.5.5)
+    rack-cors (0.4.1)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.0.13)
@@ -298,6 +299,7 @@ DEPENDENCIES
   paranoia
   pg
   puma
+  rack-cors
   rails (~> 4.0.0)
   rails-i18n
   rails_12factor

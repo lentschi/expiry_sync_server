@@ -42,6 +42,9 @@ gem 'nokogiri'
 # deleted flags:
 gem 'paranoia'
 
+#CORS:
+gem 'rack-cors', :require => 'rack/cors'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
