@@ -1,9 +1,9 @@
 class LocationsController < ApplicationController
   before_filter :authenticate_user!
-  
+
   # This may have become obsolete due to load_and_authorize_resource:
   #before_action :set_location, only: [:show, :edit, :update, :destroy]
-    
+
   load_and_authorize_resource
 
   # GET /locations
@@ -11,7 +11,7 @@ class LocationsController < ApplicationController
   def index
     @locations = Location.all
   end
-  
+
   def index_mine_changed
     @locations = current_user.locations
     @deleted_locations = current_user.locations.with_deleted.where.not('deleted_at IS NULL')
@@ -20,12 +20,14 @@ class LocationsController < ApplicationController
       @locations = @locations.where('updated_at >= :from_timestamp', {from_timestamp: location_index_params[:from_timestamp]})
       @deleted_locations = @deleted_locations.where('deleted_at >= :from_timestamp', {from_timestamp: location_index_params[:from_timestamp]})
     end
-    
+
     respond_to do |format|
       format.json do
         render json: {
           status: 'success',
-          locations: @locations,
+          locations: JSON.parse(@locations.to_json(include: {
+              creator: {}
+          })),
           deleted_locations: @deleted_locations
         }
       end
@@ -81,7 +83,7 @@ class LocationsController < ApplicationController
   # DELETE /locations/1.json
   def destroy
     success = @location.destroy
-    
+
     respond_to do |format|
       format.html { redirect_to locations_url }
       format.json { render json: {status: success ? :success : :failure} }
@@ -93,7 +95,7 @@ class LocationsController < ApplicationController
     def location_params
       params.require(:location).permit(:name)
     end
-    
+
     def location_index_params
       params.permit(:from_timestamp)
     end
