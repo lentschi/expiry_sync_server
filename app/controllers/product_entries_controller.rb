@@ -41,7 +41,7 @@ class ProductEntriesController < ApplicationController
     else
       respond_to do |format|
         format.html { render "new"}
-        format.json { render json: {status: 'failure'}}
+        format.json { render json: {status: 'failure', errors: @product_entry.errors}}
       end
     end
   end
