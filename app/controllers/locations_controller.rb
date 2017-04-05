@@ -10,7 +10,7 @@ class LocationsController < ApplicationController
   # GET /locations.json
   def index
     @locations = Location.all
-  end  
+  end
 
   def index_mine_changed
     @locations = current_user.locations
@@ -26,7 +26,8 @@ class LocationsController < ApplicationController
         render json: {
           status: 'success',
           locations: JSON.parse(@locations.to_json(include: {
-              creator: {}
+              creator: {},
+              users: {}
           })),
           deleted_locations: @deleted_locations
         }

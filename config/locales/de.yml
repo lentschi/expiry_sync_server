@@ -4,7 +4,7 @@ de:
   sign_up: "registrieren"
   logged_in_as: "eingeloggt als %{name}"
   logout: "ausloggen"
-  
+
   welcome_to_expiry_sync_title: "Willkommen bei Expiry Sync"
   welcome_to_expiry_sync_text: >
     Dies ist der Standard-Server der ExpirySync-App - Laden Sie die App im %{app_link} herunter.<br /><br />
@@ -12,23 +12,25 @@ de:
     Hier können Sie den Source-Code und die API-Doku finden: %{github_link}.
   google_play: "Google Playstore"
   github: "GitHub"
-  
+
   alternate_servers: "alternative Server"
   new_alternate_server: "neuer alternativer Server"
   editing_alternate_server: "bearbeite alternativen Server"
   successfully_created_alternate_server: "alternativen Server erfolgreich angelegt"
-  
+
   added_by: 'hinzugefügt von'
   edit: 'bearbeiten'
   delete: 'löschen'
-  
+
+  no_such_user: 'Benutzer "%{login}" existiert nicht'
+
   error_prohibited_saving:
     one: 'Ein Fehler verhinderte das Speichern dieses Formulars'
     other: '%{count} Fehler verhinderten das Speichern dieses Formulars'
-  
+
   activerecord:
     models:
-      alternate_server: 
+      alternate_server:
         one: "alternativer Server"
         other: "alternative Server"
     attributes:
