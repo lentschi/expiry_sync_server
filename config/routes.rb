@@ -5,7 +5,7 @@ ExpirySyncServer::Application.routes.draw do
 
   resources :producers
 
-  devise_for :users, controllers: {sessions: "sessions", registrations: "registrations"}
+  devise_for :users, controllers: {sessions: "sessions", registrations: "registrations", passwords: "passwords"}
 
   resources :articles
   get 'articles/by_barcode/:barcode' => 'articles#by_barcode'
