@@ -24,6 +24,8 @@ module ExpirySyncServer
     config.i18n.fallbacks = true
     config.i18n.fallbacks = [:en]
 
+    config.locations = {allow_removing_share_after_inactivity_days: 30}
+
     # CORS config:
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do

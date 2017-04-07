@@ -25,6 +25,7 @@ class LocationSharesController < ApplicationController
     end
 
     location.users << user
+    location.updated_at = Time.now
 
     respond_to do |format|
       if location.save
@@ -38,7 +39,16 @@ class LocationSharesController < ApplicationController
   end
 
   def destroy
-    removedUsers_arr = @location.users.delete(User.find(params[:id]))
+    user = User.find(params[:id])
+    if cannot? :destroy_share, @location, user
+      respond_to do |format|
+        format.html {render file: File.join(Rails.root, 'public/403.html'), status: 403, layout: false}
+        format.json { render status: 403, json: {status: :failure, errors: [I18n.t('may_not_remove_location_share', days: Rails.configuration.locations[:allow_removing_share_after_inactivity_days])]} }
+      end
+      return
+    end
+
+    removedUsers_arr = @location.users.delete(user)
 
     respond_to do |format|
       if removedUsers_arr.length == 1

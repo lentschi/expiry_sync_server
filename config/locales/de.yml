@@ -28,6 +28,8 @@ de:
     one: 'Ein Fehler verhinderte das Speichern dieses Formulars'
     other: '%{count} Fehler verhinderten das Speichern dieses Formulars'
 
+  may_not_remove_location_share: 'Die Freigabe des Ortes kann nicht aufgehoben werden, wenn der letzte Zugriff des Benutzers nicht mehr als %{days} Tage zurückliegt.'
+
   activerecord:
     models:
       alternate_server:
