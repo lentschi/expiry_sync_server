@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170406083135) do
+ActiveRecord::Schema.define(version: 20170503141131) do
 
   create_table "alternate_server_translations", force: true do |t|
     t.integer  "alternate_server_id",              null: false
@@ -118,15 +118,16 @@ ActiveRecord::Schema.define(version: 20170406083135) do
 
   create_table "product_entries", force: true do |t|
     t.string   "description"
-    t.integer  "amount",          null: false
+    t.integer  "amount",                          null: false
     t.date     "expiration_date"
-    t.integer  "article_id",      null: false
-    t.integer  "creator_id",      null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "modifier_id",     null: false
-    t.integer  "location_id",     null: false
+    t.integer  "article_id",                      null: false
+    t.integer  "creator_id",                      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "modifier_id",                     null: false
+    t.integer  "location_id",                     null: false
     t.datetime "deleted_at"
+    t.boolean  "free_to_take",    default: false, null: false
   end
 
   add_index "product_entries", ["article_id"], name: "index_product_entries_on_article_id"

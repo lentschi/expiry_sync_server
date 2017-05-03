@@ -124,14 +124,21 @@ class ProductEntriesController < ApplicationController
    			allowed_images = :images
    		end
 
-  		params.require(:product_entry).permit(
-  			{article: [:name, :barcode, allowed_images]},
-  			:article_id, # <- added manually, will simply be overwritten, if passed by client
-  			:location_id,
-  			:description,
-  			:expiration_date,
-  			:amount
-  		)
+      allowed_entry_fields = [
+        {article: [:name, :barcode, allowed_images]},
+        :article_id, # <- added manually, will simply be overwritten, if passed by client
+        :location_id,
+        :description,
+        :expiration_date,
+        :amount
+      ]
+
+      # only creators may assign free_to_take (This should probably be moved to cancan though)
+      if @product_entry.creator.nil? or @product_entry.creator.id == current_user.id
+        allowed_entry_fields << :free_to_take
+      end
+
+  		params.require(:product_entry).permit(allowed_entry_fields)
   	end
 
   	def product_entry_index_params
