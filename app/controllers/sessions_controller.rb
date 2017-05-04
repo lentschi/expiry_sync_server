@@ -1,4 +1,4 @@
-class SessionsController < Devise::SessionsController   
+class SessionsController < Devise::SessionsController
   def new
     super
   end
@@ -12,7 +12,7 @@ class SessionsController < Devise::SessionsController
       format.json { render json: {user: self.resource, status: 'success'} }
     end
   end
-  
+
   # DELETE /resource/sign_out
   def destroy
     redirect_path = after_sign_out_path_for(resource_name)

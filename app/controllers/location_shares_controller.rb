@@ -5,7 +5,7 @@ class LocationSharesController < ApplicationController
   def create
     location = Location.find_by_id(params[:location_id])
     # begin
-      user = get_user_for_sharing(location_share_params)
+      user = get_user_for_sharing(location_share_params, location)
     # rescue InvalidEmailError
     #   respond_to do |format|
     #     format.html { render action: 'new' }
@@ -62,20 +62,23 @@ class LocationSharesController < ApplicationController
   end
 
   private
-    def get_user_for_sharing(user_params)
-      return share_for_email(user_params[:email]) unless user_params[:email].nil?
+    def get_user_for_sharing(user_params, location)
+      return share_for_email(user_params[:email], location) unless user_params[:email].nil?
       return User.find_by_username(user_params[:username]) unless user_params[:username].nil?
       nil
     end
 
-    def share_for_email(email_address)
+    def share_for_email(email_address, location)
       user = User.find_or_initialize_by_email(email_address)
       return user unless user.new_record?
 
-      user.username = user.email
-      user.creating_to_accept_share = true
-      user.save
-      user.send_reset_password_instructions
+      User.transaction do
+        user.username = user.email
+        user.creating_to_accept_share = true
+        user.location_to_be_shared = location
+        user.save
+        user.send_reset_password_instructions
+      end
       user
     end
 
