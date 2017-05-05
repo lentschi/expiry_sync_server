@@ -165,7 +165,7 @@ GEM
     minitest (4.7.5)
     multi_json (1.12.1)
     multi_test (0.1.2)
-    mysql2 (0.4.4)
+    mysql2 (0.3.21)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (3.2.0)
@@ -294,7 +294,7 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   mime-types
-  mysql2
+  mysql2 (~> 0.3.10)
   nokogiri
   paranoia
   pg
@@ -319,4 +319,4 @@ RUBY VERSION
    ruby 2.1.3p242
 
 BUNDLED WITH
-   1.14.5
+   1.14.6
