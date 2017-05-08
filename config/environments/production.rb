@@ -77,8 +77,10 @@ ExpirySyncServer::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-  
+
   # required by heroku (else configured in config/initializers/secret_token.rb, which is not in git):
   # to make it work run heroku config:set SECRET_KEY_BASE=<your-rake-secret-output>:
   config.secret_key_base = ENV["SECRET_KEY_BASE"]
+
+  config.action_mailer.default_url_options = { :host => ENV['HOST_DOMAIN'] }
 end
