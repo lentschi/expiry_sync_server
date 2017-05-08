@@ -1,0 +1,1 @@
+ActionMailer::Base.default delivery_method: :sendmail
