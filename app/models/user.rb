@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  has_and_belongs_to_many :locations
+  has_many :locations_users
+  has_many :locations, through: :locations_users
   acts_as_paranoid
 
   # Include default devise modules. Others available are:
