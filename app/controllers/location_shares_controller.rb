@@ -24,16 +24,24 @@ class LocationSharesController < ApplicationController
       return
     end
 
-    location.users << user
+    errors_hash = {}
+    begin
+      location.users << user
+    rescue ActiveRecord::RecordInvalid
+      errors_hash = {username: [
+        I18n.t(:user_already_assigned, login: location_share_params[:username])
+      ]}
+    end
     location.updated_at = Time.now
 
     respond_to do |format|
-      if location.save
+      if errors_hash.empty? and location.save
         format.html { redirect_to location, notice: 'Location was successfully shared.' }
         format.json { render json: {status: :success, user: user} }
       else
-        format.html { render action: 'new' }
-        format.json { render json: {status: :failure} }
+        
+        format.html { render action: 'new'}
+        format.json { render json: {status: :failure, errors: errors_hash } }
       end
     end
   end

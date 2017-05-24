@@ -21,6 +21,9 @@ en:
   added_by: 'added by'
   edit: 'edit'
   delete: 'delete'
+  
+  no_such_user: 'User "%{login}" does not exist'
+  user_already_assigned: 'User "%{login}" is already assigned'
 
   error_prohibited_saving:
     one: 'An error prohibited this form from being saved'

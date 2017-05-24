@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170503141131) do
+ActiveRecord::Schema.define(version: 20170524074235) do
 
   create_table "alternate_server_translations", force: true do |t|
     t.integer  "alternate_server_id",              null: false
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 20170503141131) do
   end
 
   add_index "locations_users", ["location_id", "user_id"], name: "index_locations_users_on_location_id_and_user_id"
+  add_index "locations_users", ["user_id", "location_id"], name: "index_locations_users_on_user_id_and_location_id", unique: true
   add_index "locations_users", ["user_id"], name: "index_locations_users_on_user_id"
 
   create_table "producers", force: true do |t|
