@@ -17,7 +17,8 @@ class LocationsController < ApplicationController
     @deleted_locations = current_user.locations.with_deleted.where.not('deleted_at IS NULL')
 
     unless location_index_params[:from_timestamp].nil?
-      @locations = @locations.where('updated_at >= :from_timestamp', {from_timestamp: location_index_params[:from_timestamp]})
+      from_timestamp = DateTime.strptime(location_index_params[:from_timestamp], '%a, %d %b %Y %H:%M:%S %z').in_time_zone
+      @locations = @locations.where('updated_at >= :from_timestamp', {from_timestamp: from_timestamp})
       @deleted_locations = @deleted_locations.where('deleted_at >= :from_timestamp', {from_timestamp: location_index_params[:from_timestamp]})
     end
 
