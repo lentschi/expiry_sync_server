@@ -95,6 +95,7 @@ gem 'globalize', '~> 4.0.3'
 gem 'globalize-accessors'
 gem 'http_accept_language'
 gem 'haml-rails'
+gem 'open_uri_redirections'
 
 gem 'remote_article_fetcher', path: "lib/gems/remote_article_fetcher"
 

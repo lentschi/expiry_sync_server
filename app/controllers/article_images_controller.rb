@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'open_uri_redirections'
 
 class ArticleImagesController < ApplicationController
   before_action :set_article_image, only: [:show, :edit, :update, :destroy]
@@ -13,19 +14,19 @@ class ArticleImagesController < ApplicationController
   # GET /article_images/1.json
   def show
   end
-  
+
   def serve
     @image = ArticleImage.find(params[:id])
     raise ActionController::RoutingError.new("No such image") if @image.nil? or (@image.source_url.nil? and @image.image_data.nil?)
     if @image.image_data.nil?
-      result = open(@image.source_url)
+      result = open(@image.source_url, allow_redirections: :all)
       @image.image_data = result.read
       @image.original_extname = File.extname(@image.source_url)
       @image.original_basename = File.basename(@image.source_url, @image.original_extname)
       @image.mime_type = result.content_type
       @image.save
     end
-    
+
     send_data(@image.image_data, :type => @image.mime_type, :filename => "#{params[:id]}#{@image.original_extname}", :disposition => "inline")
   end
 
