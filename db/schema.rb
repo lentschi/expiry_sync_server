@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20170524074235) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",                default: "", null: false
-    t.text     "description",         default: "", null: false
+    t.text     "description"
   end
 
   add_index "alternate_server_translations", ["alternate_server_id"], name: "index_alternate_server_translations_on_alternate_server_id"
