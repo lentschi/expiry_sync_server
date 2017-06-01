@@ -4,22 +4,23 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_filter :prepare_params_for_can_can, only: [:create]
   before_filter :configure_permitted_devise_parameters, if: :devise_controller?
-  
+  before_filter :set_date_response_header
+
   # required by the 'clerk'-gem (track creator and modifier user):
   include SentientController
-  
+
   #TODO: Research if that doesn't just make things unsafe:
   protect_from_forgery with: :null_session, :if => Proc.new { |c| c.request.format == 'application/json' }
   skip_before_filter :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
-  
+
   # CanCan:
   rescue_from CanCan::AccessDenied do |exception|
     raise ActionController::RoutingError.new('Forbidden')
   end
-  
+
   # set locale according to HTTP_ACCEPT_LANGUAGE:
   include HttpAcceptLanguage::AutoLocale
-  
+
   protected
   # workaround to make CanCan and rails 4 work together on create actions
   # s. https://github.com/ryanb/cancan/issues/835#issuecomment-20229737 and
@@ -30,12 +31,17 @@ class ApplicationController < ActionController::Base
     method = "#{resource}_params"
     params[resource] &&= send(method) if respond_to?(method, true)
   end
-  
+
   def configure_permitted_devise_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me) }
     devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:username, :email, :password, :remember_me) }
 
-    #not quite sure why this is required:      
-    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation) } 
+    #not quite sure why this is required:
+    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation) }
+  end
+
+  def set_date_response_header
+    response.header['Date'] = Time.now.httpdate
+    response.header['Access-Control-Expose-Headers'] = 'Date'
   end
 end

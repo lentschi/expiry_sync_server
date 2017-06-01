@@ -33,6 +33,8 @@ ExpirySyncServer::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stder
-  
+
   config.log_level = :info
+
+  config.secret_key_base = 'c5fc7721e07c546e0d0949d4059f8bb1e39f26a3be6b1d5ec03eff2629d8910ded026afdab2dedefcd9a7f57bf95034adcb19ba4ef8b0a8e76a1a1e0113a4295'
 end

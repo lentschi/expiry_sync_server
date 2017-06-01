@@ -1,3 +1,5 @@
+- content_for :head do
+  %meta{name: 'robots', content: 'noindex, nofollow'}
 %h1= AlternateServer.model_name.human(count: 3)
 %table
   %thead

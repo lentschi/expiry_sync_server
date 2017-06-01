@@ -1,5 +1,17 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
+
+class ExpirySyncDeviseMailer < Devise::Mailer
+  def reset_password_instructions(record, token, opts={})
+    return super unless record.creating_to_accept_share
+
+    @token = token
+    mail = devise_mail(record, :share_request, opts)
+    mail.subject = I18n.t('mail.share_request.subject')
+    mail
+  end
+end
+
 Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
@@ -13,7 +25,7 @@ Devise.setup do |config|
   config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
 
   # Configure the class responsible to send e-mails.
-  # config.mailer = 'Devise::Mailer'
+  config.mailer = 'ExpirySyncDeviseMailer'
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and

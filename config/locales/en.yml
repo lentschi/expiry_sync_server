@@ -4,7 +4,7 @@ en:
   sign_up: "sign up"
   logged_in_as: "logged in as %{name}"
   logout: "logout"
-  
+
   welcome_to_expiry_sync_title: "Welcome to Expiry Sync"
   welcome_to_expiry_sync_text: >
     This is HomerIncognito's server for the ExpirySync app - Download the app at the %{app_link}.<br /><br />
@@ -12,23 +12,38 @@ en:
     You can find the source code and the API docs at %{github_link}.
   google_play: "Google Playstore"
   github: "GitHub"
-  
+
   alternate_servers: "alternate servers"
   new_alternate_server: "new alternate server"
   editing_alternate_server: "editing alternate server"
   successfully_created_alternate_server: "successfully created an alternate server"
-  
+
   added_by: 'added by'
   edit: 'edit'
   delete: 'delete'
   
+  no_such_user: 'User "%{login}" does not exist'
+  user_already_assigned: 'User "%{login}" is already assigned'
+
   error_prohibited_saving:
     one: 'An error prohibited this form from being saved'
     other: '%{count} errors prohibited this form from being saved'
-  
+
+  mail:
+    header: Hello %{name}!
+    footer: >
+      This e-mail was generated automatically - please do not
+      respond directly.
+    share_request:
+      subject: ExpirySync location share
+      body: |
+        Someone has shared the location '%{location}' with you.
+        Click %{link} to accept this share and set a password.
+      link_text: Set a password
+
   activerecord:
     models:
-      alternate_server: 
+      alternate_server:
         one: "alternate server"
         other: "alternate servers"
     attributes:
