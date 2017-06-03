@@ -82,6 +82,8 @@ ExpirySyncServer::Application.configure do
   # to make it work run heroku config:set SECRET_KEY_BASE=<your-rake-secret-output>:
   config.secret_key_base = ENV["SECRET_KEY_BASE"]
 
+  config.action_mailer.default_url_options = { :host => ENV['EMAIL_LINK_HOST'] } unless ENV['EMAIL_LINK_HOST'].nil?
+
   unless ENV['SMTP_SERVER'].nil?
     config.action_mailer.smtp_settings = {
       user_name: ENV['SMTP_USER'],
