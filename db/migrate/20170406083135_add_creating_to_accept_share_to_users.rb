@@ -1,5 +1,5 @@
 class AddCreatingToAcceptShareToUsers < ActiveRecord::Migration
   def change
-    add_column :users, :creating_to_accept_share, :boolean, default: 0, null: false
+    add_column :users, :creating_to_accept_share, :boolean, default: false, null: false
   end
 end
