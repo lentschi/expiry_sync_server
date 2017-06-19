@@ -33,7 +33,7 @@ gem 'devise'
 gem 'devise-i18n'
 gem 'sentient_user', git: "git://github.com/bokmann/sentient_user.git"
 gem 'clerk', git: "git://github.com/house9/clerk.git"
-gem 'cancan'    
+gem 'cancan'
 
 # views:
 gem 'haml'
@@ -62,7 +62,7 @@ end
 
 
 group :production do
-  gem 'mysql2'
+  gem 'mysql2', '~> 0.3.10'
   gem 'unicorn'
 end
 
