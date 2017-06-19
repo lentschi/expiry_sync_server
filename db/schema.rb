@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170524074235) do
+ActiveRecord::Schema.define(version: 20170618181315) do
 
   create_table "alternate_server_translations", force: true do |t|
     t.integer  "alternate_server_id",              null: false
@@ -91,7 +91,6 @@ ActiveRecord::Schema.define(version: 20170524074235) do
   end
 
   add_index "locations", ["created_at"], name: "index_locations_on_created_at"
-  add_index "locations", ["creator_id", "name"], name: "index_locations_on_creator_id_and_name", unique: true
   add_index "locations", ["creator_id"], name: "index_locations_on_creator_id"
   add_index "locations", ["modifier_id"], name: "index_locations_on_modifier_id"
   add_index "locations", ["updated_at"], name: "index_locations_on_updated_at"

@@ -57,9 +57,10 @@ class LocationSharesController < ApplicationController
     end
 
     removedUsers_arr = @location.users.delete(user)
+    @location.updated_at = Time.now
 
     respond_to do |format|
-      if removedUsers_arr.length == 1
+      if removedUsers_arr.length == 1 and @location.save
         format.html { redirect_to @location, notice: 'Location was successfully unshared.' }
         format.json { render json: {status: :success, user: removedUsers_arr.first} }
       else
