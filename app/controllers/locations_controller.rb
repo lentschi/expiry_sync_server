@@ -73,7 +73,7 @@ class LocationsController < ApplicationController
     respond_to do |format|
       if @location.update(location_params)
         format.html { redirect_to @location, notice: 'Location was successfully updated.' }
-        format.json { render json: {status: :success} }
+        format.json { render json: {status: :success, location: @location} }
       else
         format.html { render action: 'edit' }
         format.json { render json: {status: :failure} }
