@@ -8,10 +8,6 @@ class Location < ActiveRecord::Base
 
   validates :name, presence: true
 
-  # TODO: This doesn't work together with track_who_does_it
-  # -> write a custom validator, that fetches the current user manually:
-  validates :name, uniqueness: {scope: :creator_id}
-
   def user_related?(user)
   	self.users.where(id: user.id).length == 1
   end

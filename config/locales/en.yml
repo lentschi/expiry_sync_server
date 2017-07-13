@@ -28,6 +28,8 @@ en:
   error_prohibited_saving:
     one: 'An error prohibited this form from being saved'
     other: '%{count} errors prohibited this form from being saved'
+    
+  may_not_remove_location_share: 'Cannot remove this user from the location unless their last access took place more than %{days} days ago.'
 
   mail:
     header: Hello %{name}!
