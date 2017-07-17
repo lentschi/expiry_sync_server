@@ -60,6 +60,10 @@ group :heroku_production_server do
   gem 'puma'
 end
 
+group :docker_production_db do
+  gem 'pg'
+end
+
 
 group :production do
   gem 'mysql2', '~> 0.3.10'
