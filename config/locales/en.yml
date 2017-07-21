@@ -31,6 +31,13 @@ en:
     
   may_not_remove_location_share: 'Cannot remove this user from the location unless their last access took place more than %{days} days ago.'
 
+  set_password_button: "Set password"
+  set_password_intro: |
+    A location has been shared with you through the app "ExpirySync".<br />
+    After assigning your user a password, please follow the further instructions in the email!      
+  new_password: "New password"
+  confirm_password: "Confirm password"
+    
   mail:
     header: Hello %{name}!
     footer: >
@@ -39,9 +46,14 @@ en:
     share_request:
       subject: ExpirySync location share
       body: |
-        Someone has shared the location '%{location}' with you.
-        Click %{link} to accept this share and set a password.
-      link_text: Set a password
+        Someone has shared the location "%{location}" through the app "Expiry Sync" with you.
+        
+        Please click %{link} to accept this share and set a password.
+        Then install the app on your device: %{app_link}
+        When first launching the app choose the "%{server_name}" server and log in with %{email}.
+      link_text: set a password
+      app_link_text: ExpirySync at GooglePlay
+      server_name: Advanced 
 
   activerecord:
     models:

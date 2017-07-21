@@ -8,8 +8,6 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
-/.ruby-version
-/.ruby-gemset
 
 # ignore Eclipse files:
 /.project

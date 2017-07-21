@@ -3,6 +3,9 @@
 %p
   = t('mail.share_request.body', |
     location: @resource.location_to_be_shared.name, |
+    app_link: link_to(t('mail.share_request.app_link_text'), "https://play.google.com/store/apps/details?id=at.florian_lentsch.expirysync"), |
+    server_name: "<b>" + t('mail.share_request.server_name') + "</b>", |
+    email: "<b>#{@resource.email}</b>", |
     link: link_to(t('mail.share_request.link_text'), edit_password_url(@resource, :reset_password_token => @token))).gsub(/\n/,'<br />').html_safe |
 %p{:style => 'color:#ccc'}
   = t('mail.footer') 

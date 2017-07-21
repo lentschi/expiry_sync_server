@@ -31,6 +31,29 @@ de:
 
   may_not_remove_location_share: 'Die Freigabe des Ortes kann nicht aufgehoben werden, wenn der letzte Zugriff des Benutzers nicht mehr als %{days} Tage zurückliegt.'
 
+  set_password_button: "Passwort setzen"
+  set_password_intro: |
+    Ein Ort wurde Ihnen über die App "ExpirySync" freigegeben.<br />
+    Nachdem Sie Ihrem Benutzer ein Passwort verliehen haben, folgen Sie bitte den weiteren Anweisungen im E-Mail!
+  new_password: "Neues Passwort"
+  confirm_password: "Passwort bestätigen"
+
+  mail:
+    header: Guten Tag %{name}!
+    footer: >
+      Dieses E-Mail wurde automatisch generiert - bitte antworten Sie nicht direkt darauf.
+    share_request:
+      subject: ExpirySync - Freigabe eines Ortes
+      body: |
+        Jemand hat mit Ihnen den Ort "%{location}" über die App "Expiry Sync" geteilt.
+        
+        Klicken Sie bitte auf %{link} um die Freigabe zu akzeptieren und ein Passwort zu vergeben.
+        Danach installieren Sie die App: %{app_link}
+        Beim ersten Start der App wählen Sie den Server "%{server_name}" und loggen sich dann mit dem Benuzter %{email} ein.
+      link_text: Passwort vergeben
+      app_link_text: ExpirySync bei GooglePlay
+      server_name: Erweitert 
+
   activerecord:
     models:
       alternate_server:
