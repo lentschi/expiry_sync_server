@@ -6,6 +6,8 @@ ExpirySync - Ruby on Rails API server
 This is just the server;
 There's a wrapper project including the __API docs__ as well as both server and client as submodules at [https://github.com/lentschi/expiry_sync](https://github.com/lentschi/expiry_sync).
 
+The server is licensed under the [GPLv3](LICENSE.md).
+
 ## Installation
 
 - [Install ruby](https://www.ruby-lang.org/en/documentation/installation/) (v2.1 +)
