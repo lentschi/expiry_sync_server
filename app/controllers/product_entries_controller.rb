@@ -134,7 +134,7 @@ class ProductEntriesController < ApplicationController
       ]
 
       # only creators may assign free_to_take (This should probably be moved to cancan though)
-      if @product_entry and (@product_entry.creator.nil? or @product_entry.creator.id == current_user.id)
+      if self.action_name=='create' or (@product_entry and (@product_entry.creator.nil? or @product_entry.creator.id == current_user.id))
         allowed_entry_fields << :free_to_take
       end
 
