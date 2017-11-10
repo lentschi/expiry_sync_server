@@ -57,7 +57,7 @@ es:
         "%{server_name}" e inicie sesión con %{email}.
       link_text: establecer una contraseña
       app_link_text: ExpirySync en Google Play
-      server_name: Defecto
+      server_name: Estándar
   activerecord:
     models:
       alternate_server:
