@@ -1,0 +1,74 @@
+es:
+  home: inicio
+  login: iniciar sesión
+  sign_up: registrar
+  logged_in_as: 'conectado como %{name}'
+  logout: cerrar sesión
+  welcome_to_expiry_sync_title: Bienvenido a Expiry Sync
+  welcome_to_expiry_sync_text: >-
+    Este es el servidor predeterminado para la aplicación ExpirySync. Descargue la
+    aplicación en %{app_link}. <br /> <br /> La aplicación y el servidor son
+    proyectos de código abierto. Puede agregar su propio servidor aquí:
+    %{alternate_servers_link}. <br /> <br /> Puede encontrar el código fuente y
+    los documentos API en %{github_link}.
+  google_play: Google Play Store
+  github: GitHub
+  alternate_servers: servidores alternativos
+  new_alternate_server: nuevo servidor alternativo
+  editing_alternate_server: editar servidor alternativo
+  successfully_created_alternate_server: creado con éxito un servidor alternativo
+  added_by: añadido por
+  edit: editar
+  delete: borrar
+  no_such_user: 'El usuario "%{login}" no existe'
+  user_already_assigned: 'El usuario "%{login}" ya está asignado'
+  error_prohibited_saving:
+    one: Un error prohibió que se salvara este formulario
+    other: '%{count} errores prohibiós que se guarde este formulario'
+  may_not_remove_location_share: >-
+    No se puede eliminar a este usuario de la ubicación a menos que su último
+    acceso haya tenido lugar más de %{days} días atrás.
+  set_password_button: Configurar la contraseña
+  set_password_intro: >-
+    Se ha compartido una ubicación contigo a través de la aplicación "ExpirySync".
+    <br />
+
+    Después de asignarle una contraseña a su usuario, ¡siga las instrucciones
+    adicionales en el correo electrónico!
+  new_password: Nueva contraseña
+  confirm_password: Confirmar contraseña
+  mail:
+    header: 'Hola %{name}!'
+    footer: >-
+      Este correo electrónico se generó automáticamente, por favor no responda
+      directamente.
+    share_request:
+      subject: Intercambio de ubicación de ExpirySync
+      body: >-
+        Alguien ha compartido contigo la ubicación "%{location}" a través de la
+        aplicación "Expiry Sync".
+
+
+        Haga clic en %{link} para aceptar esta acción y establecer una contraseña.
+
+        Luego, instale la aplicación en su dispositivo: %{app_link}
+
+        Cuando abra por primera vez la aplicación, elija el servidor
+        "%{server_name}" e inicie sesión con %{email}.
+      link_text: establecer una contraseña
+      app_link_text: ExpirySync en Google Play
+      server_name: Estándar
+  activerecord:
+    models:
+      alternate_server:
+        one: servidor alternativo
+        other: servidores alternos
+    attributes:
+      alternate_server:
+        name: nombre
+        url: URL
+        description: descripción
+  helpers:
+    submit:
+      alternate_server:
+        create: agregar servidor alternativo
