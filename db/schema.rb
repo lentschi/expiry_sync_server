@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170618181315) do
+ActiveRecord::Schema.define(version: 20171112103815) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "alternate_server_translations", force: true do |t|
     t.integer  "alternate_server_id",              null: false
@@ -22,8 +25,8 @@ ActiveRecord::Schema.define(version: 20170618181315) do
     t.text     "description"
   end
 
-  add_index "alternate_server_translations", ["alternate_server_id"], name: "index_alternate_server_translations_on_alternate_server_id"
-  add_index "alternate_server_translations", ["locale"], name: "index_alternate_server_translations_on_locale"
+  add_index "alternate_server_translations", ["alternate_server_id"], name: "index_alternate_server_translations_on_alternate_server_id", using: :btree
+  add_index "alternate_server_translations", ["locale"], name: "index_alternate_server_translations_on_locale", using: :btree
 
   create_table "alternate_servers", force: true do |t|
     t.string   "url"
@@ -48,10 +51,10 @@ ActiveRecord::Schema.define(version: 20170618181315) do
     t.datetime "updated_at"
   end
 
-  add_index "article_images", ["article_id"], name: "index_article_images_on_article_id"
-  add_index "article_images", ["article_source_id"], name: "index_article_images_on_article_source_id"
-  add_index "article_images", ["creator_id"], name: "index_article_images_on_creator_id"
-  add_index "article_images", ["modifier_id"], name: "index_article_images_on_modifier_id"
+  add_index "article_images", ["article_id"], name: "index_article_images_on_article_id", using: :btree
+  add_index "article_images", ["article_source_id"], name: "index_article_images_on_article_source_id", using: :btree
+  add_index "article_images", ["creator_id"], name: "index_article_images_on_creator_id", using: :btree
+  add_index "article_images", ["modifier_id"], name: "index_article_images_on_modifier_id", using: :btree
 
   create_table "article_sources", force: true do |t|
     t.string   "name",       null: false
@@ -59,7 +62,7 @@ ActiveRecord::Schema.define(version: 20170618181315) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "article_sources", ["name"], name: "index_article_sources_on_name", unique: true
+  add_index "article_sources", ["name"], name: "index_article_sources_on_name", unique: true, using: :btree
 
   create_table "articles", force: true do |t|
     t.string   "name",              null: false
@@ -72,14 +75,41 @@ ActiveRecord::Schema.define(version: 20170618181315) do
     t.integer  "producer_id"
   end
 
-  add_index "articles", ["article_source_id"], name: "index_articles_on_article_source_id"
-  add_index "articles", ["barcode"], name: "index_articles_on_barcode"
-  add_index "articles", ["created_at"], name: "index_articles_on_created_at"
-  add_index "articles", ["creator_id", "barcode"], name: "index_articles_on_creator_id_and_barcode", unique: true
-  add_index "articles", ["creator_id"], name: "index_articles_on_creator_id"
-  add_index "articles", ["modifier_id"], name: "index_articles_on_modifier_id"
-  add_index "articles", ["producer_id"], name: "index_articles_on_producer_id"
-  add_index "articles", ["updated_at"], name: "index_articles_on_updated_at"
+  add_index "articles", ["article_source_id"], name: "index_articles_on_article_source_id", using: :btree
+  add_index "articles", ["barcode"], name: "index_articles_on_barcode", using: :btree
+  add_index "articles", ["created_at"], name: "index_articles_on_created_at", using: :btree
+  add_index "articles", ["creator_id", "barcode"], name: "index_articles_on_creator_id_and_barcode", unique: true, using: :btree
+  add_index "articles", ["creator_id"], name: "index_articles_on_creator_id", using: :btree
+  add_index "articles", ["modifier_id"], name: "index_articles_on_modifier_id", using: :btree
+  add_index "articles", ["producer_id"], name: "index_articles_on_producer_id", using: :btree
+  add_index "articles", ["updated_at"], name: "index_articles_on_updated_at", using: :btree
+
+  create_table "impressions", force: true do |t|
+    t.string   "impressionable_type"
+    t.integer  "impressionable_id"
+    t.integer  "user_id"
+    t.string   "controller_name"
+    t.string   "action_name"
+    t.string   "view_name"
+    t.string   "request_hash"
+    t.string   "ip_address"
+    t.string   "session_hash"
+    t.text     "message"
+    t.text     "referrer"
+    t.text     "params"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "impressions", ["controller_name", "action_name", "ip_address"], name: "controlleraction_ip_index", using: :btree
+  add_index "impressions", ["controller_name", "action_name", "request_hash"], name: "controlleraction_request_index", using: :btree
+  add_index "impressions", ["controller_name", "action_name", "session_hash"], name: "controlleraction_session_index", using: :btree
+  add_index "impressions", ["impressionable_type", "impressionable_id", "ip_address"], name: "poly_ip_index", using: :btree
+  add_index "impressions", ["impressionable_type", "impressionable_id", "params"], name: "poly_params_request_index", using: :btree
+  add_index "impressions", ["impressionable_type", "impressionable_id", "request_hash"], name: "poly_request_index", using: :btree
+  add_index "impressions", ["impressionable_type", "impressionable_id", "session_hash"], name: "poly_session_index", using: :btree
+  add_index "impressions", ["impressionable_type", "message", "impressionable_id"], name: "impressionable_type_message_index", using: :btree
+  add_index "impressions", ["user_id"], name: "index_impressions_on_user_id", using: :btree
 
   create_table "locations", force: true do |t|
     t.string   "name",        null: false
@@ -90,19 +120,19 @@ ActiveRecord::Schema.define(version: 20170618181315) do
     t.datetime "deleted_at"
   end
 
-  add_index "locations", ["created_at"], name: "index_locations_on_created_at"
-  add_index "locations", ["creator_id"], name: "index_locations_on_creator_id"
-  add_index "locations", ["modifier_id"], name: "index_locations_on_modifier_id"
-  add_index "locations", ["updated_at"], name: "index_locations_on_updated_at"
+  add_index "locations", ["created_at"], name: "index_locations_on_created_at", using: :btree
+  add_index "locations", ["creator_id"], name: "index_locations_on_creator_id", using: :btree
+  add_index "locations", ["modifier_id"], name: "index_locations_on_modifier_id", using: :btree
+  add_index "locations", ["updated_at"], name: "index_locations_on_updated_at", using: :btree
 
   create_table "locations_users", id: false, force: true do |t|
     t.integer "location_id"
     t.integer "user_id"
   end
 
-  add_index "locations_users", ["location_id", "user_id"], name: "index_locations_users_on_location_id_and_user_id"
-  add_index "locations_users", ["user_id", "location_id"], name: "index_locations_users_on_user_id_and_location_id", unique: true
-  add_index "locations_users", ["user_id"], name: "index_locations_users_on_user_id"
+  add_index "locations_users", ["location_id", "user_id"], name: "index_locations_users_on_location_id_and_user_id", using: :btree
+  add_index "locations_users", ["user_id", "location_id"], name: "index_locations_users_on_user_id_and_location_id", unique: true, using: :btree
+  add_index "locations_users", ["user_id"], name: "index_locations_users_on_user_id", using: :btree
 
   create_table "producers", force: true do |t|
     t.string   "name"
@@ -112,9 +142,9 @@ ActiveRecord::Schema.define(version: 20170618181315) do
     t.datetime "updated_at"
   end
 
-  add_index "producers", ["creator_id"], name: "index_producers_on_creator_id"
-  add_index "producers", ["modifier_id"], name: "index_producers_on_modifier_id"
-  add_index "producers", ["name"], name: "index_producers_on_name", unique: true
+  add_index "producers", ["creator_id"], name: "index_producers_on_creator_id", using: :btree
+  add_index "producers", ["modifier_id"], name: "index_producers_on_modifier_id", using: :btree
+  add_index "producers", ["name"], name: "index_producers_on_name", unique: true, using: :btree
 
   create_table "product_entries", force: true do |t|
     t.string   "description"
@@ -130,13 +160,13 @@ ActiveRecord::Schema.define(version: 20170618181315) do
     t.boolean  "free_to_take",    default: false, null: false
   end
 
-  add_index "product_entries", ["article_id"], name: "index_product_entries_on_article_id"
-  add_index "product_entries", ["created_at"], name: "index_product_entries_on_created_at"
-  add_index "product_entries", ["creator_id"], name: "index_product_entries_on_creator_id"
-  add_index "product_entries", ["expiration_date"], name: "index_product_entries_on_expiration_date"
-  add_index "product_entries", ["location_id"], name: "index_product_entries_on_location_id"
-  add_index "product_entries", ["modifier_id"], name: "index_product_entries_on_modifier_id"
-  add_index "product_entries", ["updated_at"], name: "index_product_entries_on_updated_at"
+  add_index "product_entries", ["article_id"], name: "index_product_entries_on_article_id", using: :btree
+  add_index "product_entries", ["created_at"], name: "index_product_entries_on_created_at", using: :btree
+  add_index "product_entries", ["creator_id"], name: "index_product_entries_on_creator_id", using: :btree
+  add_index "product_entries", ["expiration_date"], name: "index_product_entries_on_expiration_date", using: :btree
+  add_index "product_entries", ["location_id"], name: "index_product_entries_on_location_id", using: :btree
+  add_index "product_entries", ["modifier_id"], name: "index_product_entries_on_modifier_id", using: :btree
+  add_index "product_entries", ["updated_at"], name: "index_product_entries_on_updated_at", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email"
@@ -156,8 +186,8 @@ ActiveRecord::Schema.define(version: 20170618181315) do
     t.boolean  "creating_to_accept_share", default: false, null: false
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  add_index "users", ["username"], name: "index_users_on_username", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end

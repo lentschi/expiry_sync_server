@@ -6,6 +6,9 @@ class ApplicationController < ActionController::Base
   before_filter :configure_permitted_devise_parameters, if: :devise_controller?
   before_filter :set_date_response_header
 
+  # Log all page impressions with 'impressionist':
+  impressionist :unique => [:controller_name, :action_name, :session_hash]
+
   # required by the 'clerk'-gem (track creator and modifier user):
   include SentientController
 
