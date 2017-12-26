@@ -1,5 +1,5 @@
 &ref_0
-home: à la maison
+home: "à la maison"
 login: se connecter
 sign_up: se régistrer
 logged_in_as: 'connecté en tant que %{name}'
