@@ -1,5 +1,5 @@
 fr:
-  home: à la maison
+  home: accueil
   login: se connecter
   sign_up: se régistrer
   logged_in_as: 'connecté en tant que %{name}'
