@@ -6,7 +6,7 @@ fr:
   logout: Déconnecter
   welcome_to_expiry_sync_title: Bienvenue chez Expiry Sync
   welcome_to_expiry_sync_text: >-
-    Il s'agit du serveur standard pour l'application ExpirySync - Téléchargez
+    Il s'agit du serveur avancé pour l'application ExpirySync - Téléchargez
     l'application sur le %{app_link}. <br /> <br /> L'application et le serveur
     sont deux projets open source; vous pouvez ajouter votre propre serveur ici:
     %{alternate_servers_link}. <br /> <br /> Vous pouvez trouver le code source et
@@ -57,7 +57,7 @@ fr:
         "%{server_name}" et connectez-vous avec %{email}.
       link_text: définir un mot de passe
       app_link_text: ExpirySync sur Google Play
-      server_name: Standard
+      server_name: Avancé 
   activerecord:
     models:
       alternate_server:
