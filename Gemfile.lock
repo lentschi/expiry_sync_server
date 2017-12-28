@@ -150,6 +150,8 @@ GEM
       ruby_parser (~> 3.5)
     http_accept_language (2.0.5)
     i18n (0.7.0)
+    impressionist (1.6.0)
+      nokogiri (~> 1)
     jbuilder (1.5.3)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2.0)
@@ -295,6 +297,7 @@ DEPENDENCIES
   haml
   haml-rails
   http_accept_language
+  impressionist
   jbuilder (~> 1.2)
   jquery-rails
   mime-types
