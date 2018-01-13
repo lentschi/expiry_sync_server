@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_date_response_header
 
   # Log all page impressions with 'impressionist':
-  impressionist :unique => [:controller_name, :action_name, :session_hash]
+  impressionist :unique => [:controller_name, :action_name, :session_hash], :actions=>[:show, :index]
 
   # required by the 'clerk'-gem (track creator and modifier user):
   include SentientController
