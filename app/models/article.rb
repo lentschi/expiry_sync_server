@@ -43,17 +43,17 @@ class Article < ActiveRecord::Base
     article = smart_find(data)
     return article unless article.nil?
     
-    data.delete(:images) if data[:images].nil?
+    if data[:images].nil?
+      data.delete(:images) 
+    else
+      data[:images].map! {|imageParams| ArticleImage.decode(imageParams)}
+    end
     self.new(data)
   end
   
   def decode_images(params)
     params.each do |imageParams|
-      img = ArticleImage.new
-      img.image_data = Base64.decode64(imageParams[:image_data])
-      img.mime_type = imageParams[:mime_type]
-      img.original_extname = imageParams[:original_extname]
-      img.source = ArticleSource.get_user_source
+      img = ArticleImage.decode(imageParams)
       self.images << img
     end
   end
