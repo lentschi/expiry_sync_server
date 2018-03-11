@@ -41,7 +41,7 @@ namespace :cleanup do
     end
 
     ProductEntry.with_deleted.all.each do |soft_deleted_entry|
-      soft_deleted_entry.really_destroy!
+      soft_deleted_entry.really_destroy! unless soft_deleted_entry.deleted_at.nil?
     end
 
     users_to_deactivate_arr.each do |user|
