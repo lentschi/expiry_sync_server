@@ -34,6 +34,7 @@ namespace :cleanup do
     end
 
     articles_to_remove_arr.each do |article|
+      Rails.logger.info "Deleting article #{article.name} #{article.id}"
       article.images.each do |img|
         img.delete
       end
