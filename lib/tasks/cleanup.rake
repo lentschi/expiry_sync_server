@@ -27,7 +27,7 @@ namespace :cleanup do
     articles_to_remove_arr = []
     articles_with_serial_to_remove_arr = []
     Article.all.each do |article|
-      if ProductEntry.where(article_id: article.id).first.nil?
+      if ProductEntry.find_by_article_id(article.id).nil?
         articles_to_remove_arr << article
         articles_with_serial_to_remove_arr << article if article.barcode.nil? or article.barcode.strip == ''
       end
