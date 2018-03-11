@@ -41,9 +41,9 @@ namespace :cleanup do
       article.delete
     end
 
-    #ProductEntry.with_deleted.all.each do |soft_deleted_entry|
-    #  soft_deleted_entry.really_destroy! unless soft_deleted_entry.deleted_at.nil?
-    #end
+    ProductEntry.with_deleted.all.each do |soft_deleted_entry|
+      soft_deleted_entry.really_destroy! unless soft_deleted_entry.deleted_at.nil?
+    end
 
     users_to_deactivate_arr.each do |user|
       Rails.logger.info "Deactivated #{user.username} (sign in count: #{user.sign_in_count}, last sign in: #{user.last_sign_in_at})"
