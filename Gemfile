@@ -106,4 +106,4 @@ gem 'open_uri_redirections'
 
 gem 'remote_article_fetcher', path: "lib/gems/remote_article_fetcher"
 
-ruby "2.1.3"
+ruby "2.3.7"
