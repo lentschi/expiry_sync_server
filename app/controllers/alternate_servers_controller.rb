@@ -51,6 +51,7 @@ class AlternateServersController < ApplicationController
       clean_params.delete("description_#{lang}")
     end
     
+    clean_params['replacement_url'] = nil if clean_params['replacement_url'] == ''
     @alternate_server.update(clean_params)
     respond_with(@alternate_server, location: alternate_servers_path)
   end
@@ -66,11 +67,12 @@ class AlternateServersController < ApplicationController
 
   private
     def alternate_server_params
-      fields_arr = [:url]
+      fields_arr = [:url, :replacement_url]
       
       I18n.available_locales.each do |lang|
         fields_arr << "name_#{lang}".to_sym
         fields_arr << "description_#{lang}".to_sym
+        fields_arr << "replacement_explanation_#{lang}".to_sym
       end
       
       params.require(:alternate_server).permit(fields_arr)

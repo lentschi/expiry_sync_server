@@ -167,10 +167,19 @@ form {
 	
 	.field {
 		display:table-row;
+		&:hover {
+			background-color: lightblue;
+		}
 	}
 	
 	label, input, select, textarea {
 		display: table-cell;
+		padding: 5px;
+	}
+
+	textarea {
+		min-width: 300px;
+		min-height: 80px;
 	}
 	
 	.language_container {

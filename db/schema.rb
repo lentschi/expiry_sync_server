@@ -11,18 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171112103815) do
+ActiveRecord::Schema.define(version: 20180827154144) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "alternate_server_translations", force: true do |t|
-    t.integer  "alternate_server_id",              null: false
-    t.string   "locale",                           null: false
+    t.integer  "alternate_server_id",                  null: false
+    t.string   "locale",                               null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",                default: "", null: false
+    t.string   "name",                    default: "", null: false
     t.text     "description"
+    t.text     "replacement_explanation"
   end
 
   add_index "alternate_server_translations", ["alternate_server_id"], name: "index_alternate_server_translations_on_alternate_server_id", using: :btree
@@ -30,11 +31,12 @@ ActiveRecord::Schema.define(version: 20171112103815) do
 
   create_table "alternate_servers", force: true do |t|
     t.string   "url"
-    t.integer  "creator_id",  null: false
-    t.integer  "modifier_id", null: false
+    t.integer  "creator_id",      null: false
+    t.integer  "modifier_id",     null: false
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "replacement_url"
   end
 
   create_table "article_images", force: true do |t|
