@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   before_filter :prepare_params_for_can_can, only: [:create]
   before_filter :configure_permitted_devise_parameters, if: :devise_controller?
   before_filter :set_date_response_header
+  before_filter :set_redirect_url_header, :if => Proc.new { |c| c.request.format == 'application/json' }
 
   # Log all page impressions with 'impressionist':
   #impressionist :unique => [:controller_name, :action_name, :session_hash], :actions=>[:show, :index]
@@ -46,5 +47,12 @@ class ApplicationController < ActionController::Base
   def set_date_response_header
     response.header['Date'] = Time.now.httpdate
     response.header['Access-Control-Expose-Headers'] = 'Date'
+  end
+
+  def set_redirect_url_header
+    redirect_setting = ApplicationSetting.find_by_setting_key('redirect_url')
+    response.header['Access-Control-Expose-Headers'] = 'X-Expiry-Sync-Permanent-Redirect'
+    response.header['X-Expiry-Sync-Permanent-Redirect'] = redirect_setting.setting_value unless redirect_setting.nil?
+    render json: {status: 'Expiry-Sync-Permanent-Redirect'}
   end
 end
