@@ -52,9 +52,9 @@ namespace :cleanup do
     multi_images_removed = []
     Article.all.each do |article|
 	firstImage = true
-	article.article_images.each do |image|
+	article.images.each do |image|
 		unless firstImage
-			#image.delete
+			image.delete
 			multi_images_removed << image
 		end
 		firstImage = false
