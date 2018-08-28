@@ -50,7 +50,7 @@ namespace :cleanup do
     end
 
     multi_images_removed = []
-    Article.each do |article|
+    Article.all.each do |article|
 	firstImage = true
 	article.article_images.each do |image|
 		unless firstImage
