@@ -10,6 +10,9 @@
   .field
     = f.label :url
     = f.text_field :url
+  .field
+    = f.label :replacement_url
+    = f.text_field :replacement_url
   - I18n.available_locales.each do |lang|
     .field{"data-lang" => lang}
       = f.label(AlternateServer.human_attribute_name("name") + " (#{lang})", for: "alternate_server_name_#{lang}")
@@ -19,5 +22,9 @@
       = f.label(AlternateServer.human_attribute_name("description") + " (#{lang})", for: "alternate_server_description_#{lang}")
       %br/
       = f.text_area "description_#{lang}"
+    .field{"data-lang" => lang}
+      = f.label(AlternateServer.human_attribute_name("replacement_explanation") + " (#{lang})", for: "replacement_explanation_#{lang}")
+      %br/
+      = f.text_area "replacement_explanation_#{lang}"
   .actions
     = f.submit
