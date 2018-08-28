@@ -49,6 +49,18 @@ namespace :cleanup do
       Rails.logger.info "Deactivated #{user.username} (sign in count: #{user.sign_in_count}, last sign in: #{user.last_sign_in_at})"
     end
 
-    Rails.logger.info "Deactivated #{users_to_deactivate_arr.length} users. Removed #{locations_to_remove_arr.length} locations and #{articles_to_remove_arr.length} articles (#{articles_with_serial_to_remove_arr.length} thereof without barcode)."
+    multi_images_removed = []
+    Article.each do |article|
+	firstImage = true
+	article.article_images.each do |image|
+		unless firstImage
+			#image.delete
+			multi_images_removed << image
+		end
+		firstImage = false
+	end
+    end
+
+    Rails.logger.info "Deactivated #{users_to_deactivate_arr.length} users. Removed #{locations_to_remove_arr.length} locations and #{articles_to_remove_arr.length} articles (#{articles_with_serial_to_remove_arr.length} thereof without barcode). Removed #{multi_images_removed.length} images because the associated articles had more than one image."
   end
 end
