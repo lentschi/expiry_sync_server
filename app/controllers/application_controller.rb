@@ -52,10 +52,11 @@ class ApplicationController < ActionController::Base
   def set_redirect_url_header
     return if request.headers['X-Expiry-Sync-Api-Version'].nil? or request.headers['X-Expiry-Sync-Api-Version'].to_i < 2
     redirect_setting = ApplicationSetting.find_by_setting_key('redirect_url')
-    unless redirect_setting.nil?
-      response.header['Access-Control-Expose-Headers'] = 'X-Expiry-Sync-Permanent-Redirect'
-      response.header['X-Expiry-Sync-Permanent-Redirect'] = redirect_setting.setting_value
-      render json: {status: 'Expiry-Sync-Permanent-Redirect'}
-    end
+
+    return if redirect_setting.nil?
+
+    response.header['Access-Control-Expose-Headers'] = 'X-Expiry-Sync-Permanent-Redirect'
+    response.header['X-Expiry-Sync-Permanent-Redirect'] = redirect_setting.setting_value
+    render json: {status: 'Expiry-Sync-Permanent-Redirect'}
   end
 end

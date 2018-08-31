@@ -176,6 +176,7 @@ GEM
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
+    open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
     paranoia (2.1.5)
       activerecord (~> 4.0)
@@ -302,6 +303,7 @@ DEPENDENCIES
   mime-types
   mysql2 (~> 0.3.10)
   nokogiri
+  open_uri_redirections
   paranoia
   pg
   puma
@@ -322,7 +324,7 @@ DEPENDENCIES
   unicorn
 
 RUBY VERSION
-   ruby 2.1.3p242
+   ruby 2.3.7
 
 BUNDLED WITH
    1.14.6

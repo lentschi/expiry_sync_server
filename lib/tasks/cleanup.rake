@@ -27,13 +27,14 @@ namespace :cleanup do
     articles_to_remove_arr = []
     articles_with_serial_to_remove_arr = []
     Article.all.each do |article|
-      if ProductEntry.where(article_id: article.id).first.nil?
+      if ProductEntry.find_by_article_id(article.id).nil?
         articles_to_remove_arr << article
         articles_with_serial_to_remove_arr << article if article.barcode.nil? or article.barcode.strip == ''
       end
     end
 
     articles_to_remove_arr.each do |article|
+      Rails.logger.info "Deleting article #{article.name} #{article.id}"
       article.images.each do |img|
         img.delete
       end
@@ -41,13 +42,25 @@ namespace :cleanup do
     end
 
     ProductEntry.with_deleted.all.each do |soft_deleted_entry|
-      soft_deleted_entry.really_destroy!
+      soft_deleted_entry.really_destroy! unless soft_deleted_entry.deleted_at.nil?
     end
 
     users_to_deactivate_arr.each do |user|
       Rails.logger.info "Deactivated #{user.username} (sign in count: #{user.sign_in_count}, last sign in: #{user.last_sign_in_at})"
     end
 
-    Rails.logger.info "Deactivated #{users_to_deactivate_arr.length} users. Removed #{locations_to_remove_arr.length} locations and #{articles_to_remove_arr.length} articles (#{articles_with_serial_to_remove_arr.length} thereof without barcode)."
+    multi_images_removed = []
+    Article.all.each do |article|
+	firstImage = true
+	article.images.each do |image|
+		unless firstImage
+			image.delete
+			multi_images_removed << image
+		end
+		firstImage = false
+	end
+    end
+
+    Rails.logger.info "Deactivated #{users_to_deactivate_arr.length} users. Removed #{locations_to_remove_arr.length} locations and #{articles_to_remove_arr.length} articles (#{articles_with_serial_to_remove_arr.length} thereof without barcode). Removed #{multi_images_removed.length} images because the associated articles had more than one image."
   end
 end
