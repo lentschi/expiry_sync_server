@@ -22,7 +22,7 @@ end
 
 Then /^I should see that I am logged in with that user$/ do
   that_user = @authHelper.remember_new_user("that user")
-  expect(page).to have_content("logged in as #{that_user.email.nil? ?that_user.username : that_user.email}")
+  expect(page).to have_content("logged in as #{that_user.email.nil? ? that_user.username : that_user.email}")
 end
 
 Given /^I am logged in with that user in my web browser$/ do
@@ -31,9 +31,9 @@ Given /^I am logged in with that user in my web browser$/ do
   visit "/"
   click_link "login"
   
-  fill_in "Login", with: that_user.email.nil? ?that_user.username : that_user.email
+  fill_in "Login", with: that_user.email.nil? ? that_user.username : that_user.email
   fill_in "Password", with: that_user.password
   
   click_button "login"
-  expect(page).to have_content("logged in as #{that_user.email.nil? ?that_user.username : that_user.email}")
+  expect(page).to have_content("logged in as #{that_user.email.nil? ? that_user.username : that_user.email}")
 end

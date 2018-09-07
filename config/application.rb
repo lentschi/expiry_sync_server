@@ -26,11 +26,13 @@ module ExpirySyncServer
 
     config.locations = {allow_removing_share_after_inactivity_days: 30}
 
+    Rails.application.config.active_record.sqlite3.represent_boolean_as_integer = true
+
     # CORS config:
-    config.middleware.insert_before 0, "Rack::Cors" do
+    config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options]
+        origins /.*/
+        resource '*', headers: :any, credentials: true, methods: [:get, :post, :put, :delete, :options]
       end
     end
   end

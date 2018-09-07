@@ -19,7 +19,7 @@ When /^I submit the creation form for an alternate server on the website (provid
   when 'omitting the url'
     server.url = nil
   when 'with an url that has been used before'
-    other_server = FactoryGirl.create(:alternate_server)
+    other_server = FactoryBot.create(:alternate_server)
     server.url = other_server.url
   when 'with an invalid url'
     server.url = '##invalid##'

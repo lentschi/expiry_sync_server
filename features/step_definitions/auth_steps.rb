@@ -11,7 +11,7 @@ end
 Given /^a valid user(?: (with|without) an email address)? exists$/ do |with_email_address_str|
   params = Hash.new
   params[:email] = nil unless with_email_address_str.nil? or with_email_address_str=='with'
-  @authHelper.existing_user ||= FactoryGirl.create :user, params
+  @authHelper.existing_user ||= FactoryBot.create :user, params
 end
 
 Given /^I am logged in with that user$/ do
@@ -63,7 +63,7 @@ When /^I try to register (.+)$/ do |in_which_way_str|
   when 'with an invalid username'
     new_user.username = ''
   when 'with an invalid email address'
-    new_user.email = 'bui@invalid_'
+    new_user.email = '_invalid_'
   else
     raise Cucumber::Undefined.new("No such way to register in: '#{in_which_way_str}'")
   end  

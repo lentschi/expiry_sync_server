@@ -76,7 +76,7 @@ Then /^I should have received a valid location$/ do
   TestHelper.verify_contained_obj_integrity result, "location"
   result["location"].should have_key("name")
 
-  @locationHelper.locations = [ FactoryGirl.build(:location, result["location"]) ]
+  @locationHelper.locations = [ FactoryBot.build(:location, result["location"]) ]
 end
 
 Given /^(a location|several locations) (?:created by (.+) )?(?:is|are|was|were) (not )?assigned to me$/ do |location_amount_str, creator_str, assigned_str|
@@ -110,7 +110,7 @@ Given /^(a location|several locations) (?:created by (.+) )?(?:is|are|was|were) 
   # create the location:
   @locationHelper.locations = Array.new
   VALID_LOCATION_DATA.each do |location_data|
-    cur_location = FactoryGirl.create(:location, location_data)
+    cur_location = FactoryBot.create(:location, location_data)
     cur_location.users << (assigned_to_me ? @authHelper.remember_logged_in_user : @authHelper.other_user)
     cur_location.save
     @locationHelper.locations << cur_location
@@ -148,7 +148,7 @@ Given /^several locations were assigned to me before that retrieval$/ do
   }
 
   SEVERAL_LOCATION_AMOUNT.times do
-    new_location = FactoryGirl.build :location, params
+    new_location = FactoryBot.build :location, params
     new_location.users << @authHelper.remember_logged_in_user
     new_location.save
   end
@@ -171,7 +171,7 @@ Given /^a changed set of locations was assigned to me after that retrieval$/ do
     updated_at: fake_time
   }
   SEVERAL_LOCATION_AMOUNT.times do
-    new_location = FactoryGirl.build :location, params
+    new_location = FactoryBot.build :location, params
     new_location.users << @authHelper.remember_logged_in_user
     new_location.save
     @locationHelper.modified_locations << new_location
@@ -211,7 +211,7 @@ Then /^(.+) should( not| no longer)? be in the location list(?: marked as (delet
   when 'the location with its new data'
     @locationHelper.locations_submitted.should_not be_nil
     @locationHelper.locations_submitted.should have_at_least(1).items
-    @locationHelper.locations_submitted.map { |params| FactoryGirl.build(:location,params[:location]) }
+    @locationHelper.locations_submitted.map { |params| FactoryBot.build(:location,params[:location]) }
   when 'the location with its old data'
     old_location = @locationHelper.remember_location('the location with its old data')
     old_location.id = nil # we don't count the id as 'data'
