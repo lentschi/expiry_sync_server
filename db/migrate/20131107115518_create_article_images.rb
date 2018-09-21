@@ -1,4 +1,4 @@
-class CreateArticleImages < ActiveRecord::Migration
+class CreateArticleImages < ActiveRecord::Migration[4.2]
   def change
     create_table :article_images do |t|
       t.string :source_url

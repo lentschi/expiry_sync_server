@@ -1,4 +1,4 @@
-class ChangeArticlesAllowEmptyCreator < ActiveRecord::Migration
+class ChangeArticlesAllowEmptyCreator < ActiveRecord::Migration[4.2]
   def change
     change_table :articles do |t|
       t.change :creator_id, :integer, :null => true

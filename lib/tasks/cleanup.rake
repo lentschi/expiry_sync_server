@@ -63,4 +63,36 @@ namespace :cleanup do
 
     Rails.logger.info "Deactivated #{users_to_deactivate_arr.length} users. Removed #{locations_to_remove_arr.length} locations and #{articles_to_remove_arr.length} articles (#{articles_with_serial_to_remove_arr.length} thereof without barcode). Removed #{multi_images_removed.length} images because the associated articles had more than one image."
   end
+
+  desc "Perform cleanup"
+  task :shrink_images, [] => [:environment] do |task, args|
+    images = ArticleImage.where(['image_data IS NOT NULL', 'source_url IS NULL'])
+    puts "Scanning #{images.length} images"
+
+    initialSize = 0
+    images.each do |image|
+      initialSize += image.image_data.length
+    end
+
+    i = 0
+    resized = 0
+    gainedBytes = 0
+    images.each do |image|
+      puts "#{i}/#{images.length}"
+      i += 1
+
+      origLength = image.image_data.length
+      image.shrink!
+      resized += 1
+      gainedBytes += origLength - image.image_data.length
+    end
+
+    images = ArticleImage.where(['image_data IS NOT NULL', 'source_url IS NULL'])
+    finalSize = 0
+    images.each do |image|
+      finalSize += image.image_data.length
+    end
+
+    puts "Done - Resized #{resized} images. Gained #{gainedBytes} bytes. Difference: Before: #{initialSize} bytes vs After: #{finalSize} bytes"
+  end
 end

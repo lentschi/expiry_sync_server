@@ -29,6 +29,7 @@ class Ability
 
     # product entries:
     can [:update, :destroy, :index_changed], ProductEntry do |entry|
+      Rails.logger.info "--- Hi there!"
       entry.location.user_related?(user)
     end
   end

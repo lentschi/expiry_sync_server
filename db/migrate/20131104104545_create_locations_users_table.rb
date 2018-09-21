@@ -1,4 +1,4 @@
-class CreateLocationsUsersTable < ActiveRecord::Migration
+class CreateLocationsUsersTable < ActiveRecord::Migration[4.2]
   def change
     create_table :locations_users, id: false do |t|
       t.references :location

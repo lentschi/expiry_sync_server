@@ -7,7 +7,7 @@ class ArticleImagesController < ApplicationController
   # GET /article_images
   # GET /article_images.json
   def index
-    @article_images = ArticleImage.all
+    @article_images = ArticleImage.where(['image_data IS NOT NULL', 'source_url IS NULL'])
   end
 
   # GET /article_images/1

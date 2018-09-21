@@ -1,4 +1,4 @@
-class CreateAlternateServers < ActiveRecord::Migration
+class CreateAlternateServers < ActiveRecord::Migration[4.2]
   def up
     create_table :alternate_servers do |t|
       t.string :url, unique: true

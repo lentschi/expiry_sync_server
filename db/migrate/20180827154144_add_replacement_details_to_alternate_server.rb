@@ -1,4 +1,4 @@
-class AddReplacementDetailsToAlternateServer < ActiveRecord::Migration
+class AddReplacementDetailsToAlternateServer < ActiveRecord::Migration[4.2]
   def change
     add_column :alternate_servers, :replacement_url, :string
 

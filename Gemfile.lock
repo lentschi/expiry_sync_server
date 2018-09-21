@@ -73,7 +73,6 @@ GEM
     bcrypt (3.1.12)
     builder (3.2.3)
     byebug (10.0.2)
-    cancan (1.6.10)
     cancancan (2.2.0)
     capistrano (3.11.0)
       airbrussh (>= 1.0.0)
@@ -264,6 +263,7 @@ GEM
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
+    rmagick (2.16.0)
     rspec-core (2.14.7)
     rspec-expectations (2.14.5)
       diff-lcs (>= 1.1.3, < 2.0)
@@ -344,7 +344,6 @@ PLATFORMS
 DEPENDENCIES
   addressable
   byebug
-  cancan (~> 1.6)
   cancancan (~> 2.2)
   capistrano-rails
   capistrano-rails-console
@@ -379,6 +378,7 @@ DEPENDENCIES
   rails-i18n (~> 5.1)
   rake (< 11.0)
   remote_article_fetcher!
+  rmagick (~> 2.16)
   rspec-core (= 2.14.7)
   rspec-rails (= 2.14.0)
   sass-rails (~> 5.0)
@@ -395,4 +395,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.4
+   1.16.5
