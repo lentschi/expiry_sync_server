@@ -7,14 +7,14 @@ module CucumberAlternateServerHelpers
     attr_accessor :new_alternate_server, :existing_servers
     
     def new_alternate_server
-      @new_alternate_server ||= FactoryGirl.build(:alternate_server)
+      @new_alternate_server ||= FactoryBot.build(:alternate_server)
     end
     
     def existing_servers
       return @existing_servers unless @existing_servers.nil?
       @existing_servers = []
       SEVERAL_AMOUNT.times do 
-        @existing_servers << FactoryGirl.create(:alternate_server)
+        @existing_servers << FactoryBot.create(:alternate_server)
       end
     end
     

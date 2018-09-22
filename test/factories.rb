@@ -1,8 +1,8 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
-    username  "test"
-    email "test@test.com"
-    password "123123"
+    username  { "test" }
+    email { "test@test.com" }
+    password { "123123" }
     password_confirmation { |u| u.password }  
     
     callback :before_create do
@@ -20,7 +20,7 @@ FactoryGirl.define do
   end
   
   factory :article_source do
-  	name "user_generated"
+  	name { "user_generated" }
   	
   	# Don't create many sources, just because many articles might be created:
   	initialize_with do
@@ -49,8 +49,8 @@ FactoryGirl.define do
   end
   
   factory :product_entry do
-  	description "mmmh"
-  	amount 1
+  	description { "mmmh" }
+  	amount { 1 }
   	
   	# assocs:
   	article

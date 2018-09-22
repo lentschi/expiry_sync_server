@@ -1,5 +1,5 @@
 class LocationsController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   # This may have become obsolete due to load_and_authorize_resource:
   #before_action :set_location, only: [:show, :edit, :update, :destroy]

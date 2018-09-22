@@ -78,6 +78,17 @@ ExpirySyncServer::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
+  # see https://github.com/heroku/rails_12factor#migrating-to-rails-5 :
+  # Disable serving static files from the `/public` folder by default since
+  # Apache or NGINX already handles this.
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
+  end
+
   # required by heroku (else configured in config/initializers/secret_token.rb, which is not in git):
   # to make it work run heroku config:set SECRET_KEY_BASE=<your-rake-secret-output>:
   config.secret_key_base = ENV["SECRET_KEY_BASE"]

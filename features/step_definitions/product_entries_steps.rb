@@ -49,7 +49,7 @@ Given /^there is an article created by (.+)$/ do |creator_str|
   end
   
   @authHelper.other_user.make_current unless created_by_me
-  existing_article = FactoryGirl.create(:article, @productEntryHelper.get_valid_article_data())
+  existing_article = FactoryBot.create(:article, @productEntryHelper.get_valid_article_data())
   @productEntryHelper.articles << existing_article
   @previously_existing_article_ids << existing_article.id
 end
@@ -77,7 +77,7 @@ Given /^there (is a product entry|are several product entries) assigned to (.+) 
 	
   @authHelper.other_user.make_current unless assigned_to_me
   VALID_ENTRY_DATA.each do |entry_data|
-  	entry = FactoryGirl.create(:product_entry, location: that_location)
+  	entry = FactoryBot.create(:product_entry, location: that_location)
   	@productEntryHelper.entries << entry
   	
     break if single_entry
@@ -173,7 +173,7 @@ Then /^I should have received a valid product entry$/ do
   result["product_entry"].should have_key("description")
   result["product_entry"].should have_key("creator_id")
   
-  received_entry = FactoryGirl.build(:product_entry, result["product_entry"])
+  received_entry = FactoryBot.build(:product_entry, result["product_entry"])
   @productEntryHelper.entries = [ received_entry ]
 end
 
@@ -188,7 +188,7 @@ Then /^I should have received a valid article wrapped in its product entry$/ do
   result["product_entry"]["article"].should have_key("barcode")
   result["product_entry"]["article"].should have_key("name")
 
-	received_article = FactoryGirl.build(:article, result["product_entry"]["article"])
+	received_article = FactoryBot.build(:article, result["product_entry"]["article"])
   @productEntryHelper.articles << received_article
 end
 
@@ -260,7 +260,7 @@ Then /^(.+) should( not| no longer)? be in the product entry list(?: marked as (
 #  when 'the product entry with its new data'
 #    @productEntryHelper.entries_submitted.should_not be_nil
 #    @productEntryHelper.entries_submitted.should have_at_least(1).items
-#    @productEntryHelper.entries_submitted.map { |params| FactoryGirl.build(:product_entry,params[:product_entry]) }
+#    @productEntryHelper.entries_submitted.map { |params| FactoryBot.build(:product_entry,params[:product_entry]) }
 #  when 'the product entry with its old data'
 #    old_entry = @productEntryHelper.remember_entry('the product entry with its old data')
 #    old_entry.id = nil # we don't count the id as 'data'
@@ -288,7 +288,7 @@ Given(/^several product entries were assigned to that location before that retri
   }
   
   SEVERAL_PRODUCT_ENTRIES_AMOUNT.times do
-    new_entry = FactoryGirl.build :product_entry, params
+    new_entry = FactoryBot.build :product_entry, params
     new_entry.save
   end
 end
@@ -312,7 +312,7 @@ Given(/^a changed set of product entries was assigned to me after that retrieval
     location_id: that_location.id
   }
   SEVERAL_PRODUCT_ENTRIES_AMOUNT.times do
-    new_entry = FactoryGirl.build :product_entry, params
+    new_entry = FactoryBot.build :product_entry, params
     new_entry.save
     @productEntryHelper.modified_entries << new_entry
   end

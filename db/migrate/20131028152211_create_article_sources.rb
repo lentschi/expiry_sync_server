@@ -1,4 +1,4 @@
-class CreateArticleSources < ActiveRecord::Migration
+class CreateArticleSources < ActiveRecord::Migration[4.2]
   def change
     create_table :article_sources do |t|
       t.string :name

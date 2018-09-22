@@ -1,5 +1,5 @@
 class AlternateServersController < ApplicationController
-  before_filter :authenticate_user!, except: [:index]
+  before_action :authenticate_user!, except: [:index]
   load_resource except: [:index, :new]
   authorize_resource except: [:index, :new, :create]
 

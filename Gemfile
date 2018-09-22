@@ -1,58 +1,62 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.0.0'
+gem 'rails', '~> 5.2.0'
 
-gem 'composite_primary_keys', '~> 6.0.0'
+# s. https://stackoverflow.com/questions/35893584 :
+gem 'rake', '< 11.0'
 
-# Use sqlite3 as the database for Active Record
+gem "composite_primary_keys", "~> 11.0"
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
+gem "sass-rails", "~> 5.0"
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem "uglifier", "~> 4.1"
 
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
+gem "coffee-rails", "~> 4.2"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+gem "therubyracer", "~> 0.12.3", platforms: :ruby
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+gem "jquery-rails", "~> 4.3"
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+gem 'turbolinks', "~> 5.2"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+gem "jbuilder", "~> 2.7"
 
 # auth
-gem 'devise'
-gem 'devise-i18n'
-gem 'sentient_user', git: "git://github.com/bokmann/sentient_user.git"
-gem 'clerk', git: "git://github.com/house9/clerk.git"
-gem 'cancan'
+gem "devise", "~> 4.5"
+gem "devise-i18n", "~> 1.6"
+gem "sentient_user", "~> 0.4.0"
+# gem 'sentient_user', git: "git://github.com/bokmann/sentient_user.git"
+gem "clerk", "~> 1.0"
+# gem 'clerk', git: "git://github.com/house9/clerk.git"
+gem "cancancan", "~> 2.2"
 
 # views:
-gem 'haml'
+gem "haml", "~> 5.0"
+gem "haml-rails", "~> 1.0"
 
 # html parsing:
-gem 'nokogiri'
+gem "nokogiri", "~> 1.8"
 
 # deleted flags:
-gem 'paranoia'
+gem "paranoia", "~> 2.4"
 
 # CORS:
-gem 'rack-cors', :require => 'rack/cors'
+gem "rack-cors", "~> 1.0", :require => 'rack/cors'
 
 # Impressionist:
-gem 'impressionist'
+gem "impressionist", "~> 1.6"
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
+  gem "sdoc", "~> 1.0", require: false
 end
 
 group :heroku_production_db do
@@ -89,21 +93,20 @@ group :test do
   gem "cucumber", :require => false
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'addressable'
 end
 
 
-gem 'rails_12factor'
-
-gem 'mime-types'
-gem 'rails-i18n'
-gem 'globalize', '~> 4.0.3'
-gem 'globalize-accessors'
-gem 'http_accept_language'
-gem 'haml-rails'
+gem "mime-types", "~> 3.2"
+gem "rails-i18n", "~> 5.1"
+gem 'globalize', git: 'https://github.com/globalize/globalize'
+gem 'globalize-accessors', git: 'https://github.com/globalize/globalize-accessors'
+gem "http_accept_language", "~> 2.1"
+gem "open_uri_redirections", "~> 0.2.1"
+gem "rmagick", "~> 2.16"
 gem 'open_uri_redirections'
 
 gem 'remote_article_fetcher', path: "lib/gems/remote_article_fetcher"
 
-ruby "2.3.7"
+ruby "2.5.1"

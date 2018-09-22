@@ -5,7 +5,7 @@ Before do |scenario|
 end
 
 Given /^a valid article exists in the db$/ do
-	@articleHelper.existing_article = FactoryGirl.create(:article)
+	@articleHelper.existing_article = FactoryBot.create(:article)
 end
 
 Given /^a valid article exists in the remote testing db$/ do

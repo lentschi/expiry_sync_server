@@ -7,7 +7,7 @@ class ArticleImagesController < ApplicationController
   # GET /article_images
   # GET /article_images.json
   def index
-    @article_images = ArticleImage.all
+    @article_images = ArticleImage.where(['image_data IS NOT NULL', 'source_url IS NULL'])
   end
 
   # GET /article_images/1
@@ -24,7 +24,8 @@ class ArticleImagesController < ApplicationController
       @image.original_extname = File.extname(@image.source_url)
       @image.original_basename = File.basename(@image.source_url, @image.original_extname)
       @image.mime_type = result.content_type
-      @image.save
+
+      # Intentionally NOT saving the image to save space
     end
 
     send_data(@image.image_data, :type => @image.mime_type, :filename => "#{params[:id]}#{@image.original_extname}", :disposition => "inline")

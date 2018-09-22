@@ -1,5 +1,5 @@
 class ProductEntriesController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 #  load_and_authorize_resource
   load_and_authorize_resource :location, only: [:index_changed]
   load_and_authorize_resource :product_entry, through: :location, only: [:index_changed]
@@ -106,7 +106,7 @@ class ProductEntriesController < ApplicationController
         render json: {
           status: 'success',
           product_entries: JSON.parse(@product_entries.to_json(include: {
-            article: {include: {images: {exclude: :image_data}}},
+            article: {include: {images: {except: :image_data}}},
             creator: {}
           })),
           deleted_product_entries: JSON.parse(@deleted_product_entries.to_json(include: :article)),

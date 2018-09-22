@@ -1,4 +1,4 @@
-class CreateProductEntries < ActiveRecord::Migration
+class CreateProductEntries < ActiveRecord::Migration[4.2]
   def change
     create_table :product_entries do |t|
       t.string :description

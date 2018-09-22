@@ -1,4 +1,4 @@
-class AddSomeConstraintsAndIndices < ActiveRecord::Migration
+class AddSomeConstraintsAndIndices < ActiveRecord::Migration[4.2]
   def change
     change_table :article_sources do |t|
       t.change :name, :string, :null => false

@@ -53,8 +53,20 @@ class Article < ActiveRecord::Base
   
   def decode_images(params)
     params.each do |imageParams|
+      # Do not save an image if it's the same as any of the ones with
+      # source url (Actually the client shouldn't repost it in that case,
+      # but it does):
+      matching_existing_image = nil
+      self.images.each do |existing_image|
+        next if existing_image.source_url.nil?
+        result = open(existing_image.source_url, allow_redirections: :all)
+        matching_existing_image = existing_image if result.read == Base64.decode64(imageParams[:image_data])
+      end
+
+      next unless matching_existing_image.nil?
+
       img = ArticleImage.decode(imageParams)
-      self.images << img
+      self.images << img 
     end
   end
   
