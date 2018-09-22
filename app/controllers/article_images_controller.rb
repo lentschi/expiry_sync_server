@@ -24,7 +24,8 @@ class ArticleImagesController < ApplicationController
       @image.original_extname = File.extname(@image.source_url)
       @image.original_basename = File.basename(@image.source_url, @image.original_extname)
       @image.mime_type = result.content_type
-      @image.save
+
+      # Intentionally NOT saving the image to save space
     end
 
     send_data(@image.image_data, :type => @image.mime_type, :filename => "#{params[:id]}#{@image.original_extname}", :disposition => "inline")
