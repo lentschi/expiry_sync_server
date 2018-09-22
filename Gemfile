@@ -105,7 +105,6 @@ gem 'globalize-accessors', git: 'https://github.com/globalize/globalize-accessor
 gem "http_accept_language", "~> 2.1"
 gem "open_uri_redirections", "~> 0.2.1"
 gem "rmagick", "~> 2.16"
-gem 'open_uri_redirections'
 
 gem 'remote_article_fetcher', path: "lib/gems/remote_article_fetcher"
 
