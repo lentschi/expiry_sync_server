@@ -10,43 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_27_175714) do
+ActiveRecord::Schema.define(version: 2018_10_11_144846) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "alternate_server_translations", id: :serial, force: :cascade do |t|
+  create_table "alternate_server_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.integer "alternate_server_id", null: false
-    t.string "locale", limit: 255, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "name", limit: 255, default: "", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name", default: "", null: false
     t.text "description"
     t.text "replacement_explanation"
     t.index ["alternate_server_id"], name: "index_alternate_server_translations_on_alternate_server_id"
     t.index ["locale"], name: "index_alternate_server_translations_on_locale"
   end
 
-  create_table "alternate_servers", id: :serial, force: :cascade do |t|
-    t.string "url", limit: 255
+  create_table "alternate_servers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "url"
     t.integer "creator_id", null: false
     t.integer "modifier_id", null: false
-    t.datetime "deleted_at"
+    t.timestamp "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "replacement_url"
+    t.index ["creator_id"], name: "index_alternate_servers_on_creator_id"
+    t.index ["deleted_at"], name: "index_alternate_servers_on_deleted_at"
+    t.index ["modifier_id"], name: "index_alternate_servers_on_modifier_id"
   end
 
-  create_table "application_settings", id: :serial, force: :cascade do |t|
-    t.string "setting_key", limit: 255, null: false
-    t.string "setting_value", limit: 255, null: false
+  create_table "application_settings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "setting_key", null: false
+    t.string "setting_value", null: false
   end
 
-  create_table "article_images", id: :serial, force: :cascade do |t|
-    t.string "source_url", limit: 255
-    t.string "original_basename", limit: 255
-    t.string "original_extname", limit: 255
-    t.string "mime_type", limit: 255
+  create_table "article_images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "source_url"
+    t.string "original_basename"
+    t.string "original_extname"
+    t.string "mime_type"
     t.binary "image_data"
     t.integer "article_id", null: false
     t.integer "article_source_id", null: false
@@ -60,21 +60,21 @@ ActiveRecord::Schema.define(version: 2018_08_27_175714) do
     t.index ["modifier_id"], name: "index_article_images_on_modifier_id"
   end
 
-  create_table "article_sources", id: :serial, force: :cascade do |t|
-    t.string "name", limit: 255, null: false
+  create_table "article_sources", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_article_sources_on_name", unique: true
   end
 
-  create_table "articles", id: :serial, force: :cascade do |t|
-    t.string "name", limit: 255, null: false
+  create_table "articles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "barcode"
+    t.string "name", null: false
     t.integer "article_source_id", null: false
     t.integer "creator_id"
+    t.integer "modifier_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "barcode", limit: 255
-    t.integer "modifier_id"
     t.integer "producer_id"
     t.index ["article_source_id"], name: "index_articles_on_article_source_id"
     t.index ["barcode"], name: "index_articles_on_barcode"
@@ -86,16 +86,16 @@ ActiveRecord::Schema.define(version: 2018_08_27_175714) do
     t.index ["updated_at"], name: "index_articles_on_updated_at"
   end
 
-  create_table "impressions", id: :serial, force: :cascade do |t|
-    t.string "impressionable_type", limit: 255
+  create_table "impressions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "impressionable_type"
     t.integer "impressionable_id"
     t.integer "user_id"
-    t.string "controller_name", limit: 255
-    t.string "action_name", limit: 255
-    t.string "view_name", limit: 255
-    t.string "request_hash", limit: 255
-    t.string "ip_address", limit: 255
-    t.string "session_hash", limit: 255
+    t.string "controller_name"
+    t.string "action_name"
+    t.string "view_name"
+    t.string "request_hash"
+    t.string "ip_address"
+    t.string "session_hash"
     t.text "message"
     t.text "referrer"
     t.text "params"
@@ -105,15 +105,15 @@ ActiveRecord::Schema.define(version: 2018_08_27_175714) do
     t.index ["controller_name", "action_name", "request_hash"], name: "controlleraction_request_index"
     t.index ["controller_name", "action_name", "session_hash"], name: "controlleraction_session_index"
     t.index ["impressionable_type", "impressionable_id", "ip_address"], name: "poly_ip_index"
-    t.index ["impressionable_type", "impressionable_id", "params"], name: "poly_params_request_index"
+    t.index ["impressionable_type", "impressionable_id", "params"], name: "poly_params_request_index", length: { params: 255 }
     t.index ["impressionable_type", "impressionable_id", "request_hash"], name: "poly_request_index"
     t.index ["impressionable_type", "impressionable_id", "session_hash"], name: "poly_session_index"
-    t.index ["impressionable_type", "message", "impressionable_id"], name: "impressionable_type_message_index"
+    t.index ["impressionable_type", "message", "impressionable_id"], name: "impressionable_type_message_index", length: { message: 255 }
     t.index ["user_id"], name: "index_impressions_on_user_id"
   end
 
-  create_table "locations", id: :serial, force: :cascade do |t|
-    t.string "name", limit: 255, null: false
+  create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "name", null: false
     t.integer "creator_id", null: false
     t.integer "modifier_id", null: false
     t.datetime "created_at", null: false
@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_175714) do
     t.index ["updated_at"], name: "index_locations_on_updated_at"
   end
 
-  create_table "locations_users", id: false, force: :cascade do |t|
+  create_table "locations_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.integer "location_id"
     t.integer "user_id"
     t.index ["location_id", "user_id"], name: "index_locations_users_on_location_id_and_user_id"
@@ -133,8 +133,8 @@ ActiveRecord::Schema.define(version: 2018_08_27_175714) do
     t.index ["user_id"], name: "index_locations_users_on_user_id"
   end
 
-  create_table "producers", id: :serial, force: :cascade do |t|
-    t.string "name", limit: 255
+  create_table "producers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "name"
     t.integer "creator_id"
     t.integer "modifier_id"
     t.datetime "created_at"
@@ -144,15 +144,15 @@ ActiveRecord::Schema.define(version: 2018_08_27_175714) do
     t.index ["name"], name: "index_producers_on_name", unique: true
   end
 
-  create_table "product_entries", id: :serial, force: :cascade do |t|
-    t.string "description", limit: 255
+  create_table "product_entries", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.string "description"
     t.integer "amount", null: false
     t.date "expiration_date"
     t.integer "article_id", null: false
     t.integer "creator_id", null: false
+    t.integer "modifier_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "modifier_id", null: false
     t.integer "location_id", null: false
     t.datetime "deleted_at"
     t.boolean "free_to_take", default: false, null: false
@@ -165,20 +165,20 @@ ActiveRecord::Schema.define(version: 2018_08_27_175714) do
     t.index ["updated_at"], name: "index_product_entries_on_updated_at"
   end
 
-  create_table "users", id: :serial, force: :cascade do |t|
-    t.string "email", limit: 255
-    t.string "encrypted_password", limit: 255, default: "", null: false
-    t.string "reset_password_token", limit: 255
+  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
+    t.binary "username", limit: 255, default: "", null: false
+    t.string "email"
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string "current_sign_in_ip", limit: 255
-    t.string "last_sign_in_ip", limit: 255
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "username", limit: 255, default: "", null: false
     t.datetime "deleted_at"
     t.boolean "creating_to_accept_share", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
