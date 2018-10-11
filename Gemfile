@@ -61,6 +61,7 @@ end
 
 group :heroku_production_db do
   gem 'pg'
+  gem 'mysql2', '~> 0.5.2'
 end
 
 group :heroku_production_server do
@@ -68,12 +69,11 @@ group :heroku_production_server do
 end
 
 group :docker_production_db do
-  gem 'pg'
+  gem 'mysql2', '~> 0.5.2'
 end
 
 
 group :production do
-  gem 'mysql2', '~> 0.3.10'
   gem 'unicorn'
 end
 
