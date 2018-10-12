@@ -83,11 +83,11 @@ class ProductEntriesController < ApplicationController
   end
 
   def destroy
- 		success = @product_entry.destroy
+    @product_entry.destroy unless @product_entry.nil?
 
     respond_to do |format|
       format.html { redirect_to product_entries_url }
-      format.json { render json: {status: success ? :success : :failure} }
+      format.json { render json: {status: :success} }
     end
   end
 
