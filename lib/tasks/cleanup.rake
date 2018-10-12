@@ -67,7 +67,7 @@ namespace :cleanup do
   desc "Perform cleanup"
   task :shrink_images, [] => [:environment] do |task, args|
     images = ArticleImage.where(['image_data IS NOT NULL', 'source_url IS NULL'])
-    puts "Scanning #{images.length} images"
+    Rails.logger.info "Scanning #{images.length} images"
 
     initialSize = 0
     images.each do |image|
@@ -78,7 +78,7 @@ namespace :cleanup do
     resized = 0
     gainedBytes = 0
     images.each do |image|
-      puts "#{i}/#{images.length}"
+      Rails.logger.info "#{i}/#{images.length}"
       i += 1
 
       origLength = image.image_data.length
@@ -93,6 +93,6 @@ namespace :cleanup do
       finalSize += image.image_data.length
     end
 
-    puts "Done - Resized #{resized} images. Gained #{gainedBytes} bytes. Difference: Before: #{initialSize} bytes vs After: #{finalSize} bytes"
+    Rails.logger.info "Done - Resized #{resized} images. Gained #{gainedBytes} bytes. Difference: Before: #{initialSize} bytes vs After: #{finalSize} bytes"
   end
 end
