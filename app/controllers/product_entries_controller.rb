@@ -3,7 +3,8 @@ class ProductEntriesController < ApplicationController
 #  load_and_authorize_resource
   load_and_authorize_resource :location, only: [:index_changed]
   load_and_authorize_resource :product_entry, through: :location, only: [:index_changed]
-  load_and_authorize_resource only: [:destroy]
+  authorize_resource only: [:destroy]
+  before_action :set_product_entry, only: [:destroy]
 
   def create
     unless product_entry_params[:article].nil?
@@ -143,5 +144,12 @@ class ProductEntriesController < ApplicationController
 
   	def product_entry_index_params
       params.permit(:from_timestamp)
+    end
+
+    def set_product_entry
+      @product_entry = ProductEntry.with_deleted.find(params[:id])
+    rescue
+      # Ignore to stay idempotent
+      @product_entry = nil
     end
 end
