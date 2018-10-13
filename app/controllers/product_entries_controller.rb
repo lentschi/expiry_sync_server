@@ -3,7 +3,8 @@ class ProductEntriesController < ApplicationController
 #  load_and_authorize_resource
   load_and_authorize_resource :location, only: [:index_changed]
   load_and_authorize_resource :product_entry, through: :location, only: [:index_changed]
-  load_and_authorize_resource only: [:destroy]
+  authorize_resource only: [:destroy]
+  before_action :set_product_entry, only: [:destroy]
 
   def create
     unless product_entry_params[:article].nil?
@@ -82,11 +83,11 @@ class ProductEntriesController < ApplicationController
   end
 
   def destroy
- 		success = @product_entry.destroy
+    @product_entry.destroy unless @product_entry.nil?
 
     respond_to do |format|
       format.html { redirect_to product_entries_url }
-      format.json { render json: {status: success ? :success : :failure} }
+      format.json { render json: {status: :success} }
     end
   end
 
@@ -143,5 +144,12 @@ class ProductEntriesController < ApplicationController
 
   	def product_entry_index_params
       params.permit(:from_timestamp)
+    end
+
+    def set_product_entry
+      @product_entry = ProductEntry.with_deleted.find(params[:id])
+    rescue
+      # Ignore to stay idempotent
+      @product_entry = nil
     end
 end
