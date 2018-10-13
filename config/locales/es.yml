@@ -22,6 +22,7 @@ es:
   delete: borrar
   no_such_user: 'El usuario "%{login}" no existe'
   user_already_assigned: 'El usuario "%{login}" ya está asignado'
+  username_taken: 'ya está en uso'
   error_prohibited_saving:
     one: Un error prohibió que se salvara este formulario
     other: '%{count} errores prohibiós que se guarde este formulario'

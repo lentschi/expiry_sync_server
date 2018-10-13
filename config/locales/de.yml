@@ -24,6 +24,7 @@ de:
 
   no_such_user: 'Benutzer "%{login}" existiert nicht'
   user_already_assigned: 'Benutzer "%{login}" ist bereits zugewiesen'
+  username_taken: 'bereits vergeben'
 
   error_prohibited_saving:
     one: 'Ein Fehler verhinderte das Speichern dieses Formulars'

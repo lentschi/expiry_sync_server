@@ -16,7 +16,8 @@ class User < ActiveRecord::Base
 
   attr_accessor :login, :location_to_be_shared
 
-  validates :username, :uniqueness => { :case_sensitive => false }, length: { in: 2..20 }
+  validates :username, length: { in: 2..20 }
+  validate :username_uniqueness
   validate :username_not_changed_on_update
 
   cattr_accessor :email_is_required
@@ -56,6 +57,13 @@ class User < ActiveRecord::Base
   def username_not_changed_on_update
     if username_changed? && self.persisted?
       errors.add(:username, "may not be changed")
+    end
+  end
+
+  def username_uniqueness
+    entries = User.where('LOWER(CONVERT(username USING utf8)) = :value', { :value => self.username.downcase })
+    if entries.count >= 2 || entries.count == 1 && (new_record? || entries.first.id != self.id )
+      errors[:username] << I18n.t('username_taken')
     end
   end
 end

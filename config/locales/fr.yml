@@ -22,6 +22,7 @@ fr:
   delete: supprimer
   no_such_user: 'L''utilisateur "%{login}" n''existe pas'
   user_already_assigned: 'L''utilisateur "%{login}" est déjà pris'
+  username_taken: 'n''est pas disponible'
   error_prohibited_saving:
     one: Une erreur a empêché ce formulaire d'être enregistré
     other: '%{count} erreurs ont empêché l''enregistrement de ce formulaire'
