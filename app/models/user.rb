@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
-      where(conditions).where(["LOWER(CONVERT(username USING utf8)) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+      where(conditions).where([username_query + " OR lower(email) = :value", { :value => login.downcase }]).first
     else
       conditions.permit! if conditions.class.to_s == "ActionController::Parameters"
       where(conditions).first
@@ -61,9 +61,23 @@ class User < ActiveRecord::Base
   end
 
   def username_uniqueness
-    entries = User.where('LOWER(CONVERT(username USING utf8)) = :value', { :value => self.username.downcase })
+    return if self.username.nil?
+    entries = User.where(User.username_query, { :value => self.username.downcase })
     if entries.count >= 2 || entries.count == 1 && (new_record? || entries.first.id != self.id )
       errors[:username] << I18n.t('username_taken')
     end
+  end
+
+  def self.username_query
+    if ActiveRecord::Base.connection_config[:adapter] != 'mysql2'
+      return 'LOWER(username) = :value'  
+    end
+
+    # Had to convert username from VARCHAR to VARBINARY
+    # as otherwise 'myuser ' = 'myuser' is true on mysql.
+    # There were already users with trailing whitespaces in the original
+    # Postgres DB, so the easy way of simply using validation to prevent this cannot be taken.
+    # However the LOWER() function doesn't work for mysql's VARBINARY -> cast it first:
+    'LOWER(CONVERT(username USING utf8)) = :value'
   end
 end

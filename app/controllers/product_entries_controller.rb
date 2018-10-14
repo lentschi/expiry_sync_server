@@ -3,8 +3,8 @@ class ProductEntriesController < ApplicationController
 #  load_and_authorize_resource
   load_and_authorize_resource :location, only: [:index_changed]
   load_and_authorize_resource :product_entry, through: :location, only: [:index_changed]
-  authorize_resource only: [:destroy]
   before_action :set_product_entry, only: [:destroy]
+  authorize_resource only: [:destroy]
 
   def create
     unless product_entry_params[:article].nil?
