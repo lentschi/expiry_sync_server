@@ -20,7 +20,7 @@ module ExpirySyncServer
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
 
     config.i18n.default_locale = :en
-    config.i18n.available_locales = %w(de en es fr)
+    config.i18n.available_locales = %w(de en es it)
     config.i18n.fallbacks = true
     config.i18n.fallbacks = [:en]
 
