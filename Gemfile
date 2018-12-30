@@ -54,6 +54,8 @@ gem "rack-cors", "~> 1.0", :require => 'rack/cors'
 # Impressionist:
 gem "impressionist", "~> 1.6"
 
+gem "tzinfo-data"
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem "sdoc", "~> 1.0", require: false
@@ -85,6 +87,7 @@ group :development do
   gem 'sqlite3'
   gem 'byebug'
   gem 'selenium-webdriver'
+  gem 'thin'
 end
 
 group :test do
