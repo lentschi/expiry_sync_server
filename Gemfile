@@ -61,19 +61,11 @@ group :doc do
   gem "sdoc", "~> 1.0", require: false
 end
 
-group :heroku_production_db do
-  gem 'pg'
-  gem 'mysql2', '~> 0.5.2'
-end
-
-group :heroku_production_server do
+group :heroku do
   gem 'puma'
 end
 
-group :docker_production_db do
-  gem 'mysql2', '~> 0.5.2'
-end
-
+gem 'mysql2', '~> 0.5.2', group: [:local_docker_compose, :heroku]
 
 group :production do
   gem 'unicorn'
