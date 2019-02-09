@@ -102,14 +102,18 @@ class ProductEntriesController < ApplicationController
       @deleted_product_entries = @deleted_product_entries.where('deleted_at >= :from_timestamp', {from_timestamp: from_timestamp})
     end
 
+    t = Time.now
+    entries_json = JSON.parse(@product_entries.to_json(include: {
+      article: {include: {images: {except: :image_data}}},
+      creator: {}
+    }))
+    Rails.logger.info '--- JSON parse took ' + (Time.now - t).to_s
+
     respond_to do |format|
       format.json do
         render json: {
           status: 'success',
-          product_entries: JSON.parse(@product_entries.to_json(include: {
-            article: {include: {images: {except: :image_data}}},
-            creator: {}
-          })),
+          product_entries: entries_json,
           deleted_product_entries: JSON.parse(@deleted_product_entries.to_json(include: :article)),
         }
       end
