@@ -103,7 +103,7 @@ class ProductEntriesController < ApplicationController
     end
 
     t = Time.now
-    entries_json = JSON.parse(@product_entries.to_json(include: {
+    entries_json = JSON.parse(@product_entries.includes(:creator, article: [:images]).to_json(include: {
       article: {include: {images: {except: :image_data}}},
       creator: {}
     }))
@@ -114,7 +114,7 @@ class ProductEntriesController < ApplicationController
         render json: {
           status: 'success',
           product_entries: entries_json,
-          deleted_product_entries: JSON.parse(@deleted_product_entries.to_json(include: :article)),
+          deleted_product_entries: JSON.parse(@deleted_product_entries.includes(:creator, article: [:images]).to_json(include: :article)),
         }
       end
     end
