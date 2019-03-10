@@ -49,7 +49,6 @@ module RemoteArticleFetcher
           name: article[:name],
           producer_attributes: {name: article[:producer]},
           images_attributes: [{
-            source_url: article[:image] + ".jpg",
             original_basename: article[:image],
             original_extname: '.jpg',
             mime_type: 'image/jpeg',
