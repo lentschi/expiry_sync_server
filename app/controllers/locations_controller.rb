@@ -4,6 +4,7 @@ class LocationsController < ApplicationController
   # This may have become obsolete due to load_and_authorize_resource:
   #before_action :set_location, only: [:show, :edit, :update, :destroy]
 
+  before_action :initialize_location_for_put_creation, only: :update
   load_and_authorize_resource
 
   # GET /locations
@@ -70,13 +71,18 @@ class LocationsController < ApplicationController
   # PATCH/PUT /locations/1
   # PATCH/PUT /locations/1.json
   def update
-    respond_to do |format|
-      if @location.update(location_params)
-        format.html { redirect_to @location, notice: 'Location was successfully updated.' }
-        format.json { render json: {status: :success, location: @location} }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: {status: :failure} }
+    if self.api_version < 3
+      legacy_update
+    else
+      respond_to do |format|
+        new_record = @location.new_record?
+        if @location.save
+          format.html { redirect_to @location, notice: "Location was successfully #{new_record ? 'created' : 'updated'}." }
+          format.json { render json: {status: :success, location: @location} }
+        else
+          format.html { render action: new_record ? 'new' : 'edit' }
+          format.json { render json: {status: :failure} }
+        end
       end
     end
   end
@@ -93,6 +99,29 @@ class LocationsController < ApplicationController
   end
 
   private
+    def initialize_location_for_put_creation
+      return if self.api_version < 3
+      @location = Location.find_by_id(params[:id])
+      if @location.nil?
+        @location = Location.new(location_params)
+        @location.id = params[:id]
+      else
+        @location.assign_attributes(location_params)
+      end
+    end
+
+    def legacy_update
+      respond_to do |format|
+        if @location.update(location_params)
+          format.html { redirect_to @location, notice: 'Location was successfully updated.' }
+          format.json { render json: {status: :success, location: @location} }
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: {status: :failure} }
+        end
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def location_params
       params.require(:location).permit(:name)

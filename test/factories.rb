@@ -14,6 +14,7 @@ FactoryBot.define do
   sequence :location_name 
   
   factory :location do
+    id { SecureRandom.uuid }
     sequence(:name) do |n|
       "Default-#{n}"
     end
@@ -35,6 +36,7 @@ FactoryBot.define do
   end
   
   factory :article do  	
+    id { SecureRandom.uuid }
   	sequence(:name) do |n|
       "Butter-#{n}"
     end
@@ -49,6 +51,7 @@ FactoryBot.define do
   end
   
   factory :product_entry do
+    id { SecureRandom.uuid }
   	description { "mmmh" }
   	amount { 1 }
   	

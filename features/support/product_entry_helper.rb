@@ -84,7 +84,7 @@ module CucumberProductEntryHelpers
           found = nil
           (entries_list[:product_entries] + entries_list[:deleted_product_entries]).each do |entry_hash|
             # only compare the id if we have one (when comparing 'data' we won't have one):
-            if (the_entry.id.nil? || Integer(entry_hash['id']) == the_entry.id) \
+            if (the_entry.id.nil? || entry_hash['id'] == the_entry.id) \
               and entry_hash['amount'] == the_entry.amount \
               and entry_hash['description'] == the_entry.description \
               and entry_hash['expiration_date'] == the_entry.expiration_date \

@@ -49,8 +49,13 @@ class ApplicationController < ActionController::Base
     response.header['Access-Control-Expose-Headers'] = 'Date'
   end
 
+  def api_version
+    return 0 if request.headers['X-Expiry-Sync-Api-Version'].nil?
+    request.headers['X-Expiry-Sync-Api-Version'].to_i
+  end
+
   def set_redirect_url_header
-    return if request.headers['X-Expiry-Sync-Api-Version'].nil? or request.headers['X-Expiry-Sync-Api-Version'].to_i < 2
+    return if self.api_version < 2
     redirect_setting = ApplicationSetting.find_by_setting_key('redirect_url')
 
     return if redirect_setting.nil?
