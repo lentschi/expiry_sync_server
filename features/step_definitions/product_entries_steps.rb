@@ -126,9 +126,11 @@ When /^I try to add a product entry (.+) containing (.+)$/ do |with_data_str, co
       params[:product_entry][:article].delete(:name)
 	else 
 		raise Cucumber::Undefined.new("Don't know what that means: '#{with_data_str}'") unless with_data_str == 'with valid data'
-	end
+  end
+  
+  params[:id] = SecureRandom.uuid
 	
-	@jsonHelper.json_post ADD_PRODUCT_ENTRY_PATH, params
+	@jsonHelper.json_put ADD_PRODUCT_ENTRY_PATH + '/' + params[:id], params
   @productEntryHelper.entries_submitted << params
 end 
 
@@ -138,7 +140,7 @@ When /^I try to update that product entry with valid data, (.+)$/ do |data_specs
 	
 	params = Hash.new
 	params[:product_entry] = @productEntryHelper.get_valid_entry_data()
-	params[:product_entry][:article] = {barcode: entry.article.barcode, name: entry.article.name}
+  params[:product_entry][:article] = {id: entry.article.id, barcode: entry.article.barcode, name: entry.article.name}
 	
 	case data_specs_str
 	when "not changing the article"
@@ -153,7 +155,7 @@ When /^I try to update that product entry with valid data, (.+)$/ do |data_specs
 	else
 		raise Cucumber::Undefined.new("Don't know what that means: '#{data_specs_str}'")
 	end
-	
+  
 	@jsonHelper.json_put UPDATE_PRODUCT_ENTRY_PATH + "/" + entry.id.to_s, params
   @productEntryHelper.entries_submitted << params
 end

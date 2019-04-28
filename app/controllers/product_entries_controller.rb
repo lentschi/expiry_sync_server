@@ -3,6 +3,7 @@ class ProductEntriesController < ApplicationController
 #  load_and_authorize_resource
   load_and_authorize_resource :location, only: [:index_changed]
   load_and_authorize_resource :product_entry, through: :location, only: [:index_changed]
+  before_action :set_product_entry_for_update_or_creation, only: :update
   before_action :set_product_entry, only: [:destroy]
   authorize_resource only: [:destroy]
 
@@ -48,36 +49,49 @@ class ProductEntriesController < ApplicationController
   end
 
   def update
-  	@product_entry = ProductEntry.with_deleted.find_by(id: params[:id])
-  	raise ActiveRecord::RecordNotFound if @product_entry.nil? # TODO: Find out if this is really necessary
-
-  	unless product_entry_params[:article].nil?
-  		if @product_entry.article.barcode != product_entry_params[:article][:barcode]
-  			@article = Article.smart_find_or_initialize(product_entry_params[:article])
+    new_record = @product_entry.new_record?
+    unless product_entry_params[:article].nil?
+  		if @product_entry.article.barcode != product_entry_params[:article][:barcode] or new_record
+        @article = Article.smart_find_or_initialize(product_entry_params[:article])
+        article_change_required = true
   		else
-  			@article = @product_entry.article
+        @article = @product_entry.article
+        article_change_required = (@article.id.nil? or (@article.name != product_entry_params[:article][:name]))
   		end
-  		article_change_required = (@article.id.nil? or (@article.name != product_entry_params[:article][:name]))
   		@article.name = product_entry_params[:article][:name]
-  		@article.source = ArticleSource.get_user_source if @article.source.nil?
-  		Rails.logger.info "Save: "+@article.save().to_s if article_change_required
+      @article.source = ArticleSource.get_user_source if @article.source.nil?
+      
+      save_result = @article.save()
+  		Rails.logger.info "Save: "+save_result.to_s if article_change_required
       Rails.logger.info "Errors: "+@article.errors.to_yaml.to_s
 
-  		params[:product_entry].delete :article
-      params[:product_entry][:article_id] = @article.id
+  		# params[:product_entry].delete :article
+      # params[:product_entry][:article_id] = @article.id
+      if save_result
+        @product_entry.article = @article
+        @product_entry.article_id = @article.id
+      else
+        @product_entry.article = @product_entry.article_id = nil
+      end
   	end
 
-  	respond_to do |format|
-      if @product_entry.update(product_entry_params.merge({deleted_at: nil}))
-        format.html { redirect_to @product_entry, notice: 'Product entry was successfully updated.' }
-        format.json do
-          product_entry = @product_entry.attributes
-          product_entry[:article] = @product_entry.article.attributes
-          render json: {status: 'success', product_entry: product_entry}
+    if Rails.configuration.api_version < 3
+      self.legacy_update
+    else
+      respond_to do |format|
+        @product_entry.deleted_at = nil
+        if @product_entry.save
+          format.html { redirect_to @product_entry, notice: "Product entry was successfully #{new_record ? 'created' : 'updated'}." }
+          format.json do
+            product_entry = @product_entry.attributes
+            product_entry[:article] = @product_entry.article.attributes
+            require 'byebug'; byebug
+            render json: {status: 'success', product_entry: product_entry}
+          end
+        else
+          format.html { render action: new_record ? 'new' : 'edit' }
+          format.json { render json: {status: :failure} }
         end
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: {status: :failure} }
       end
     end
   end
@@ -121,6 +135,56 @@ class ProductEntriesController < ApplicationController
   end
 
   private
+    def set_product_entry_for_update_or_creation
+      require 'byebug'; byebug
+      return if Rails.configuration.api_version < 3 # -> normal update
+
+      ini_params = product_entry_params.deep_dup      
+      @product_entry = ProductEntry.with_deleted.find_by_id(params[:id])
+      if @product_entry.nil?
+        # creation with user generated ID:
+
+        # unsure why this is required
+        unless product_entry_params[:article].nil?
+          ini_params[:article] = Article.new(product_entry_params[:article])
+        end
+
+        @product_entry = ProductEntry.new(ini_params)
+        @product_entry.id = params[:id]
+      else
+        # normal update:
+        unless product_entry_params[:article].nil?
+          ini_params[:article] = Article.find_by_barcode(product_entry_params[:article][:barcode])
+          ini_params[:article] = Article.find_by_id(product_entry_params[:article][:id]) if ini_params[:article].nil?
+          unless ini_params[:article].nil? 
+            original_id = ini_params[:article].id
+            ini_params[:article].assign_attributes(product_entry_params[:article])
+            ini_params[:article].id = original_id
+          else
+            ini_params[:article] = Article.new(product_entry_params[:article])
+          end
+        end
+
+        @product_entry.assign_attributes(ini_params)
+      end
+    end
+
+  def legacy_update  
+      respond_to do |format|
+        if @product_entry.update(product_entry_params.merge({deleted_at: nil}))
+          format.html { redirect_to @product_entry, notice: 'Product entry was successfully updated.' }
+          format.json do
+            product_entry = @product_entry.attributes
+            product_entry[:article] = @product_entry.article.attributes
+            render json: {status: 'success', product_entry: product_entry}
+          end
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: {status: :failure} }
+        end
+      end
+    end
+
    	def product_entry_params
    		# s. https://github.com/rails/rails/issues/13766 :
    		unless params[:product_entry].nil? or params[:product_entry][:article].nil? or params[:product_entry][:article][:images].nil?
@@ -130,7 +194,7 @@ class ProductEntriesController < ApplicationController
    		end
 
       allowed_entry_fields = [
-        {article: [:name, :barcode, allowed_images]},
+        {article: [:id, :name, :barcode, allowed_images]},
         :article_id, # <- added manually, will simply be overwritten, if passed by client
         :location_id,
         :description,

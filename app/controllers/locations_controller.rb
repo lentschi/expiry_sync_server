@@ -2,9 +2,9 @@ class LocationsController < ApplicationController
   before_action :authenticate_user!
 
   # This may have become obsolete due to load_and_authorize_resource:
-  #before_action :set_location, only: [:show, :edit, :update, :destroy]
+  #before_action :set_location_for_update_or_creation, only: [:show, :edit, :update, :destroy]
 
-  before_action :initialize_location_for_put_creation, only: :update
+  before_action :set_location_for_update_or_creation, only: :update
   load_and_authorize_resource
 
   # GET /locations
@@ -71,8 +71,8 @@ class LocationsController < ApplicationController
   # PATCH/PUT /locations/1
   # PATCH/PUT /locations/1.json
   def update
-    if self.api_version < 3
-      legacy_update
+    if Rails.configuration.api_version < 3
+      self.legacy_update
     else
       respond_to do |format|
         new_record = @location.new_record?
@@ -99,13 +99,16 @@ class LocationsController < ApplicationController
   end
 
   private
-    def initialize_location_for_put_creation
-      return if self.api_version < 3
+    def set_location_for_update_or_creation
+      return if Rails.configuration.api_version < 3 # -> normal update
+      
       @location = Location.find_by_id(params[:id])
       if @location.nil?
+        # creation with user generated ID:
         @location = Location.new(location_params)
         @location.id = params[:id]
       else
+        # normal update:
         @location.assign_attributes(location_params)
       end
     end

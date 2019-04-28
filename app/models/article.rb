@@ -12,6 +12,8 @@ class Article < ActiveRecord::Base
   
   validates :source, :name, presence: true
   validates :barcode, uniqueness: {scope: :creator_id}
+
+  cattr_accessor :api_version
   
   def self.smart_find(data)
     article = self.find_by(barcode: data[:barcode], creator_id: User.current.id) unless User.current.nil? or data[:barcode].nil?
@@ -25,6 +27,7 @@ class Article < ActiveRecord::Base
       data = self.remote_article_fetch(data) unless data[:barcode].nil?
       unless data.nil? or data[:name].nil? or data[:name].empty?
         data = self.build_nested_references(data)
+        data[:id] = SecureRandom.uuid if Rails.configuration.api_version >= 3
         
         # if the remotes have found something, initialize a new article for the local db:
         return self.new(data) 
@@ -49,6 +52,8 @@ class Article < ActiveRecord::Base
     else
       data[:images].map! {|imageParams| ArticleImage.decode(imageParams)}
     end
+
+    data[:id] = SecureRandom.uuid if Rails.configuration.api_version >= 3
     self.new(data)
   end
   

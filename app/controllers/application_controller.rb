@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :prepare_params_for_can_can, only: [:create]
   before_action :configure_permitted_devise_parameters, if: :devise_controller?
   before_action :set_date_response_header
+  before_action :set_api_version
   before_action :set_redirect_url_header, :if => Proc.new { |c| c.request.format == 'application/json' }
 
   # Log all page impressions with 'impressionist':
@@ -49,13 +50,14 @@ class ApplicationController < ActionController::Base
     response.header['Access-Control-Expose-Headers'] = 'Date'
   end
 
-  def api_version
-    return 0 if request.headers['X-Expiry-Sync-Api-Version'].nil?
-    request.headers['X-Expiry-Sync-Api-Version'].to_i
+  def set_api_version
+    return if request.headers['X-Expiry-Sync-Api-Version'].nil?
+    
+    Rails.configuration.api_version = request.headers['X-Expiry-Sync-Api-Version'].to_i
   end
 
   def set_redirect_url_header
-    return if self.api_version < 2
+    return if Rails.configuration.api_version < 2
     redirect_setting = ApplicationSetting.find_by_setting_key('redirect_url')
 
     return if redirect_setting.nil?
