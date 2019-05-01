@@ -85,7 +85,6 @@ class ProductEntriesController < ApplicationController
           format.json do
             product_entry = @product_entry.attributes
             product_entry[:article] = @product_entry.article.attributes
-            require 'byebug'; byebug
             render json: {status: 'success', product_entry: product_entry}
           end
         else
@@ -136,7 +135,6 @@ class ProductEntriesController < ApplicationController
 
   private
     def set_product_entry_for_update_or_creation
-      require 'byebug'; byebug
       return if Rails.configuration.api_version < 3 # -> normal update
 
       ini_params = product_entry_params.deep_dup      

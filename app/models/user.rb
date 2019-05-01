@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   has_many :locations_users
   has_many :locations, through: :locations_users
   acts_as_paranoid
+  after_initialize :fix_broken_sqlite_blob
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -65,6 +66,14 @@ class User < ActiveRecord::Base
     entries = User.where(User.username_query, { :value => self.username.downcase })
     if entries.count >= 2 || entries.count == 1 && (new_record? || entries.first.id != self.id )
       errors[:username] << I18n.t('username_taken')
+    end
+  end
+
+  def fix_broken_sqlite_blob
+    if ActiveRecord::Base.connection.instance_of? ActiveRecord::ConnectionAdapters::SQLite3Adapter
+      # Couldn't find out why this is happening for sqlite blobs
+      # maybe this is fixed with a newer ActiveRecord version -> meanwhile workaround:
+      self.username = '' if self.username == "x''"
     end
   end
 
