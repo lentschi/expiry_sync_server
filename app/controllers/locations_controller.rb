@@ -101,7 +101,7 @@ class LocationsController < ApplicationController
   private
     def set_location_for_update_or_creation
       return if Rails.configuration.api_version < 3 # -> normal update
-      
+
       @location = Location.find_by_id(params[:id])
       if @location.nil?
         # creation with user generated ID:

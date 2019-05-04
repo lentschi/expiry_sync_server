@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
   end
 
   def fix_broken_sqlite_blob
-    if ActiveRecord::Base.connection.instance_of? ActiveRecord::ConnectionAdapters::SQLite3Adapter
+    if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::SQLite3Adapter"
       # Couldn't find out why this is happening for sqlite blobs
       # maybe this is fixed with a newer ActiveRecord version -> meanwhile workaround:
       self.username = '' if self.username == "x''"
@@ -79,7 +79,7 @@ class User < ActiveRecord::Base
 
   def self.username_query
     if ActiveRecord::Base.connection_config[:adapter] != 'mysql2'
-      return 'LOWER(username) = :value'  
+      return 'LOWER(username) = :value'
     end
 
     # Had to convert username from VARCHAR to VARBINARY
