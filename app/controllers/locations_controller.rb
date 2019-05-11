@@ -107,6 +107,7 @@ class LocationsController < ApplicationController
         # creation with user generated ID:
         @location = Location.new(location_params)
         @location.id = params[:id]
+        @location.users << current_user
       else
         # normal update:
         @location.assign_attributes(location_params)
