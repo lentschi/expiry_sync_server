@@ -11,11 +11,16 @@ class Article < ActiveRecord::Base
   accepts_nested_attributes_for :producer
   
   validates :source, :name, presence: true
-  validates :barcode, uniqueness: {scope: :creator_id}
+  validates :barcode, uniqueness: {scope: :creator_id}, if: :barcode
 
   cattr_accessor :api_version
   
   def self.smart_find(data)
+    if data[:barcode].nil? and not data[:id].nil?
+      article = self.find_by(id: data[:id], creator_id: User.current.id) unless User.current.nil?
+      return article unless article.nil?
+    end
+
     article = self.find_by(barcode: data[:barcode], creator_id: User.current.id) unless User.current.nil? or data[:barcode].nil?
     return article unless article.nil? # own article with the specified barcode will be returned even if the names don't match 
            
@@ -53,7 +58,7 @@ class Article < ActiveRecord::Base
       data[:images].map! {|imageParams| ArticleImage.decode(imageParams)}
     end
 
-    data[:id] = SecureRandom.uuid if Rails.configuration.api_version >= 3
+    data[:id] = SecureRandom.uuid if data[:id].nil? and Rails.configuration.api_version >= 3
     self.new(data)
   end
   

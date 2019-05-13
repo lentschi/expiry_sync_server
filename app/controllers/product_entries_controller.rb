@@ -51,27 +51,19 @@ class ProductEntriesController < ApplicationController
   def update
     new_record = @product_entry.new_record?
     unless product_entry_params[:article].nil?
-  		if @product_entry.article.barcode != product_entry_params[:article][:barcode] or new_record
-        @article = Article.smart_find_or_initialize(product_entry_params[:article])
-        article_change_required = true
-  		else
-        @article = @product_entry.article
-        article_change_required = (@article.id.nil? or (@article.name != product_entry_params[:article][:name]))
-  		end
-  		@article.name = product_entry_params[:article][:name]
-      @article.source = ArticleSource.get_user_source if @article.source.nil?
-      
-      save_result = @article.save()
-  		Rails.logger.info "Save: "+save_result.to_s if article_change_required
-      Rails.logger.info "Errors: "+@article.errors.to_yaml.to_s
-
-  		# params[:product_entry].delete :article
-      # params[:product_entry][:article_id] = @article.id
-      if save_result
-        @product_entry.article = @article
-        @product_entry.article_id = @article.id
-      else
-        @product_entry.article = @product_entry.article_id = nil
+      @product_entry.article.source = ArticleSource.get_user_source if @product_entry.article.source.nil?
+      article_save_required = product_entry_params[:article][:name] != @product_entry.article.name \
+        or @product_entry.article.new_record?
+      if article_save_required
+        @product_entry.article.name = product_entry_params[:article][:name]
+        save_result = @product_entry.article.save()
+        Rails.logger.info "Save: "+ save_result.to_s
+        Rails.logger.info "Errors: "+ @product_entry.article.errors.to_yaml.to_s
+        if save_result
+          @product_entry.article_id = @product_entry.article.id
+        else
+          @product_entry.article = @product_entry.article_id = nil
+        end
       end
   	end
 
@@ -144,7 +136,7 @@ class ProductEntriesController < ApplicationController
 
         # unsure why this is required
         unless product_entry_params[:article].nil?
-          ini_params[:article] = Article.new(product_entry_params[:article])
+          ini_params[:article] = Article.smart_find_or_initialize(product_entry_params[:article])
         end
 
         @product_entry = ProductEntry.new(ini_params)
@@ -152,15 +144,7 @@ class ProductEntriesController < ApplicationController
       else
         # normal update:
         unless product_entry_params[:article].nil?
-          ini_params[:article] = Article.find_by_barcode(product_entry_params[:article][:barcode])
-          ini_params[:article] = Article.find_by_id(product_entry_params[:article][:id]) if ini_params[:article].nil?
-          unless ini_params[:article].nil? 
-            original_id = ini_params[:article].id
-            ini_params[:article].assign_attributes(product_entry_params[:article])
-            ini_params[:article].id = original_id
-          else
-            ini_params[:article] = Article.new(product_entry_params[:article])
-          end
+          ini_params[:article] = Article.smart_find_or_initialize(ini_params[:article])
         end
 
         @product_entry.assign_attributes(ini_params)
