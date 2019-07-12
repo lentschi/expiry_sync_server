@@ -53,7 +53,7 @@ class ProductEntriesController < ApplicationController
     unless product_entry_params[:article].nil?
       @product_entry.article.source = ArticleSource.get_user_source if @product_entry.article.source.nil?
       article_save_required = product_entry_params[:article][:name] != @product_entry.article.name \
-        or @product_entry.article.new_record?
+        || @product_entry.article.new_record?
       if article_save_required
         @product_entry.article.name = product_entry_params[:article][:name]
         save_result = @product_entry.article.save()
@@ -129,7 +129,7 @@ class ProductEntriesController < ApplicationController
     def set_product_entry_for_update_or_creation
       return if Rails.configuration.api_version < 3 # -> normal update
 
-      ini_params = product_entry_params.deep_dup      
+      ini_params = product_entry_params.deep_dup
       @product_entry = ProductEntry.with_deleted.find_by_id(params[:id])
       if @product_entry.nil?
         # creation with user generated ID:
@@ -151,7 +151,7 @@ class ProductEntriesController < ApplicationController
       end
     end
 
-  def legacy_update  
+  def legacy_update
       respond_to do |format|
         if @product_entry.update(product_entry_params.merge({deleted_at: nil}))
           format.html { redirect_to @product_entry, notice: 'Product entry was successfully updated.' }
