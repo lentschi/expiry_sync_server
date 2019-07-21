@@ -58,6 +58,11 @@ class Article < ActiveRecord::Base
       data[:images].map! {|imageParams| ArticleImage.decode(imageParams)}
     end
 
+    if Rails.configuration.api_version >= 3 and not data[:barcode].nil? and not data[:id].nil?
+      article = self.find_by(id: data[:id])
+      return article unless article.nil?
+    end
+
     data[:id] = SecureRandom.uuid if data[:id].nil? and Rails.configuration.api_version >= 3
     self.new(data)
   end
