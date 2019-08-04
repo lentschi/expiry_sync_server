@@ -103,7 +103,7 @@ class ProductEntriesController < ApplicationController
 
     unless product_entry_index_params[:from_timestamp].nil?
       from_timestamp = DateTime.strptime(product_entry_index_params[:from_timestamp], '%a, %d %b %Y %H:%M:%S %z').in_time_zone
-      @product_entries = @product_entries.where('updated_at >= :from_timestamp', {from_timestamp: from_timestamp})
+      @product_entries = @product_entries.joins(:article).where('product_entries.updated_at >= :from_timestamp OR articles.updated_at >= :from_timestamp', {from_timestamp: from_timestamp})
       @deleted_product_entries = @deleted_product_entries.where('deleted_at >= :from_timestamp', {from_timestamp: from_timestamp})
     end
 
