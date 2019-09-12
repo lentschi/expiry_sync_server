@@ -87,17 +87,6 @@ class LocationsController < ApplicationController
     end
   end
 
-  # DELETE /locations/1
-  # DELETE /locations/1.json
-  def destroy
-    success = @location.destroy
-
-    respond_to do |format|
-      format.html { redirect_to locations_url }
-      format.json { render json: {status: success ? :success : :failure} }
-    end
-  end
-
   private
     def set_location_for_update_or_creation
       return if Rails.configuration.api_version < 3 # -> normal update
