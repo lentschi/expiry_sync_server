@@ -20,6 +20,7 @@ module CucumberProductEntryHelpers
     
     def get_valid_entry_data()
       entry_data = @@valid_entry_data_arr[@valid_entry_data_counter]
+      entry_data[:id] = SecureRandom.uuid
       @valid_entry_data_counter += 1
       @valid_entry_data_counter = 0 if @valid_entry_data_counter >= @@valid_entry_data_arr.length
       
@@ -28,6 +29,7 @@ module CucumberProductEntryHelpers
     
     def get_valid_article_data()
       article_data = @@valid_article_data_arr[@valid_article_data_counter]
+      article_data[:id] = SecureRandom.uuid
       @valid_article_data_counter += 1
       @valid_article_data_counter = 0 if @valid_article_data_counter >= @@valid_article_data_arr.length
       
@@ -84,7 +86,7 @@ module CucumberProductEntryHelpers
           found = nil
           (entries_list[:product_entries] + entries_list[:deleted_product_entries]).each do |entry_hash|
             # only compare the id if we have one (when comparing 'data' we won't have one):
-            if (the_entry.id.nil? || Integer(entry_hash['id']) == the_entry.id) \
+            if (the_entry.id.nil? || entry_hash['id'] == the_entry.id) \
               and entry_hash['amount'] == the_entry.amount \
               and entry_hash['description'] == the_entry.description \
               and entry_hash['expiration_date'] == the_entry.expiration_date \

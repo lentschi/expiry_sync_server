@@ -36,11 +36,12 @@ When /^I try to add a location with valid data(?: using (.+))?$/ do |using_data_
   location_data = @locationHelper.get_valid_location_data()
   params = {
     location: {
+      id: SecureRandom.uuid,
       name: same_name_as_before ? @locationHelper.locations_submitted.last[:location][:name] : location_data[:name]
     }
   }
 
-  @jsonHelper.json_post ADD_LOCATION_PATH, params
+  @jsonHelper.json_put ADD_LOCATION_PATH + '/' + params[:location][:id], params
 
   @locationHelper.locations_submitted << params
 end

@@ -4,7 +4,6 @@ module TestHelper
   # verify hash model instance representation
   def self.verify_obj_integrity(obj, modelName)
     obj.should have_key("id")
-    obj["id"].should be_integer_valued
   end
   
   def self.verify_contained_obj_integrity(result, modelName)

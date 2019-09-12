@@ -3,6 +3,7 @@ class ProductEntriesController < ApplicationController
 #  load_and_authorize_resource
   load_and_authorize_resource :location, only: [:index_changed]
   load_and_authorize_resource :product_entry, through: :location, only: [:index_changed]
+  before_action :set_product_entry_for_update_or_creation, only: :update
   before_action :set_product_entry, only: [:destroy]
   authorize_resource only: [:destroy]
 
@@ -48,36 +49,40 @@ class ProductEntriesController < ApplicationController
   end
 
   def update
-  	@product_entry = ProductEntry.with_deleted.find_by(id: params[:id])
-  	raise ActiveRecord::RecordNotFound if @product_entry.nil? # TODO: Find out if this is really necessary
-
-  	unless product_entry_params[:article].nil?
-  		if @product_entry.article.barcode != product_entry_params[:article][:barcode]
-  			@article = Article.smart_find_or_initialize(product_entry_params[:article])
-  		else
-  			@article = @product_entry.article
-  		end
-  		article_change_required = (@article.id.nil? or (@article.name != product_entry_params[:article][:name]))
-  		@article.name = product_entry_params[:article][:name]
-  		@article.source = ArticleSource.get_user_source if @article.source.nil?
-  		Rails.logger.info "Save: "+@article.save().to_s if article_change_required
-      Rails.logger.info "Errors: "+@article.errors.to_yaml.to_s
-
-  		params[:product_entry].delete :article
-      params[:product_entry][:article_id] = @article.id
+    new_record = @product_entry.new_record?
+    unless product_entry_params[:article].nil?
+      @product_entry.article.source = ArticleSource.get_user_source if @product_entry.article.source.nil?
+      article_save_required = product_entry_params[:article][:name] != @product_entry.article.name \
+        || @product_entry.article.new_record?
+      if article_save_required
+        @product_entry.article.name = product_entry_params[:article][:name]
+        save_result = @product_entry.article.save()
+        Rails.logger.info "Save: "+ save_result.to_s
+        Rails.logger.info "Errors: "+ @product_entry.article.errors.to_yaml.to_s
+        if save_result
+          @product_entry.article_id = @product_entry.article.id
+        else
+          @product_entry.article = @product_entry.article_id = nil
+        end
+      end
   	end
 
-  	respond_to do |format|
-      if @product_entry.update(product_entry_params.merge({deleted_at: nil}))
-        format.html { redirect_to @product_entry, notice: 'Product entry was successfully updated.' }
-        format.json do
-          product_entry = @product_entry.attributes
-          product_entry[:article] = @product_entry.article.attributes
-          render json: {status: 'success', product_entry: product_entry}
+    if Rails.configuration.api_version < 3
+      legacy_update
+    else
+      respond_to do |format|
+        @product_entry.deleted_at = nil
+        if @product_entry.save
+          format.html { redirect_to @product_entry, notice: "Product entry was successfully #{new_record ? 'created' : 'updated'}." }
+          format.json do
+            product_entry = @product_entry.attributes
+            product_entry[:article] = @product_entry.article.attributes
+            render json: {status: 'success', product_entry: product_entry}
+          end
+        else
+          format.html { render action: new_record ? 'new' : 'edit' }
+          format.json { render json: {status: :failure} }
         end
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: {status: :failure} }
       end
     end
   end
@@ -98,7 +103,7 @@ class ProductEntriesController < ApplicationController
 
     unless product_entry_index_params[:from_timestamp].nil?
       from_timestamp = DateTime.strptime(product_entry_index_params[:from_timestamp], '%a, %d %b %Y %H:%M:%S %z').in_time_zone
-      @product_entries = @product_entries.where('updated_at >= :from_timestamp', {from_timestamp: from_timestamp})
+      @product_entries = @product_entries.joins(:article).where('product_entries.updated_at >= :from_timestamp OR articles.updated_at >= :from_timestamp', {from_timestamp: from_timestamp})
       @deleted_product_entries = @deleted_product_entries.where('deleted_at >= :from_timestamp', {from_timestamp: from_timestamp})
     end
 
@@ -121,6 +126,54 @@ class ProductEntriesController < ApplicationController
   end
 
   private
+    def set_product_entry_for_update_or_creation
+      if Rails.configuration.api_version < 3 # -> normal update
+        @product_entry = ProductEntry.with_deleted.find_by_id(params[:id])
+        return
+      end
+
+      ini_params = product_entry_params.deep_dup
+      @product_entry = ProductEntry.with_deleted.find_by_id(params[:id])
+      if @product_entry.nil?
+        # creation with user generated ID:
+
+        # unsure why this is required
+        unless product_entry_params[:article].nil?
+          ini_params[:article] = Article.smart_find_or_initialize(product_entry_params[:article])
+        end
+
+        @product_entry = ProductEntry.new(ini_params)
+        @product_entry.id = params[:id]
+      else
+        # normal update:
+        unless product_entry_params[:article].nil?
+          ini_params[:article] = Article.smart_find_or_initialize(ini_params[:article])
+        end
+
+        @product_entry.assign_attributes(ini_params)
+      end
+    end
+
+  def legacy_update
+      ini_params = product_entry_params.deep_dup
+      unless product_entry_params[:article].nil?
+        ini_params[:article] = Article.smart_find_or_initialize(ini_params[:article])
+      end
+      respond_to do |format|
+        if @product_entry.update(ini_params.merge({deleted_at: nil}))
+          format.html { redirect_to @product_entry, notice: 'Product entry was successfully updated.' }
+          format.json do
+            product_entry = @product_entry.attributes
+            product_entry[:article] = @product_entry.article.attributes
+            render json: {status: 'success', product_entry: product_entry}
+          end
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: {status: :failure} }
+        end
+      end
+    end
+
    	def product_entry_params
    		# s. https://github.com/rails/rails/issues/13766 :
    		unless params[:product_entry].nil? or params[:product_entry][:article].nil? or params[:product_entry][:article][:images].nil?
@@ -130,7 +183,7 @@ class ProductEntriesController < ApplicationController
    		end
 
       allowed_entry_fields = [
-        {article: [:name, :barcode, allowed_images]},
+        {article: [:id, :name, :barcode, allowed_images]},
         :article_id, # <- added manually, will simply be overwritten, if passed by client
         :location_id,
         :description,

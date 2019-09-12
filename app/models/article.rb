@@ -1,4 +1,5 @@
 class Article < ActiveRecord::Base
+  include LegacyIdHandler
   track_who_does_it creator_foreign_key: "creator_id", updater_foreign_key: "modifier_id"
   acts_as_remote_article_fetcher
   
@@ -10,9 +11,16 @@ class Article < ActiveRecord::Base
   accepts_nested_attributes_for :producer
   
   validates :source, :name, presence: true
-  validates :barcode, uniqueness: {scope: :creator_id}
+  validates :barcode, uniqueness: {scope: :creator_id}, if: :barcode
+
+  cattr_accessor :api_version
   
   def self.smart_find(data)
+    if data[:barcode].nil? and not data[:id].nil?
+      article = self.find_by(id: data[:id], creator_id: User.current.id) unless User.current.nil?
+      return article unless article.nil?
+    end
+
     article = self.find_by(barcode: data[:barcode], creator_id: User.current.id) unless User.current.nil? or data[:barcode].nil?
     return article unless article.nil? # own article with the specified barcode will be returned even if the names don't match 
            
@@ -24,6 +32,7 @@ class Article < ActiveRecord::Base
       data = self.remote_article_fetch(data) unless data[:barcode].nil?
       unless data.nil? or data[:name].nil? or data[:name].empty?
         data = self.build_nested_references(data)
+        data[:id] = SecureRandom.uuid if Rails.configuration.api_version >= 3
         
         # if the remotes have found something, initialize a new article for the local db:
         return self.new(data) 
@@ -48,6 +57,13 @@ class Article < ActiveRecord::Base
     else
       data[:images].map! {|imageParams| ArticleImage.decode(imageParams)}
     end
+
+    if Rails.configuration.api_version >= 3 and not data[:barcode].nil? and not data[:id].nil?
+      article = self.find_by(id: data[:id])
+      return article unless article.nil?
+    end
+
+    data[:id] = SecureRandom.uuid if data[:id].nil? and Rails.configuration.api_version >= 3
     self.new(data)
   end
   

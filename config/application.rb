@@ -26,6 +26,10 @@ module ExpirySyncServer
 
     config.locations = {allow_removing_share_after_inactivity_days: 30}
 
+    # Will be overwritten by ApplicationController::set_api_version
+    # if the respective header is passed by the client:
+    config.api_version = 0
+
     Rails.application.config.active_record.sqlite3.represent_boolean_as_integer = true
 
     # CORS config:

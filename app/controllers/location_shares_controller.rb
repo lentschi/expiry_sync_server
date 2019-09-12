@@ -39,7 +39,6 @@ class LocationSharesController < ApplicationController
         format.html { redirect_to location, notice: 'Location was successfully shared.' }
         format.json { render json: {status: :success, user: user} }
       else
-        
         format.html { render action: 'new'}
         format.json { render json: {status: :failure, errors: errors_hash } }
       end
@@ -57,7 +56,12 @@ class LocationSharesController < ApplicationController
     end
 
     removedUsers_arr = @location.users.delete(user)
-    @location.updated_at = Time.now
+
+    if @location.users.length === 0
+      @location.destroy
+    else
+      @location.updated_at = Time.now
+    end
 
     respond_to do |format|
       if removedUsers_arr.length == 1 and @location.save

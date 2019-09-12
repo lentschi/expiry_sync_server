@@ -2,7 +2,8 @@ require 'open-uri'
 require 'open_uri_redirections'
 
 class ArticleImagesController < ApplicationController
-  before_action :set_article_image, only: [:show, :edit, :update, :destroy]
+  before_action :set_article_image, only: [:show, :edit, :destroy]
+  before_action :set_article_image_for_update_or_creation, only: [:update]
 
   # GET /article_images
   # GET /article_images.json
@@ -59,13 +60,18 @@ class ArticleImagesController < ApplicationController
   # PATCH/PUT /article_images/1
   # PATCH/PUT /article_images/1.json
   def update
-    respond_to do |format|
-      if @article_image.update(article_image_params)
-        format.html { redirect_to @article_image, notice: 'Article image was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @article_image.errors, status: :unprocessable_entity }
+    if Rails.configuration.api_version < 3
+      self.legacy_update
+    else
+      new_record = @article_image.new_record?
+      respond_to do |format|
+        if @article_image.save()
+          format.html { redirect_to @article_image, notice: "Article image was successfully updated." }
+          format.json { head :no_content }
+        else
+          format.html { render action: new_record ? 'new' : 'edit' }
+          format.json { render json: @article_image.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -81,6 +87,33 @@ class ArticleImagesController < ApplicationController
   end
 
   private
+    def set_article_image_for_update_or_creation
+      return if Rails.configuration.api_version < 3 # -> normal update
+      
+      @article_image = ArticleImage.with_deleted.find_by_id(params[:id])
+      if @article_image.nil?
+        # creation with user generated ID:
+        @article_image = ArticleImage.new(article_image_params)
+        @article_image.id = params[:id]
+      else
+        # normal update:
+        @article_image.assign_attributes(article_image_params)
+      end
+    end
+
+    def legacy_update
+      respond_to do |format|
+        if @article_image.update(article_image_params)
+          format.html { redirect_to @article_image, notice: 'Article image was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: @article_image.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+    
+
     # Use callbacks to share common setup or constraints between actions.
     def set_article_image
       @article_image = ArticleImage.find(params[:id])

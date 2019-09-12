@@ -13,7 +13,8 @@ class Ability
     end
 
     can [:update, :destroy], Location do |location|
-      location.try(:creator) == user
+      location.try(:creator) == user \
+        || !Location.exists?(location.id)
     end
 
     can [:destroy_share], Location do |location, share_user|

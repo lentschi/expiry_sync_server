@@ -11,6 +11,7 @@ module CucumberJsonHelpers
     def set_json_request_header!
       header 'Accept', "application/json"
       header 'Content-Type', "application/json"
+      header 'X-Expiry-Sync-Api-Version', "3"
     end
     
     def json_request(path, request_opts)

@@ -61,7 +61,7 @@ module CucumberLocationHelpers
           found = nil
           (locations_list[:locations] + locations_list[:deleted_locations]).each do |location_hash|
             # only compare the id if we have one (when comparing 'data' we won't have one):
-            if (the_location.id.nil? || Integer(location_hash['id']) == the_location.id) \
+            if (the_location.id.nil? || location_hash['id'] == the_location.id) \
               and location_hash['name'] == the_location.name
               found = location_hash 
               break
