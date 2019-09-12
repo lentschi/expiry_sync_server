@@ -31,7 +31,7 @@ module LegacyIdHandler
   private
   def set_uuid
     if self.id.nil? and Rails.configuration.api_version < 3
-      if ActiveRecord::Base.connection.instance_of? ActiveRecord::ConnectionAdapters::SQLite3Adapter
+      if ActiveRecord::Base.connection.class.to_s == "ActiveRecord::ConnectionAdapters::SQLite3Adapter"
         resources_with_numeric_ids = self.class.where("TYPEOF(id) = 'integer'")
       else
         resources_with_numeric_ids = self.class.where("id REGEXP '^[0-9]+$'")

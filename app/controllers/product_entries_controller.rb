@@ -68,7 +68,7 @@ class ProductEntriesController < ApplicationController
   	end
 
     if Rails.configuration.api_version < 3
-      self.legacy_update
+      legacy_update
     else
       respond_to do |format|
         @product_entry.deleted_at = nil
@@ -127,7 +127,10 @@ class ProductEntriesController < ApplicationController
 
   private
     def set_product_entry_for_update_or_creation
-      return if Rails.configuration.api_version < 3 # -> normal update
+      if Rails.configuration.api_version < 3 # -> normal update
+        @product_entry = ProductEntry.with_deleted.find_by_id(params[:id])
+        return
+      end
 
       ini_params = product_entry_params.deep_dup
       @product_entry = ProductEntry.with_deleted.find_by_id(params[:id])
@@ -152,8 +155,12 @@ class ProductEntriesController < ApplicationController
     end
 
   def legacy_update
+      ini_params = product_entry_params.deep_dup
+      unless product_entry_params[:article].nil?
+        ini_params[:article] = Article.smart_find_or_initialize(ini_params[:article])
+      end
       respond_to do |format|
-        if @product_entry.update(product_entry_params.merge({deleted_at: nil}))
+        if @product_entry.update(ini_params.merge({deleted_at: nil}))
           format.html { redirect_to @product_entry, notice: 'Product entry was successfully updated.' }
           format.json do
             product_entry = @product_entry.attributes

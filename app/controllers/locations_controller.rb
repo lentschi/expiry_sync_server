@@ -72,7 +72,7 @@ class LocationsController < ApplicationController
   # PATCH/PUT /locations/1.json
   def update
     if Rails.configuration.api_version < 3
-      self.legacy_update
+      legacy_update
     else
       respond_to do |format|
         new_record = @location.new_record?
