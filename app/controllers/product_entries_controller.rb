@@ -177,7 +177,7 @@ class ProductEntriesController < ApplicationController
    	def product_entry_params
    		# s. https://github.com/rails/rails/issues/13766 :
    		unless params[:product_entry].nil? or params[:product_entry][:article].nil? or params[:product_entry][:article][:images].nil?
-   			allowed_images = {images: [:image_data, :mime_type, :original_extname]}
+   			allowed_images = {images: [:id, :image_data, :mime_type, :original_extname]}
    		else
    			allowed_images = :images
    		end
