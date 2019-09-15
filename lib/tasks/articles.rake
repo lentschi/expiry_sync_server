@@ -2,8 +2,10 @@ namespace :articles do
   desc "Fetch article's data from the remotes. Additional params will restrict the engines used (fetch_remote[barcode,engine1,engine2,...)"
   task :fetch_remote, [:barcode] => [:environment] do |task, args|
     unless args.extras.empty?
-      RemoteArticleFetcher.fetcher_sequence.select! do |fetcher_str|
-        args.extras.include?(fetcher_str.to_s)
+      Article # required to initialize fetchers_arr
+      original_fetchers_arr = RemoteArticleFetcher::ActsAsRemoteArticleFetcher.fetchers_arr.dup
+      RemoteArticleFetcher::ActsAsRemoteArticleFetcher.fetchers_arr.select! do |fetcherClass|
+        args.extras.include?(fetcherClass.to_s.demodulize.underscore)
       end
     end
 

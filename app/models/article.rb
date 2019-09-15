@@ -35,7 +35,13 @@ class Article < ActiveRecord::Base
         data[:id] = SecureRandom.uuid if Rails.configuration.api_version >= 3
 
         # if the remotes have found something, initialize a new article for the local db:
-        return self.new(data)
+        article = self.new(data)
+        if Rails.configuration.api_version >= 3
+          article.images.each do |image|
+            image.id = SecureRandom.uuid
+          end
+        end
+        return article
       end
     elsif not data[:barcode].nil? # querying for a specific name...
     	# -> try if anyone has got such an article:
