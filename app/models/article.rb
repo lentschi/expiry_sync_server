@@ -17,7 +17,7 @@ class Article < ActiveRecord::Base
 
   def self.smart_find(data)
     if data[:barcode].nil? and not data[:id].nil?
-      article = self.find_by(id: data[:id], creator_id: User.current.id) unless User.current.nil?
+      article = self.find_by(id: data[:id])
       return article unless article.nil?
     end
 
