@@ -30,7 +30,7 @@ gem 'turbolinks', "~> 5.2"
 gem "jbuilder", "~> 2.7"
 
 # auth
-gem "devise", "~> 4.5"
+gem "devise", "~> 4.7"
 gem "devise-i18n", "~> 1.6"
 gem "sentient_user", "~> 0.4.0"
 # gem 'sentient_user', git: "git://github.com/bokmann/sentient_user.git"
