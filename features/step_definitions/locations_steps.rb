@@ -1,5 +1,6 @@
 ADD_LOCATION_PATH = '/locations'
-DELETE_LOCATION_PATH = '/locations'
+LOCATION_PATH = '/locations'
+LOCATION_SHARE_SUB_PATH = '/location_shares'
 UPDATE_LOCATION_PATH = '/locations'
 INDEX_MY_CHANGED_LOCATIONS_PATH = '/locations/index_mine_changed'
 
@@ -112,7 +113,8 @@ Given /^(a location|several locations) (?:created by (.+) )?(?:is|are|was|were) 
   @locationHelper.locations = Array.new
   VALID_LOCATION_DATA.each do |location_data|
     cur_location = FactoryBot.create(:location, location_data)
-    cur_location.users << (assigned_to_me ? @authHelper.remember_logged_in_user : @authHelper.other_user)
+    cur_location.users << @authHelper.remember_logged_in_user if assigned_to_me
+    cur_location.users << @authHelper.other_user unless created_by_me and assigned_to_me
     cur_location.save
     @locationHelper.locations << cur_location
 
@@ -127,8 +129,18 @@ Given /I just created a new location$/ do
   step 'a location is assigned to me'
 end
 
-When /^I try to delete that location$/ do
-  @jsonHelper.json_delete DELETE_LOCATION_PATH + "/"+@locationHelper.remember_location('that location').id.to_s
+When /^I try to delete that location( for the other user)?$/ do |hack_other_user|
+  that_location = @locationHelper.remember_location('that location')
+
+  if hack_other_user
+    user_id = @authHelper.other_user.id
+  else
+    user_id = @authHelper.remember_logged_in_user.id
+  end
+
+  @jsonHelper.json_delete LOCATION_PATH + "/" \
+    + that_location.id.to_s + LOCATION_SHARE_SUB_PATH + '/' \
+    + user_id.to_s
 end
 
 When /^I request a list of my locations( specifying the time of that retrieval)?$/ do |specify_time_str|

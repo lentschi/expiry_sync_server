@@ -20,17 +20,17 @@ Scenario: Delete an existing location assigned created by the current user
     When I request a list of my locations
     Then the call should be successful
         And I should have received a valid location list
-        And the previously deleted location should be in the location list marked as deleted
+    When I request a list of product entries for that location
+        Then the call should fail
 
 Scenario: Delete an existing location, that is not assigned to the current user
     Given a location is not assigned to me
     When I try to delete that location
     Then the call should fail
 
-Scenario: Delete an existing location, that is assigned to the current user
-    but was created by someone else than the current user
+Scenario: Delete an existing location for a user other than the current user
     Given a location created by someone else is assigned to me
-    When I try to delete that location
+    When I try to delete that location for the other user
     Then the call should fail
 
 # UPDATING
