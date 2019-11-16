@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   @@email_is_required = false # will only be required upon update
 
   def username
+    return nil if self[:username].nil?
     self[:username].force_encoding('UTF-8')
   end
 
