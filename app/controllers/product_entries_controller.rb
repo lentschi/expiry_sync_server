@@ -188,6 +188,7 @@ class ProductEntriesController < ApplicationController
         :location_id,
         :description,
         :expiration_date,
+        :free_to_take,
         :amount
       ]
 

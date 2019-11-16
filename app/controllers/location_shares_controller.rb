@@ -82,7 +82,7 @@ class LocationSharesController < ApplicationController
     end
 
     def share_for_email(email_address, location)
-      user = User.find_or_initialize_by_email(email_address)
+      user = User.find_or_initialize_by(email: email_address)
       return user unless user.new_record?
 
       User.transaction do
