@@ -1,0 +1,71 @@
+ru:
+  home: "дома"
+  login: "Войти"
+  sign_up: "зарегистрироваться"
+  logged_in_as: "вошел как %{name}"
+  logout: "выход из системы"
+
+  welcome_to_expiry_sync_title: "Добро пожаловать в Expiry Sync"
+  welcome_to_expiry_sync_text: >
+    Это сервер по умолчанию для приложения ExpirySync. Загрузите приложение со страницы %{app_link}. <br /> <br />
+    Приложение и сервер являются проектами с открытым исходным кодом, вы можете добавить свой собственный сервер здесь: %{alternate_servers_link}. <br /> <br />
+    Вы можете найти исходный код и документацию по API в %{github_link}.
+  google_play: "Google Playstore"
+  github: "GitHub"
+
+  alternate_servers: "альтернативные серверы"
+  new_alternate_server: "новый альтернативный сервер"
+  editing_alternate_server: "редактирование альтернативного сервера"
+  successfully_created_alternate_server: "успешно создан на альтернативном сервере"
+
+  added_by: 'добавлено'
+  edit: 'редактировать'
+  delete: 'удалять'
+
+  no_such_user: 'Пользователь "%{login}" не существует'
+  user_already_assigned: 'Пользователь "%{login}" уже назначен'
+  username_taken: 'уже принято'
+
+  error_prohibited_saving:
+    one: 'Эта форма из сохраненных'
+    other: '%{count} ошибок сделали эту форму из сохраненной'
+
+  may_not_remove_location_share: 'Местоположение не может быть разблокировано, если последний доступ пользователя был не более %{days} дней назад.'
+
+  set_password_button: "Установить пароль"
+  set_password_intro: |
+    Место поделено с вами через приложение "ExpirySync".<br />
+    После назначения пароля пользователю, пожалуйста, следуйте дальнейшим инструкциям в письме!
+  new_password: "Новый пароль"
+  confirm_password: "Подтвердите пароль"
+
+  mail:
+    header: Привет %{name}!
+    footer: >
+      Это письмо было сгенерировано автоматически - не отвечайте напрямую.
+    share_request:
+      subject: Расположение местоположения ExpirySync
+      body: |
+        Кто-то поделился с вами местоположением "%{location}" через приложение "Expiry Sync".
+
+        Пожалуйста, нажмите% {ссылка}, чтобы принять эту долю и установить пароль.
+        Затем установите приложение на свое устройство: %{app_link}
+        При первом запуске приложения выберите сервер "%{server_name}" и войдите в систему с помощью %{email}.
+      link_text: установить пароль
+      app_link_text: ExpirySync в GooglePlay
+      server_name: дефолт
+
+  activerecord:
+    models:
+      alternate_server:
+        one: "альтернативный сервер"
+        other: "альтернативные серверы"
+    attributes:
+      alternate_server:
+        name: "имя"
+        url: "URL"
+        description: "описание"
+  helpers:
+    submit:
+      alternate_server:
+        create: "добавить альтернативный сервер"
