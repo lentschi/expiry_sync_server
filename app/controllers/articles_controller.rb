@@ -5,7 +5,7 @@ class ArticlesController < ApplicationController
     article = Article.smart_find(barcode: params[:barcode])
 
     ret = true
-    if article.new_record?
+    if not article.nil? and article.new_record?
       article.images.each do |image|
         ret = ret && image.save
       end
