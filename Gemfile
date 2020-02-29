@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '~> 5.2.0'
 
 # s. https://stackoverflow.com/questions/35893584 :
-gem 'rake', '< 11.0'
+gem 'rake', '< 14.0'
 
 gem "composite_primary_keys", "~> 11.0"
 
