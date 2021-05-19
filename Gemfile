@@ -43,7 +43,7 @@ gem "haml", "~> 5.0"
 gem "haml-rails", "~> 1.0"
 
 # html parsing:
-gem "nokogiri", "~> 1.10"
+gem "nokogiri", "~> 1.11"
 
 # deleted flags:
 gem "paranoia", "~> 2.4"
